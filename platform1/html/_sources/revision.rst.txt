@@ -1,0 +1,19 @@
+Revision History
+================
+**vmk180_trd_platform1_2020.2**
+ 
+* Compatible with Vivado and PetaLinux 2020.2 tools version
+
+* Initial Release of the design including:
+
+	* Vivado design
+
+	* PetaLinux BSP
+
+	* Prebuilt SD card image
+
+	* Vitis platform and XSCT platform creation tcl script
+
+	* Vitis accelerator projects, GStreamer plugins and Jupyter notebook
+
+	* 2D Filter (PL) using the Vitis Vision libraries 
