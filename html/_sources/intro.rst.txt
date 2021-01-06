@@ -14,8 +14,8 @@ Platform
 .. raw:: html
 
     <embed>
-	Platform 1: can be found <a href="../../platform1/index.html">here</a> <br />
-	Platform 2: can be found <a href="../../platform2/index.html">here</a> <br />
+	Platform 1: can be found <a href="../platform1/index.html">here</a> <br />
+	Platform 2: can be found <a href="../platform2/index.html">here</a> <br />
 
         ...
     </embed>

@@ -1,6 +1,6 @@
 Revision History
 ================
-**vck190_pcie_platform_2020.2**
+**vmk180_trd_platform2_2020.2**
 
 * Compatible with Vivado and PetaLinux 2020.2 tools version
 
