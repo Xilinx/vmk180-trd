@@ -1,9 +1,7 @@
 Introduction
 ============
 
-The PCIe base platform demonstrates the PCIe capabilities of Versal Devices. The Platform design demonstrates a video file being transferred from a x86 host
-machine (root complex) to the endpoint (VMK180 evaluation board) processes the data with a 2d filter,  through the PCIe QDMA
-bridge interface and finally displayed at host machine.
+The PCIe base platform demonstrates the PCIe capabilities of Versal Devices. The Platform design demonstrates a video file being transferred from a x86 host machine (root complex) to the endpoint (VMK180 evaluation board) processes the data with a 2d filter and finally displayed at host machine.
 The design uses the CPM PCI Express (PCIe) Endpoint Hard block in an Gen3 x8 configuration
 along with QDMA for data transfers between the host system memory and the endpoint.
 The QDMA provides protocol conversion between PCIe transaction layer packets (TLPs) and AXI
