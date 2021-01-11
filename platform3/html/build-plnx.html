@@ -57,7 +57,7 @@
   <link rel="stylesheet" href="_static/css/pro.min.css" media="all" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="VMK180 TRD Documentation" href="index.html" /> 
+    <link rel="prev" title="4. Build the Vivado Design" href="build-vivado.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -327,8 +327,14 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#platform">1.1. Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="revision.html">1. Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">2. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">3. Run the Prebuilt Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-vivado.html">4. Build the Vivado Design</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Build the PetaLinux Image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">5.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-flow-tutorial">5.2. Build Flow Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-an-sd-card-image">5.3. Create an SD Card Image</a></li>
 </ul>
 </li>
 </ul>
@@ -337,7 +343,7 @@
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/intro.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/build-plnx.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -383,13 +389,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">1. </span>Introduction</li>
+      <li><span class="section-number">5. </span>Build the PetaLinux Image</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/build-plnx.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -402,24 +408,138 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>The Versal VMK180 TRD consists of a series of platforms, accelerators and Jupyter
-notebooks to demonstrate various aspects of the design. A platform is a Vivado
-design with a pre-instantiated set of I/O interfaces and a corresponding
-PetaLinux BSP and image that includes the required kernel drivers and user-space
-libraries to exercise those interfaces. Accelerators are mapped to FPGA logic
-resources  and stitched into the platform using the Vitis
-toolchain. The reference design currently supports the VMK180 evaluation board.</p>
-<div class="section" id="platform">
-<h2><span class="section-number">1.1. </span>Platform<a class="headerlink" href="#platform" title="Permalink to this headline">¶</a></h2>
-<embed>
-    Platform 1: can be found <a href="../platform1/index.html">here</a> <br />
-    Platform 2: can be found <a href="../platform2/index.html">here</a> <br />
-    Platform 3: can be found <a href="../platform3/index.html">here</a> <br />
-
-    ...
-</embed></div>
+  <div class="section" id="build-the-petalinux-image">
+<h1><span class="section-number">5. </span>Build the PetaLinux Image<a class="headerlink" href="#build-the-petalinux-image" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2><span class="section-number">5.1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Reference Design zip file</p></li>
+<li><p>PetaLinux Tools 2020.2</p></li>
+<li><p>Linux host machine</p></li>
+</ul>
+</div>
+<div class="section" id="build-flow-tutorial">
+<h2><span class="section-number">5.2. </span>Build Flow Tutorial<a class="headerlink" href="#build-flow-tutorial" title="Permalink to this headline">¶</a></h2>
+<p><strong>Download Reference Design Files</strong></p>
+<p>Skip the following steps if the design zip file has already been downloaded and
+extracted to a working directory</p>
+<ol class="arabic simple">
+<li><p>Download the VMK180 Targeted Reference Design ZIP file</p></li>
+<li><p>Unzip Contents</p></li>
+</ol>
+<p>The directory structure is described in the Introduction Section.</p>
+<p><strong>Generate PetaLinux Image</strong></p>
+<ol class="arabic">
+<li><p>Create a new PetaLinux project from the provided BSP:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> petalinux
+petalinux-create -t project -s xilinx-vmk180-trd-2020.2.bsp
+<span class="nb">cd</span> xilinx-vmk180-trd-2020.2
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This BSP uses  <a class="reference external" href="https://www.xilinx.com/support/answers/75991.html">AR 75991</a> for GT reset fix.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The BSP has manually created dtsi project-spec/meta-user/recipes-bsp/device-tree/files/mrmac.dtsi.
+If the IP names changed in your design change update this dtsi accordingly.</p>
+</div>
+</li>
+<li><p>Configure and build the PetaLinux project.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-build
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The XSA file used for project configuration is included with this BSP.
+The build step performs the configuration step implicitly. If you want
+to configure your BSP with the XSA file generated in the previous
+tutorial, run the following command <strong>prior</strong> to the <em>petalinux-build</em>
+command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-config --get-hw-description<span class="o">=</span>../../PATH_TO_XSA/ --silentconfig
+</pre></div>
+</div>
+</div>
+</li>
+<li><p>Create a boot image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>petalinux-package --boot --plm --psmfw --u-boot --dtb --force
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The resulting build artifacts will be available in the <em>images/linux/</em> folder.
+The relevant files for the next step are:</p>
+<ul class="simple">
+<li><p><strong>BOOT.BIN</strong>: This is the boot image which includes:</p>
+<ul>
+<li><p>Platform Loader and Manager (PLM)</p></li>
+<li><p>PS Management (PSM) firmware</p></li>
+<li><p>Platform Device Image (PDI)</p></li>
+<li><p>ARM trusted firmware</p></li>
+<li><p>u-boot</p></li>
+<li><p>Device tree blob</p></li>
+</ul>
+</li>
+<li><p><strong>boot.scr</strong>: A u-boot boot script</p></li>
+<li><p><strong>image.ub</strong>: U-boot wrapped Linux kernel image</p></li>
+<li><p><strong>rootfs.tar.gz</strong>: Compressed root file system tar ball</p></li>
+</ul>
+</div>
+<div class="section" id="create-an-sd-card-image">
+<h2><span class="section-number">5.3. </span>Create an SD Card Image<a class="headerlink" href="#create-an-sd-card-image" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Create two primary partitions on your SD card:</p>
+<ul class="simple">
+<li><p>The first partition is the boot partition in FAT32 format.</p></li>
+<li><p>The second partition is the root file system in EXT4 format.</p></li>
+</ul>
+<p>Use the fdisk utility to partition your SD card. The below steps assume your
+SD card is device <em>/dev/sdb</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo fdisk /dev/sdb
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Delete all existing partitions using the <em>d</em> command.</p></li>
+<li><p>Create the first primary partition using the <em>n</em> command followed by <em>p</em>.
+Set the size to <em>+100M</em>.</p></li>
+<li><p>Change the partition type of partition 1 with the <em>t</em> command. Select type
+<em>c</em> which is <em>W95 FAT32 (LBA)</em>.</p></li>
+<li><p>Create a second primary partition again using <em>n</em> followed by <em>p</em> and set
+the size to <em>+2G</em>.</p></li>
+<li><p>Use the <em>w</em> command to write the partition table.</p></li>
+</ul>
+</li>
+<li><p>Format the file systems of the two partitions. The first partition should be
+FAT32, the second partition ext4:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo mkfs -t vfat -F <span class="m">32</span> /dev/sdb1
+sudo mkfs -t ext4 /dev/sdb2
+</pre></div>
+</div>
+</li>
+<li><p>Copy the required boot files to partition 1:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo mount /dev/sdb1 /media/card
+<span class="nb">cd</span> images/linux
+sudo cp BOOT.BIN boot.scr image.ub /media/card
+sudo umount /media/card
+</pre></div>
+</div>
+</li>
+<li><p>Copy and extract the root file system to partition 2:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo mount /dev/sdb2 /media/card
+sudo cp rootfs.tar.gz /media/card
+<span class="nb">cd</span> /media/card
+sudo tar xfv rootfs.tar.gz
+sudo rm rootfs.tar.gz
+<span class="nb">cd</span> -
+sudo umount /media/card
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The SD card image is now ready to be used to boot the device into Linux, see
+Section <em>Run the Prebuilt Image</em> for details.</p>
+</div>
 </div>
 
 
@@ -439,7 +559,7 @@ toolchain. The reference design currently supports the VMK180 evaluation board.<
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="VMK180 TRD Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="build-vivado.html" class="btn btn-neutral float-left" title="4. Build the Vivado Design" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

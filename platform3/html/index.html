@@ -57,7 +57,7 @@
   <link rel="stylesheet" href="_static/css/pro.min.css" media="all" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="VMK180 TRD Documentation" href="index.html" /> 
+    <link rel="next" title="1. Revision History" href="revision.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -295,7 +295,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Versal ACAP VMK180 Targeted Reference Design
+            <a href="#" class="icon icon-home" alt="Documentation Home"> Versal ACAP VMK180 Targeted Reference Design
           
 
           
@@ -326,18 +326,19 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#platform">1.1. Platform</a></li>
-</ul>
-</li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="revision.html">1. Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">2. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">3. Run the Prebuilt Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-vivado.html">4. Build the Vivado Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-plnx.html">5. Build the PetaLinux Image</a></li>
 </ul>
 
             
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/intro.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/index.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -352,7 +353,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Versal ACAP VMK180 Targeted Reference Design</a>
+          <a href="#">Versal ACAP VMK180 Targeted Reference Design</a>
         
       </nav>
 
@@ -381,15 +382,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">1. </span>Introduction</li>
+      <li>VMK180 TRD Documentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -402,24 +403,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>The Versal VMK180 TRD consists of a series of platforms, accelerators and Jupyter
-notebooks to demonstrate various aspects of the design. A platform is a Vivado
-design with a pre-instantiated set of I/O interfaces and a corresponding
-PetaLinux BSP and image that includes the required kernel drivers and user-space
-libraries to exercise those interfaces. Accelerators are mapped to FPGA logic
-resources  and stitched into the platform using the Vitis
-toolchain. The reference design currently supports the VMK180 evaluation board.</p>
-<div class="section" id="platform">
-<h2><span class="section-number">1.1. </span>Platform<a class="headerlink" href="#platform" title="Permalink to this headline">¶</a></h2>
-<embed>
-    Platform 1: can be found <a href="../platform1/index.html">here</a> <br />
-    Platform 2: can be found <a href="../platform2/index.html">here</a> <br />
-    Platform 3: can be found <a href="../platform3/index.html">here</a> <br />
-
-    ...
-</embed></div>
+  <div class="section" id="vmk180-trd-documentation">
+<h1>VMK180 TRD Documentation<a class="headerlink" href="#vmk180-trd-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="revision.html">1. Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">2. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#platform">2.1. Platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#software-description">2.2. Software Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#data-flow-sequence">2.3. Data Flow Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#design-file-hierarchy">2.4. Design File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#licenses">2.5. Licenses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">3. Run the Prebuilt Image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="run.html#prerequisites">3.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html#sd-card-creation">3.2. SD Card Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html#board-setup">3.3. Board Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html#external-nic-to-vmk180-connection">3.4. External NIC to VMK180 connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html#versal-vmk180-setup">3.5. Versal VMK180 Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run.html#run-host-and-vmk180-applications">3.6. Run Host and VMK180 applications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build-vivado.html">4. Build the Vivado Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build-vivado.html#prerequisites">4.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build-vivado.html#build-flow-tutorial">4.2. Build Flow Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build-vivado.html#resource-utlization">4.3. Resource Utlization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="build-plnx.html">5. Build the PetaLinux Image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="build-plnx.html#prerequisites">5.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build-plnx.html#build-flow-tutorial">5.2. Build Flow Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="build-plnx.html#create-an-sd-card-image">5.3. Create an SD Card Image</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and Tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
 </div>
 
 
@@ -438,8 +466,8 @@ toolchain. The reference design currently supports the VMK180 evaluation board.<
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="revision.html" class="btn btn-neutral float-right" title="1. Revision History" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="index.html" class="btn btn-neutral float-left" title="VMK180 TRD Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
