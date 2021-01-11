@@ -57,7 +57,8 @@
   <link rel="stylesheet" href="_static/css/pro.min.css" media="all" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="VMK180 TRD Documentation" href="index.html" /> 
+    <link rel="next" title="4. Build the Vivado Design" href="build-vivado.html" />
+    <link rel="prev" title="2. Introduction" href="intro.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -327,17 +328,26 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#platform">1.1. Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="revision.html">1. Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">2. Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Run the Prebuilt Image</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">3.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sd-card-creation">3.2. SD Card Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#board-setup">3.3. Board Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#external-nic-to-vmk180-connection">3.4. External NIC to VMK180 connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#versal-vmk180-setup">3.5. Versal VMK180 Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-host-and-vmk180-applications">3.6. Run Host and VMK180 applications</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="build-vivado.html">4. Build the Vivado Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-plnx.html">5. Build the PetaLinux Image</a></li>
 </ul>
 
             
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/intro.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/run.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -383,13 +393,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">1. </span>Introduction</li>
+      <li><span class="section-number">3. </span>Run the Prebuilt Image</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/run.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -402,24 +412,168 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>The Versal VMK180 TRD consists of a series of platforms, accelerators and Jupyter
-notebooks to demonstrate various aspects of the design. A platform is a Vivado
-design with a pre-instantiated set of I/O interfaces and a corresponding
-PetaLinux BSP and image that includes the required kernel drivers and user-space
-libraries to exercise those interfaces. Accelerators are mapped to FPGA logic
-resources  and stitched into the platform using the Vitis
-toolchain. The reference design currently supports the VMK180 evaluation board.</p>
-<div class="section" id="platform">
-<h2><span class="section-number">1.1. </span>Platform<a class="headerlink" href="#platform" title="Permalink to this headline">¶</a></h2>
-<embed>
-    Platform 1: can be found <a href="../platform1/index.html">here</a> <br />
-    Platform 2: can be found <a href="../platform2/index.html">here</a> <br />
-    Platform 3: can be found <a href="../platform3/index.html">here</a> <br />
-
-    ...
-</embed></div>
+  <div class="section" id="run-the-prebuilt-image">
+<h1><span class="section-number">3. </span>Run the Prebuilt Image<a class="headerlink" href="#run-the-prebuilt-image" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2><span class="section-number">3.1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Reference design zip file</p></li>
+<li><p>Terminal emulator, for example</p>
+<ul>
+<li><p>Windows: teraterm (<a class="reference external" href="https://osdn.net/projects/ttssh2">https://osdn.net/projects/ttssh2</a>)</p></li>
+<li><p>Linux: picocom (<a class="reference external" href="https://github.com/npat-efault/picocom/releases">https://github.com/npat-efault/picocom/releases</a>)</p></li>
+</ul>
+</li>
+<li><p>Windows: Win32 Disk Imager utility (<a class="reference external" href="https://sourceforge.net/projects/win32diskimager">https://sourceforge.net/projects/win32diskimager</a>)</p></li>
+<li><dl class="simple">
+<dt>Host Machine with 4 x 10G NIC</dt><dd><ul>
+<li><p>Install iperf3</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="sd-card-creation">
+<h2><span class="section-number">3.2. </span>SD Card Creation<a class="headerlink" href="#sd-card-creation" title="Permalink to this headline">¶</a></h2>
+<p>Choose an unpartitioned SD card of size 8GB or greater for this demo. Use the
+<em>Win32 Disk Imager</em> utility for Windows or ‘dd’ command line utility for Linux
+to write the given rawdisk image <code class="docutils literal notranslate"><span class="pre">sdcard.img</span></code> to the SD card.</p>
+<p>After unzipping the image file <code class="docutils literal notranslate"><span class="pre">sdcard.zip</span></code> using windows extractor, use
+the following steps to write a raw disk image to a removable device using the
+Win32 Disk Imager utility.</p>
+<ol class="arabic">
+<li><p>Browse to the location of the unzipped image in the Win32 utility</p></li>
+<li><p>Choose the correct SD card under ‘device’</p></li>
+<li><p>Select ‘Write’ to the SD card, click ‘Yes’ at the prompt to continue writing
+and wait till the operation is complete</p>
+<a class="reference internal image-reference" href="_images/win32.png"><img alt="Win32 Image" src="_images/win32.png" style="width: 800px;" /></a>
+</li>
+</ol>
+<p>Steps to write a raw disk image to a removable device using dd command-line
+utility for Linux</p>
+<ol class="arabic">
+<li><p>Unzip the given image file <code class="docutils literal notranslate"><span class="pre">sdcard.zip</span></code> in linux</p></li>
+<li><p>Use dd to write <code class="docutils literal notranslate"><span class="pre">sdcard.img</span></code> to correct enumerated disk for SD card in the
+Linux machine:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>unzip sdcard.zip
+sudo dd <span class="k">if</span><span class="o">=</span>sdcard.img <span class="nv">of</span><span class="o">=</span>/dev/sdbx <span class="nv">bs</span><span class="o">=</span>1M
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>SD card partitions</strong></p>
+<p>Once the raw image is written to the SD card, you will be able to see two
+partitions. In the first partition (FAT32 format) resides:</p>
+<ul class="simple">
+<li><p>Boot image (<code class="docutils literal notranslate"><span class="pre">BOOT.BIN</span></code>)</p></li>
+<li><p>u-boot boot script (<code class="docutils literal notranslate"><span class="pre">boot.scr</span></code>)</p></li>
+<li><p>Linux kernel image (<code class="docutils literal notranslate"><span class="pre">Image</span></code>)</p></li>
+</ul>
+<p>while in the second patition (ext4 format) resides the root file system.</p>
+<p><strong>Note:</strong> A Windows OS would only allows FAT32 partitions to be viewed, which is
+the boot partition, whereas ext4 format is not recognized.</p>
+</div>
+<div class="section" id="board-setup">
+<h2><span class="section-number">3.3. </span>Board Setup<a class="headerlink" href="#board-setup" title="Permalink to this headline">¶</a></h2>
+<p>The following figure shows how to set up the VMK180 evaluation board.</p>
+<a class="reference internal image-reference" href="_images/vmk180-setup.jpg"><img alt="VMK180 Board Setup" src="_images/vmk180-setup.jpg" style="width: 900px;" /></a>
+<p><strong>Board jumper and switch settings</strong></p>
+<p>This is a onetime setup and the board should have been delivered to you with
+this default settings, but it is good to double check for the first time when
+you get the board.</p>
+<ul class="simple">
+<li><p>Make sure you remove J326 (7-8) jumper.</p></li>
+<li><p>Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits
+1 to 4 as shown in the above picture.</p></li>
+<li><p>Make sure you have the SYSCTRL uSD card inserted in the slot and card has the
+SYSCTRL image.</p></li>
+<li><p>Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4
+as shown in the above picture.</p></li>
+</ul>
+<p><strong>Serial console settings</strong></p>
+<p>VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART
+ports should be visible in Device Manager:</p>
+<ul class="simple">
+<li><p>Versal UART0</p></li>
+<li><p>Versal UART1 &amp;</p></li>
+<li><p>System Controller UART</p></li>
+</ul>
+<p>Connect a USB-C cable to the USB-UART connector. In the terminal emulator choose
+Versal UART0 and use the following settings:</p>
+<ul class="simple">
+<li><p>Baud Rate: 115200</p></li>
+<li><p>Data: 8 bit</p></li>
+<li><p>Parity: None</p></li>
+<li><p>Stop: 1 bit</p></li>
+<li><p>Flow Control: None</p></li>
+</ul>
+</div>
+<div class="section" id="external-nic-to-vmk180-connection">
+<h2><span class="section-number">3.4. </span>External NIC to VMK180 connection<a class="headerlink" href="#external-nic-to-vmk180-connection" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Connect a QSFP cable from external NIC on a host machine to VMK180 QSFP port.</p></li>
+</ul>
+</div>
+<div class="section" id="versal-vmk180-setup">
+<h2><span class="section-number">3.5. </span>Versal VMK180 Setup<a class="headerlink" href="#versal-vmk180-setup" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>SD Boot mode steps:</dt><dd><ol class="arabic simple">
+<li><p>Place the boot image in sd card and power on the board in SD boot mode.</p></li>
+<li><p>Hit any command to stop autoboot at u-boot</p></li>
+<li><p>Set the GT reference clock as mentioned under “Setting the GT reference clock using Board UI” section.</p></li>
+<li><p>Once clock programming is done enter “boot” command at u-boot.</p></li>
+<li><p>Once Linux boots, it asks for username and password, please type “root” for both.</p></li>
+</ol>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The follwoing board settings needs to be done before booting linux images on VMK180, for every fresh boot in all boot modes.</p>
+</div>
+<p><strong>Setting the GT reference clock using Board UI:</strong></p>
+<ul class="simple">
+<li><p>Copy the clock files from the clock_files folder of the vmk180_trd_platform3_2020.2 package
+to BoardUI-&gt;tests-&gt;VMK180-&gt;clockFiles folder.</p></li>
+<li><p>Open the VMK180 Board UI application. Choose the board information as shown in the figure</p></li>
+</ul>
+<blockquote>
+<div><a class="reference internal image-reference" href="_images/initial_info.PNG"><img alt="VMK180 Board Setup" src="_images/initial_info.PNG" style="width: 400px;" /></a>
+</div></blockquote>
+<ul>
+<li><p>Once the GUI is open, go to File -&gt; Change the System Controller Port. Choose the port corresponding to the system controller.
+On the bottom left, click on System Controller Tab</p>
+<a class="reference internal image-reference" href="_images/bottom_left.PNG"><img alt="VMK180 Board Setup" src="_images/bottom_left.PNG" style="width: 400px;" /></a>
+</li>
+<li><p>Choose the reference clock files to be programmed as shown in the following figure:</p>
+<a class="reference internal image-reference" href="_images/choose_clock_and_set.PNG"><img alt="VMK180 Board Setup" src="_images/choose_clock_and_set.PNG" style="width: 900px;" /></a>
+</li>
+<li><p>Click on Set 8A34001 FMC2 Frequency.
+Once the clocks are set, user will see the following in the logs window</p>
+<a class="reference internal image-reference" href="_images/clock_prog_done.PNG"><img alt="VMK180 Board Setup" src="_images/clock_prog_done.PNG" style="width: 900px;" /></a>
+</li>
+</ul>
+<blockquote>
+<div><p>This will program the clocks needed for the design.</p>
+</div></blockquote>
+</div>
+<div class="section" id="run-host-and-vmk180-applications">
+<h2><span class="section-number">3.6. </span>Run Host and VMK180 applications<a class="headerlink" href="#run-host-and-vmk180-applications" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Once host and vmk180 are booted, setup IP for each ethernet port and make sure ethernet link is established using ping.
+Once ping is successfull only proceed further.</p></li>
+<li><p>Execute following command to run the Host utility</p>
+<blockquote>
+<div><p>iperf3 -s -i 60</p>
+</div></blockquote>
+</li>
+<li><p>Execute following command on Target(EP) to start traffic</p>
+<blockquote>
+<div><p>iperf3 -c &lt;remote Host IP&gt; -t 60 -i 60</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -438,8 +592,10 @@ toolchain. The reference design currently supports the VMK180 evaluation board.<
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="build-vivado.html" class="btn btn-neutral float-right" title="4. Build the Vivado Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="index.html" class="btn btn-neutral float-left" title="VMK180 TRD Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="intro.html" class="btn btn-neutral float-left" title="2. Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

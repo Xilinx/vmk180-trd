@@ -57,7 +57,8 @@
   <link rel="stylesheet" href="_static/css/pro.min.css" media="all" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="VMK180 TRD Documentation" href="index.html" /> 
+    <link rel="next" title="5. Build the PetaLinux Image" href="build-plnx.html" />
+    <link rel="prev" title="3. Run the Prebuilt Image" href="run.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -327,17 +328,23 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#platform">1.1. Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="revision.html">1. Revision History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">2. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">3. Run the Prebuilt Image</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Build the Vivado Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">4.1. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-flow-tutorial">4.2. Build Flow Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resource-utlization">4.3. Resource Utlization</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="build-plnx.html">5. Build the PetaLinux Image</a></li>
 </ul>
 
             
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="_sources/intro.rst.txt"
+				  <li class="toctree-l1"><a href="_sources/build-vivado.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -383,13 +390,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">1. </span>Introduction</li>
+      <li><span class="section-number">4. </span>Build the Vivado Design</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/build-vivado.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -402,24 +409,98 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>The Versal VMK180 TRD consists of a series of platforms, accelerators and Jupyter
-notebooks to demonstrate various aspects of the design. A platform is a Vivado
-design with a pre-instantiated set of I/O interfaces and a corresponding
-PetaLinux BSP and image that includes the required kernel drivers and user-space
-libraries to exercise those interfaces. Accelerators are mapped to FPGA logic
-resources  and stitched into the platform using the Vitis
-toolchain. The reference design currently supports the VMK180 evaluation board.</p>
-<div class="section" id="platform">
-<h2><span class="section-number">1.1. </span>Platform<a class="headerlink" href="#platform" title="Permalink to this headline">¶</a></h2>
-<embed>
-    Platform 1: can be found <a href="../platform1/index.html">here</a> <br />
-    Platform 2: can be found <a href="../platform2/index.html">here</a> <br />
-    Platform 3: can be found <a href="../platform3/index.html">here</a> <br />
-
-    ...
-</embed></div>
+  <div class="section" id="build-the-vivado-design">
+<h1><span class="section-number">4. </span>Build the Vivado Design<a class="headerlink" href="#build-the-vivado-design" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prerequisites">
+<h2><span class="section-number">4.1. </span>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Reference Design zip file</p></li>
+<li><p>Vivado Design Suite 2020.2</p></li>
+</ul>
+</div>
+<div class="section" id="build-flow-tutorial">
+<h2><span class="section-number">4.2. </span>Build Flow Tutorial<a class="headerlink" href="#build-flow-tutorial" title="Permalink to this headline">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can skip this tutorial and move straight to the next tutorial if desired.
+A pre-built XSA file is provided at
+<em>$working_dir/vmk180_trd_platform3_2020.2/vivado/pre-built/vmk180_trd_platform3.xsa</em></p>
+</div>
+<p><strong>Download Reference Design Files:</strong></p>
+<p>Skip the following steps if the design zip file has already been downloaded and
+extracted to a working directory</p>
+<ol class="arabic simple">
+<li><p>Download the VMK180 Targeted Reference Design ZIP file</p></li>
+<li><p>Unzip Contents</p></li>
+</ol>
+<p>The directory structure is described in the Introduction Section</p>
+<p><strong>Generate Device Image and XSA:</strong></p>
+<ol class="arabic">
+<li><p>Enable Versal device support</p>
+<p>To enable Versal device support, you need to create two tcl initialization
+scripts, one for Vivado and one for HLS. Add the following line to each of
+the tcl scripts:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>enable_beta_device *
+</pre></div>
+</div>
+<p>The initialization tcl script for Vivado shall be placed at:</p>
+<ul class="simple">
+<li><p><strong>Linux</strong>: $HOME/.Xilinx/Vivado/Vivado_init.tcl</p></li>
+<li><p><strong>Windows</strong>: %APPDATA%/Roaming/Xilinx/Vivado/Vivado_init.tcl</p></li>
+</ul>
+<p>Similarly, the initialization tcl script for HLS shall be placed at:</p>
+<ul class="simple">
+<li><p><strong>Linux</strong>: $HOME/.Xilinx/HLS_init.tcl</p></li>
+<li><p><strong>Windows</strong>: %APPDATA%/Roaming/Xilinx/HLS_init.tcl</p></li>
+</ul>
+</li>
+<li><p>Open the Vivado GUI.</p>
+<p>On Linux, at the command prompt enter:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> <span class="nv">$working_dir</span>/vmk180_trd_platform3_2020.2/vivado
+vivado -source scripts/main.tcl
+</pre></div>
+</div>
+<p>A Vivado cockpit as shown below will open with vmk180_trd_platform3
+project populated.</p>
+<a class="reference internal image-reference" href="_images/vivado.PNG"><img alt="Vivado cockpit" src="_images/vivado.PNG" style="width: 1200px;" /></a>
+</li>
+<li><p>In the Flow Navigator pane on the left-hand side under IP Integrator, click
+on <em>Open Block Design</em>. An IP Integrator (IPI) block design
+(<em>mrmac_subsys_wrapper.bd</em>) becomes visible that contains the
+Control, Interface and Processing System (CIPS) IP, NOC IP and MRMAC IP.</p>
+<a class="reference internal image-reference" href="_images/block_design.PNG"><img alt="IPI Block Design" src="_images/block_design.PNG" style="width: 1200px;" /></a>
+</li>
+<li><p>In the Flow Navigator pane on the left-hand side under Program and Debug,
+click on <em>Generate Device Image</em>. The device image (pdi) for the design will
+be generated and available at
+<em>$working_dir/vmk180_trd_platform3_2020.2/vivado/vmk180_trd_platform3/vmk180_trd_platform3.runs/impl_1/mrmac_subsys_wrapper.pdi</em>.</p></li>
+<li><p>After Device Image Generation completes successfully a window pops up. Click
+on <em>Cancel</em></p>
+<a class="reference internal image-reference" href="_images/open_implemented_design.PNG"><img alt="Open Implemented Design" src="_images/open_implemented_design.PNG" style="width: 300px;" /></a>
+</li>
+<li><p>To create the XSA,</p>
+<ul class="simple">
+<li><p>From the Vivado main menu, select File→ Export → Export Hardware. The Export Hardware dialog
+box opens.</p></li>
+<li><p>Choose Include bitstream and click Next.</p></li>
+<li><p>Provide a name for your exported file (or use the default provided) and choose the location. Click Next.</p></li>
+<li><p>A warning message appears if a hardware module has already been exported. Click Yes to overwrite the
+existing XSA file, if the overwrite message is displayed.</p></li>
+<li><p>Click Finish.</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="resource-utlization">
+<h2><span class="section-number">4.3. </span>Resource Utlization<a class="headerlink" href="#resource-utlization" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>A Summary and statics of Resource utlization for the platform is shown below.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="_images/utilization.PNG"><img alt="Utlization Summary" src="_images/utilization.PNG" style="width: 300px;" /></a>
+<a class="reference internal image-reference" href="_images/utilization_stat.PNG"><img alt="Utlization Summary" src="_images/utilization_stat.PNG" style="width: 300px;" /></a>
+</div></blockquote>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -438,8 +519,10 @@ toolchain. The reference design currently supports the VMK180 evaluation board.<
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="build-plnx.html" class="btn btn-neutral float-right" title="5. Build the PetaLinux Image" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="index.html" class="btn btn-neutral float-left" title="VMK180 TRD Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="run.html" class="btn btn-neutral float-left" title="3. Run the Prebuilt Image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
