@@ -225,11 +225,6 @@ To run the notebooks, follow the below steps:
 
 Host machine Setup
 ------------------
-.. note::
-
- #. This design has been validated for SuperMicro server machine with X10SRA motherboard as PCIe Host. The machine was running Ubuntu 16.04.6 LTS with kernel version 		  4.10.0-28-generic.
- #. Current revisions of VMK180 board have a jitter attenuator chip that does not support spread- spectrum clock (SSC). As result the board do not support SSC on the PCIe clock.It requires SSC to be disabled in the host BIOs for the board to link-up.
-
 
 *Directory and file description:
 
@@ -257,7 +252,7 @@ NOTE: Make sure, the VMK180 board is powered on before booting the HOST machine 
 * Now power on the HOST machine
 
 * Execute "lspci" command on HOST machine's terminal
-  Make sure to see "03:00.0 Unclassified device [0058]: Xilinx Corporation Device a03f" entry is listed; otherwise QDMA driver
+  Make sure to see "03:00.0 RAM memory: Xilinx Corporation Device b03f" entry is listed; otherwise QDMA driver
   will not be able to recognized PCIe endpoint device. 
   
 * Copy the hosting package and follow steps to Install the QDMA driver
