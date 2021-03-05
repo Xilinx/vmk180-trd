@@ -603,13 +603,6 @@ next notebook.</p>
 </div>
 <div class="section" id="host-machine-setup">
 <h2><span class="section-number">3.6. </span>Host machine Setup<a class="headerlink" href="#host-machine-setup" title="Permalink to this headline">¶</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ol class="arabic simple">
-<li><p>This design has been validated for SuperMicro server machine with X10SRA motherboard as PCIe Host. The machine was running Ubuntu 16.04.6 LTS with kernel version             4.10.0-28-generic.</p></li>
-<li><p>Current revisions of VMK180 board have a jitter attenuator chip that does not support spread- spectrum clock (SSC). As result the board do not support SSC on the PCIe clock.It requires SSC to be disabled in the host BIOs for the board to link-up.</p></li>
-</ol>
-</div>
 <p><a href="#id1"><span class="problematic" id="id2">*</span></a>Directory and file description:</p>
 <p>Following are the list of directories in the package.</p>
 <p><strong>apps</strong> -&gt;      QDMA User space application to configure and control QDMA</p>
@@ -624,7 +617,7 @@ next notebook.</p>
 <li><p>Insert the VMK180 board into the PCIe slot of the HOST machine and power on the board</p></li>
 <li><p>Now power on the HOST machine</p></li>
 <li><p>Execute “lspci” command on HOST machine’s terminal
-Make sure to see “03:00.0 Unclassified device [0058]: Xilinx Corporation Device a03f” entry is listed; otherwise QDMA driver
+Make sure to see “03:00.0 RAM memory: Xilinx Corporation Device b03f” entry is listed; otherwise QDMA driver
 will not be able to recognized PCIe endpoint device.</p></li>
 <li><p>Copy the hosting package and follow steps to Install the QDMA driver
 NOTE: Root permissions will be required to install qdma driver.</p>
