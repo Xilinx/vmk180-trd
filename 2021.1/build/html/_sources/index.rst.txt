@@ -22,7 +22,7 @@ Contents:
    :caption: Versions
    :hidden:
 
-   Master (2021.1) <https://pages.gitenterprise.xilinx.com/mshaik/vmk180-trd/2021.1/build/html/index.html>
-   2020.2 <https://pages.gitenterprise.xilinx.com/mshaik/vmk180-trd/index_2020.2.html>
+   Master (2021.1) <https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html>
+   2020.2 <https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html>
 
    versions
