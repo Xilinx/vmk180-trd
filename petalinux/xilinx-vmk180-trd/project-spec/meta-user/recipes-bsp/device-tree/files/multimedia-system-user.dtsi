@@ -1,0 +1,14 @@
+/include/ "system-conf.dtsi"
+/ {
+	chosen {
+		bootargs = "console=ttyAMA0 earlycon=pl011,mmio32,0xFF000000,115200n8 clk_ignore_unused root=/dev/mmcblk0p2 rw rootwait";	
+		stdout-path = "serial0:115200";
+	};
+};
+&amba {
+	zyxclmm_drm {
+		compatible = "xlnx,zocl-versal";
+		status = "okay";
+	};
+};
+#include "pl-custom.dtsi"

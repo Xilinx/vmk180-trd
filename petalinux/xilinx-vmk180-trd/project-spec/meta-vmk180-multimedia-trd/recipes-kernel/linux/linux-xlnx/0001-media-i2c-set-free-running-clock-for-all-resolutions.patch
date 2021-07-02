@@ -1,0 +1,28 @@
+From bd9cdc6897da1e88ab60cb5fac97353a79cfa91b Mon Sep 17 00:00:00 2001
+From: Nagaradhesh Yeleswarapu <nagaradh@xilinx.com>
+Date: Tue, 2 Jun 2020 11:07:52 +0530
+Subject: [PATCH] media: i2c: set free running clock for all resolutions
+
+set free running clock for all resolutions, to avoid
+data corruption in mipi single sensor.
+
+Signed-off-by: Nagaradhesh Yeleswarapu <nagaradh@xilinx.com>
+---
+ drivers/media/i2c/imx274.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index 6011cec..b1a2141 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -405,6 +405,7 @@ static const struct reg_8 imx274_start_2[] = {
+  */
+ static const struct reg_8 imx274_start_3[] = {
+ 	{0x30F4, 0x00},
++	{0x3A43, 0x00},
+ 	{0x3018, 0xA2}, /* XHS VHS OUTPUT */
+ 	{IMX274_TABLE_END, 0x00}
+ };
+-- 
+2.7.4
+
