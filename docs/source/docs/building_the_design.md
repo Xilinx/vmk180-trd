@@ -60,8 +60,7 @@ vmk180-trd
 ¦   +-- Makefile
 ¦   +-- scripts
 ¦   +-- vivado
-¦   ¦   +-- vmk180_multimedia_platform
-¦   ¦   +-- vmk180_pcie_platform
+¦   ¦   +-- vmk180_TRD
 +-- README
 
 </pre>
