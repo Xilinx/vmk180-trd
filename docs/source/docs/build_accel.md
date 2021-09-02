@@ -53,7 +53,6 @@ Integrating an overlay (accelerator functions) into a Vitis Extensible platform
    Overlay(OVERLAY) - filter2d_pl 
    
 
-
 3. The generated XSA and xclbin will be located at 
 
    ```
