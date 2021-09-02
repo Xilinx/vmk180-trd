@@ -12,9 +12,12 @@ Features
  
 * 4k resolution images from a sensor
 * HDMI or Jupyter notebook display
+* Demonstration of Board as PCIe End-Point accelerator Card
 * User programmable 2D filter
-* Video file decode and display
+* Loop Back of processed 4k Video data over PCIe
+* Live Display of Loop backed video on Host
 * Jupyter notebook based power and performance monitoring
+
 
 Quick Start
 -----------
