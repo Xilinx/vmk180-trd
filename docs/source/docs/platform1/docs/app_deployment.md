@@ -16,7 +16,7 @@ Setting up the Board and Application Deployment
 Introduction
 ------------
 
-This document shows how to set up the board and run the Multimedia TRD application.
+This document shows how to set up the board and run the VMK180 TRD application.
 
 Setting up the Board
 ------------------------
@@ -27,7 +27,7 @@ Setting up the Board
   * To uncompress wic file use following command 
 
 	```
-	cd vmk180_multimedia_trd_prebuilt_2021.1
+	cd vmk180_multimedia_trd_prebuilt_2021.2
 	xz -d -v petalinux-sdimage.wic.xz
 	```
 
@@ -184,14 +184,12 @@ Run the Application
 
  This TRD includes the following jupyter notebooks:
 
-1. **vmk180-trd-nb1.ipynb**: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.
-2. **vmk180-trd-nb2.ipynb**: Demonstrates streaming video from a v4l2 device on the target to the Jupyter notebook using the GStreamer multimedia framework.
-3. **vmk180-trd-nb3.ipynb**: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.
-4. **vmk180-trd-nb4.ipynb**: Demonstrates two simultaneous streaming pipelines, one from file source and another from a v4l2 device onto two individual planes of a HDMI monitor using the GStreamer multimedia framework.
-5. **vmk180-trd-nb5.ipynb**: Demonstrates the 2D filter software kernel inserted into the video pipeline of notebook 2.
-6. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
-7. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
-8. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
+1. **vmk180-trd-nb3.ipynb**: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.
+2. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
+3. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
+4. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
+
+
   
 to run the notebooks, follow the below steps:
 
