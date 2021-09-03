@@ -16,7 +16,7 @@ Design Overview
 Introduction
 ------------
 
-The Multimedia TRD application design built on VMK180 Evaluation Kit provides a framework for building and customizing video platforms that consist of three pipeline stages:
+The VMK TRD application design built on VMK180 Evaluation Kit provides a framework for building and customizing video platforms that consist of three pipeline stages:
 
 * Capture pipeline
 * Accelerator/Processing pipeline
@@ -59,9 +59,7 @@ Design Components
 
   * VMK180 Evaluation Kit
   * [Leopard IMX274 MIPI FMC Card](https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc)
-  * USB webcam (optional)
-
-
+  
 </details>
 
 <details>
