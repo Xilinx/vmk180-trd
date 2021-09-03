@@ -1,7 +1,13 @@
 Multimedia TRD
 ===========================================================
 
-The multimedia TRD demonstrates video capture from either a file source, USB webcam or MIPI image sensor and displays it on a Jupyter Notebook or a HDMI monitor. Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter.
+VMK180 TRD demonstrates the following functionalities,
+
+* Video captured from MIPI image sensor is processed and displays on a Jupyter Notebook or a HDMI monitor.
+* Video frames are looped from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing and displayed onto the HDMI monitor connected to the host. 
+* Video frames are transferred from x86 host machine (root complex) to VMK180 evaluation board (end point) processed and displayed onto the HDMI monitor connected to VMK180 evaluation board.
+
+Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing on the end point and finally transfers it back to host where it is displayed on monitor.
 
 .. image:: ../media/sc_image_landing.jpg
    :width: 1200
