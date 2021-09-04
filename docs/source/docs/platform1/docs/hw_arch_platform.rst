@@ -6,7 +6,7 @@ Hardware Architecture of the Platform
 Introduction
 ------------
 
-This section describes the design implemented on Processing System (PS) and Programmable Logic (PL) on the VMK180 board and the LIIMX274MIPI-FMC image sensor daughter card.
+This section describes the design implemented on Processing System (PS) and Programmable Logic (PL) on the VMK180 board , LIIMX274MIPI-FMC image sensor daughter card and x86 host machine (root complex).
 
 The following figure shows the top level hardware architecture of the reference design.
 
