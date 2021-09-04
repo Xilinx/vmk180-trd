@@ -1,4 +1,4 @@
-Multimedia TRD
+VMK180 TRD
 ===========================================================
 
 VMK180 TRD demonstrates the following functionalities,
