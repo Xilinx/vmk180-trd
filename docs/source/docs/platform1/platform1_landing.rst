@@ -3,11 +3,11 @@ VMK180 TRD
 
 VMK180 TRD demonstrates the following functionalities,
 
-* Video captured from MIPI image sensor is processed and displayed on a Jupyter Notebook or a HDMI monitor connected to x86 host machine (root complex).
+* Video captured from MIPI image sensor is processed and displayed on a Jupyter Notebook or a HDMI monitor connected to x86 host machine (root complex) .
 * Video frames are looped from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing and displayed onto the HDMI monitor connected to the host. 
 * Video frames are transferred from x86 host machine (root complex) to VMK180 evaluation board (end point) processed and displayed onto the HDMI monitor connected to VMK180 evaluation board.
 
-Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing on the end point and finally transfers it back to host where it is displayed on monitor.
+Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing .
 
 .. image:: ../media/sc_image_landing.jpg
    :width: 1200

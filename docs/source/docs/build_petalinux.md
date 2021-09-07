@@ -15,8 +15,7 @@ Building Petalinux
 
 Introduction
 ------------
-This tutorial walks through the typical steps of creating and customizing a
-bootable Linux image for the VMK180 Evaluation Board. 
+This tutorial walks through the typical steps of creating and customizing a bootable Linux image for the VMK180 Evaluation Board. 
 
 In the following sections, you will:
 
@@ -65,12 +64,8 @@ Run the following command to create a new Petalinux project from the working dir
 
 ```
 cd petalinux/xilinx-vmk180-trd
-./trd.cfg -p <PFM>
+./trd.cfg -p vmk180_TRD
 ```
- Applications and their corresponding platform names are listed in the table below
-
-   Platform name(PFM) vmk80_TRD
-
 Next the project needs to be configured with the xsa file from the Vivado project.
 
 ```
@@ -112,10 +107,7 @@ equivalent to the prebuilt sdcard image provided with package
 
 Build the SDK
 ---------------
-A cross-compilation SDK is useful for application development on a host machine
-for a specific target architecture e.g. X86 host and ARM 64-bit target. Run the
-below command to generate a cross-compilation that can be used outside the
-PetaLinux:
+A cross-compilation SDK is useful for application development on a host machine for a specific target architecture e.g. X86 host and ARM 64-bit target. Run the below command to generate a cross-compilation that can be used outside the PetaLinux:
 
 ```
 petalinux-build -s
@@ -124,9 +116,7 @@ petalinux-build -s
 The resulting self-extracting shell script installer file is located at
 `images/linux/sdk.sh`.
 
-The SDK installer script can be copied to the application developer's host
-machine and installed by simply running the script. Follow the prompts on the
-screen.
+The SDK installer script can be copied to the application developer's host machine and installed by simply running the script. Follow the prompts on the screen.
 
 ```
 $ images/linux/sdk.sh
