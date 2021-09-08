@@ -426,7 +426,7 @@ Following Table lists the supported filter configuration in the design.
 A filter version of big buck bunny video will start playing on display monitor.
 
 **Next Steps**
-* Go back to the [VMK180 Multimedia TRD design start page](../platform1_landing.md)
+* Go back to the [VMK180 TRD design start page](../platform1_landing.md)
 
 **License**
 
