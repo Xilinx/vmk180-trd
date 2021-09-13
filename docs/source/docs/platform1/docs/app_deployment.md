@@ -52,7 +52,8 @@ Setting up the Board
 Below diagram shows Board and hardware connections.
 
   
-    ![GitHub Logo](../../media/vmk180-setup.png)
+![GitHub Logo](../../media/vmk180-setup.png)
+
 
    
   * **Board jumper and switch settings**
@@ -82,7 +83,6 @@ Below diagram shows Board and hardware connections.
 	* In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
   
    ![BoardUI](../../media/boardui.png)
-
 
    * Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.
    * Close the BoardUI utility.
