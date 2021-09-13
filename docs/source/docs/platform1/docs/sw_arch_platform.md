@@ -157,7 +157,53 @@ Data is transferred between the host and the target using the QDMA. QDMA device 
 
 host_package: The host package installs the PCIe QDMA driver on the host machine. It identifies the PCIe endpoint  Board connected to the host machine. This package has the application for sending files from the host machine along with the input parameters for 2dfilter on the Versal PCIe endpoint, and displays received content on the monitor.
 
+Please refer to below link for more details on QDMA drivers:
 
+https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel
+
+* Device Software components:
+
+In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
+
+Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective). 
+
+* G-streamer plugins :
+		Following G-streamer plugins are supported and provided as part of package.
+
+* Appsrc plugin: 
+		Appsrc plugin interacts with PCIe EP driver and gets the media content from the Host over PCIe interface.
+
+* Appsync Plugin: 
+ 		Appsync plugin interacts with PCIe EP driver and sends the media content to the Host over PCIe interface.
+
+* 2dfilter plugin: 
+  		2dfilter plugin gets media content from Appsrc, passes it through PL filter and sends filtered content to Appsync.
+
+* SDXFilter2d: 
+		SDX filter2d plugin is used to configure 2dfilter in PL
+
+* pcie_lib: 
+		This library provides abstract APIs for pcie_transcode applications that interact with PCIe user space configuration. 
+
+* pcie_ep_driver: 
+		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
+
+![Linux SW components](../../media/software_components.png )
+
+
+Supported Use cases:
+Following use cases are supported in this release.
+
+MIPI --> 2D Image Processing --> HDMI
+MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
+Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
+Usecase-1(MIPI --> 2D Image Processing --> HDMI):
+
+Data is captured using MIPI camera, captured frame is fed through Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port. 
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Device application provides user interface to configure  Plan-id and Sync parameters 
 **Next Steps**
 
 You can choose any of the following next steps:
