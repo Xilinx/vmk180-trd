@@ -52,7 +52,7 @@ Setting up the Board
 Below diagram shows Board and hardware connections.
 
   
-![GitHub Logo](../../media/vmk180-setup.png)
+![GitHub Logo](../../media/vmk180 boardsetup.jpg)
 
    
   * **Board jumper and switch settings**
