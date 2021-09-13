@@ -143,7 +143,8 @@ Hardware Architecture of the host to end point
 
 In the host to endpoint direction, the QDMA block moves data from the host memory to the PLside through the PCIe and then writes the data to the memory controller (DDR) via the NOC. Then, the 2D filter accelerator IP reads data from the DDR, performs filtering, and writes it back again to memory. Finally, in the endpoint to host direction, the QDMA reads the DDR via the NOC interface and writes to the host system memory through the PCIe. The following figure shows a detailed hardware block diagram.
 
-![Hardware Architecture: Top Level Diagram](../../media/PCIe_Platform_Hardware_Block_Diagram.png)
+.. image:: ../../media/PCIe_Platform_Hardware_Block_Diagram.png
+
 
 The submodules described in this section are :
 
