@@ -51,7 +51,7 @@ Setting up the Board
 
 Below diagram shows Board and hardware connections.
 
-   .. image:: ../../media/vmk180-setup.png
+.. image:: ../../media/vmk180-setup.png
    :width: 800
 
     #![GitHub Logo](../../media/vmk180-setup.png)
