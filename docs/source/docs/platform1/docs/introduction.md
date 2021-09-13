@@ -26,7 +26,7 @@ The following example Processing functions can be run on this platform
 
 The following figure shows the various pipelines supported by the design.
 
-![Pipelines Supported](../../media/pipelines.png)
+![Pipelines Supported](../../media/pipelines.PNG)
 
 The APU in the Processing Sytem (PS) consists of two Arm&reg; Cortex&reg;-A72 cores and is configured to run in symmetric multi-processing (SMP) Linux mode in the  design. The application running on Linux is responsible for configuring and controlling the video pipeline and accelerators using Jupyter notebooks.
 
@@ -42,7 +42,7 @@ The APU application controls the video data paths implemented in the PL:
 
 The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or jupyter notebook . The video format in the figure is the output format on each block. Details are described in the [Hardware Architecture document](hw_arch_platform.md).
 
-![End to end example pipelines](../../media/end_to_end_pp.png)
+![End to end example pipelines](../../media/end_to_end_pp.PNG)
 
 Design Components
 ------------------
