@@ -21,7 +21,7 @@ This chapter describes the application processing unit (APU) Linux software stac
 The  software stack and details on how the control information & data is interpreted between the x86 host and the target is shown in the following figures.
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
-![Linux Software Stack and Vertical Domains](../../media/host_stack.png)
+![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
 
 The stack is horizontally divided into the following layers:
 
