@@ -39,7 +39,8 @@ Capture
 
 A capture pipeline receives video frames and writes it into memory.Video frames are received from :
 
-** Single sensor MIPI CSI-2 camera 
+** Single sensor MIPI CSI-2 camera
+
 ** x86 host
 
 
@@ -89,6 +90,7 @@ Display
 Display pipeline fetches video frames from DDR memory and displays it onto HDMI monitor connected to :  
 
 ** VMK180 Evaluation Board 
+
 ** X86 host
 
 ** The HDMI TX display pipeline (in the PL) is controlled by the video frame buffer read, which fetches the video layer from memory and sends the data to the HDMI TX subsystem. The HDMI TX subsystem processes data and sends it out to an external display device. The HDMI
