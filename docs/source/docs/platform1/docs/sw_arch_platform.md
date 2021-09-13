@@ -190,7 +190,6 @@ Following diagram captures, all the SW components involved in achieving differen
 
 ![Linux SW components](../../media/software_components.png )
 
-
 Supported Use cases:
 Following use cases are supported in this release.
 
@@ -204,6 +203,34 @@ Data is captured using MIPI camera, captured frame is fed through Demossaic, Sca
 DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
 
 Device application provides user interface to configure  Plan-id and Sync parameters 
+
+![USECASE !](../../media/software_usecase1.png )
+
+
+Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
+
+Data is captured using MIPI camera, processed using Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent to the Host using appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Host application provides user interface to configure following parameters Height, Width,  Input-format, Kernel-preset, Kernel-mode, Kernel-name, Framerate. Host send all these parameters to the device using the control interface and actual media data is transferred using DMA through PCIe.
+
+Device application provides user interface to configure  Plan-id and Sync parameters 
+
+![USECASE 2](../../media/software_usecase2.png )
+
+Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
+
+Data is captured from the file source, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent back to the Host using Appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Host application provides user interface to configure following parameters Height, Width,  Input-format, Kernel-preset, Kernel-mode, Kernel-name, Framerate. Host send all these parameters to the device using the control interface and actual media data is transferred using DMA through PCIe.
+
+Device application provides user interface to configure  Plan-id and Sync parameters 
+
+![USECASE 3](../../media/software_usecase3.png )
+
 **Next Steps**
 
 You can choose any of the following next steps:
