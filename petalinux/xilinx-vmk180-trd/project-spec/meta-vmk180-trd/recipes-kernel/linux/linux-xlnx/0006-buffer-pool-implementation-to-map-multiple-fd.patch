@@ -1,0 +1,1753 @@
+From 21d5222accdf14fb1f4da9e66a64ad35c976887a Mon Sep 17 00:00:00 2001
+From: thippesw <thippesw@xilinx.com>
+Date: Thu, 9 Sep 2021 03:11:54 -0600
+Subject: [PATCH] buffer pool implementation to map multiple fd
+
+---
+ drivers/misc/xilinx_pci_endpoint.c | 1386 +++++++++++++++-------------
+ 1 file changed, 728 insertions(+), 658 deletions(-)
+
+diff --git a/drivers/misc/xilinx_pci_endpoint.c b/drivers/misc/xilinx_pci_endpoint.c
+index 92874f54f637..cd9aa87e7c35 100644
+--- a/drivers/misc/xilinx_pci_endpoint.c
++++ b/drivers/misc/xilinx_pci_endpoint.c
+@@ -108,6 +108,8 @@
+ #define GET_KERNEL_NAME        	  0x1c
+ #define GET_USE_CASE        	  0x1d
+ 
++#define MAP_DMA_BUFF			0x1e
++#define UNMAP_DMA_BUFF          0x1f
+ #define WIDTH_SHIFT               0x0
+ #define WIDTH_MASK                0xFFFF
+ #define HEIGHT_SHIFT              16
+@@ -149,7 +151,9 @@
+ 
+ #define READ_BUF_HIGH_OFFSET      0xFFFF0000
+ #define WRITE_BUF_HIGH_OFFSET     0xFFFF0000
++#define NUM_BUFFERS		3
+ 
++int active_index;
+ /**
+  * _PGPROT_NONCACHED    : vm_page_prot value when ((sync_mode & SYNC_MODE_MASK)
+  *			== SYNC_MODE_NONCACHED)
+@@ -165,30 +169,34 @@
+ #else
+ #define _PGPROT_NONCACHED(vm_page_prot)    pgprot_noncached(vm_page_prot)
+ #endif
+-
++char *fd_names[NUM_BUFFERS] = {
++                      "fd1",
++                      "fd2",
++                      "fd3"
++                  };
+ struct pcie_dmabuf_mem {
+-	int dbuf_fd;
+-	int flag;
+-	struct dma_buf *dbuf;
+-	struct dma_buf_attachment *dbuf_attach;
+-	struct sg_table *sgt;
+-	enum dma_data_direction dir;
+-	struct list_head list;
++    int dbuf_fd;
++    int flag;
++    struct dma_buf *dbuf;
++    struct dma_buf_attachment *dbuf_attach;
++    struct sg_table *sgt;
++    enum dma_data_direction dir;
++    struct list_head list;
+ };
+ 
+ enum pcie_dmabuf_dir {
+-        PCIE_DMABUF_DIR_BIDIR    = 1,
+-        PCIE_DMABUF_DIR_TO_DEV   = 2,
+-        PCIE_DMABUF_DIR_FROM_DEV = 3,
+-        PCIE_DMABUF_DIR_NONE     = 4,
++    PCIE_DMABUF_DIR_BIDIR    = 1,
++    PCIE_DMABUF_DIR_TO_DEV   = 2,
++    PCIE_DMABUF_DIR_FROM_DEV = 3,
++    PCIE_DMABUF_DIR_NONE     = 4,
+ };
+ 
+ struct pcie_dmabuf_args {
+-        __s32   dbuf_fd;
+-        __s32   flag;
+-        __u64   dma_addr;
+-        __u64   size;
+-        __u8    dir;
++    __s32   dbuf_fd;
++    __s32   flag;
++    __u64   dma_addr;
++    __u64   size;
++    __u8    dir;
+ };
+ 
+ 
+@@ -203,11 +211,8 @@ static DEFINE_MUTEX(pcie_write_mutex);
+  * struct pciep_driver_data - Plmem driver data
+  * @sys_dev: character device pointer
+  * @dma_dev: Device pointer
+- * @read_dmabuf: DMA buf pointer for read buffer
+- * @write_dmabuf: DMA buf pointer for write buffer
+  * @regs: points to BARMAP region
+  * @read_virt_addr: virtual address for read memory region
+- * @write_virt_addr: virtual address for write memory region
+  * @cdev: character device structure
+  * @read_complete: completion variable for read
+  * @write_complete: completion variable for write
+@@ -223,38 +228,37 @@ static DEFINE_MUTEX(pcie_write_mutex);
+  * @read_req: Read or write request from application.
+  */
+ struct pciep_driver_data {
+-	struct device *sys_dev;
+-	struct device *dma_dev;
+-	struct dma_buf *read_dmabuf;
+-	struct dma_buf *write_dmabuf;
+-	void __iomem *regs;
+-	void *read_virt_addr;
+-	void *write_virt_addr;
+-	struct cdev cdev;
+-	struct completion read_complete;
+-	struct completion write_complete;
+-	struct mutex lock;
+-	struct list_head attachments;
+-	dev_t device_number;
+-	dma_addr_t read_phys_addr;
+-	dma_addr_t write_phys_addr;
+-	size_t alloc_size;
+-	int rd_irq;
+-	int wr_irq;
+-	int host_done_irq;
+-	int read_req;
++    struct device *sys_dev;
++    struct device *dma_dev;
++    void __iomem *regs;
++    void *read_virt_addr[NUM_BUFFERS];
++    struct cdev cdev;
++    struct completion read_complete;
++    struct completion write_complete;
++    struct mutex lock;
++    struct list_head attachments;
++    dev_t device_number;
++    dma_addr_t read_phys_addr[NUM_BUFFERS];
++    dma_addr_t write_phys_addr;
++    size_t alloc_size;
++    int rd_irq;
++    int wr_irq;
++    int host_done_irq;
++    int read_req;
++    int fd[NUM_BUFFERS];	/* fd */
++    int fd_inuse[NUM_BUFFERS]
+ };
+ 
+ struct pciep_alloc_dma_buf {
+-	int fd;	/* fd */
+-	unsigned int flags;/* flags to map with */
+-	size_t size;	/* size */
++    int fd;	/* fd */
++    unsigned int flags;/* flags to map with */
++    size_t size;	/* size */
+ };
+ 
+ struct pciep_dma_buf_attachment {
+-	struct device *dev;
+-	struct sg_table sgt;
+-	struct list_head node;
++    struct device *dev;
++    struct sg_table sgt;
++    struct list_head node;
+ };
+ 
+ 
+@@ -265,32 +269,32 @@ typedef struct resolution {
+ 
+ static inline u32 reg_read(struct pciep_driver_data *this, u32 reg)
+ {
+-	return ioread32(this->regs + reg);
++    return ioread32(this->regs + reg);
+ }
+ 
+ static inline void reg_write(struct pciep_driver_data *this, u32 reg,
+-				u32 value)
++	u32 value)
+ {
+-	iowrite32(value, this->regs + reg);
++    iowrite32(value, this->regs + reg);
+ }
+ 
+ 
+ static int pcie_reset_all(struct pciep_driver_data *this)
+ {
+-	if (this) {
+-		reg_write(this, PCIEP_READ_TRANSFER_DONE, PCIEP_CLR_REG);
+-		reg_write(this, PCIEP_WRITE_TRANSFER_DONE, PCIEP_CLR_REG);
+-		reg_write(this, PCIEP_READ_BUFFER_OFFSET, PCIEP_CLR_REG);
+-		reg_write(this, PCIEP_READ_BUFFER_SIZE, PCIEP_CLR_REG);
+-		reg_write(this, PCIEP_WRITE_BUFFER_SIZE, PCIEP_CLR_REG);
+-		reg_write(this, PCIEP_READ_BUFFER_READY, PCIEP_CLR_REG);
+-		reg_write(this, PCIEP_WRITE_BUFFER_READY, PCIEP_CLR_REG);
+-	}
+-	else {
+-		return -EINVAL;
+-	}
+-
+-	return 0;
++    if (this) {
++	reg_write(this, PCIEP_READ_TRANSFER_DONE, PCIEP_CLR_REG);
++	reg_write(this, PCIEP_WRITE_TRANSFER_DONE, PCIEP_CLR_REG);
++	reg_write(this, PCIEP_READ_BUFFER_OFFSET, PCIEP_CLR_REG);
++	reg_write(this, PCIEP_READ_BUFFER_SIZE, PCIEP_CLR_REG);
++	reg_write(this, PCIEP_WRITE_BUFFER_SIZE, PCIEP_CLR_REG);
++	reg_write(this, PCIEP_READ_BUFFER_READY, PCIEP_CLR_REG);
++	reg_write(this, PCIEP_WRITE_BUFFER_READY, PCIEP_CLR_REG);
++    }
++    else {
++	return -EINVAL;
++    }
++
++    return 0;
+ }
+ 
+ /**
+@@ -301,15 +305,15 @@ static int pcie_reset_all(struct pciep_driver_data *this)
+  */
+ static int pciep_driver_file_open(struct inode *inode, struct file *file)
+ {
+-	struct pciep_driver_data *this;
+-	int status = 0;
++    struct pciep_driver_data *this;
++    int status = 0;
+ 
+-	this = container_of(inode->i_cdev, struct pciep_driver_data, cdev);
+-	file->private_data = this;
++    this = container_of(inode->i_cdev, struct pciep_driver_data, cdev);
++    file->private_data = this;
+ 
+-	pcie_reset_all(this);
++    pcie_reset_all(this);
+ 
+-	return status;
++    return status;
+ }
+ 
+ /**
+@@ -320,42 +324,42 @@ static int pciep_driver_file_open(struct inode *inode, struct file *file)
+  */
+ static int pciep_driver_file_release(struct inode *inode, struct file *file)
+ {
+-	struct pciep_driver_data *this = file->private_data;
+-	u32 value;
+-
+-	/* clear all the registers */
+-	reg_write(this, PCIEP_READ_BUFFER_OFFSET, PCIEP_CLR_REG);
+-	value = reg_read(this, PCIEP_READ_BUFFER_READY);
+-	value &= ~READ_BUF_HIGH_OFFSET;
+-	reg_write(this, PCIEP_READ_BUFFER_READY, value);
+-	reg_write(this, PCIEP_READ_BUFFER_SIZE, PCIEP_CLR_REG);
+-	reg_write(this, PCIEP_WRITE_BUFFER_SIZE, PCIEP_CLR_REG);
+-
+-	return 0;
++    struct pciep_driver_data *this = file->private_data;
++    u32 value;
++
++    /* clear all the registers */
++    reg_write(this, PCIEP_READ_BUFFER_OFFSET, PCIEP_CLR_REG);
++    value = reg_read(this, PCIEP_READ_BUFFER_READY);
++    value &= ~READ_BUF_HIGH_OFFSET;
++    reg_write(this, PCIEP_READ_BUFFER_READY, value);
++    reg_write(this, PCIEP_READ_BUFFER_SIZE, PCIEP_CLR_REG);
++    reg_write(this, PCIEP_WRITE_BUFFER_SIZE, PCIEP_CLR_REG);
++
++    return 0;
+ }
+ 
+ static ssize_t pciep_show_map_type(struct device *dev,
+-			    struct device_attribute *attr,
+-			    char *buf)
++	struct device_attribute *attr,
++	char *buf)
+ {
+-	struct pciep_driver_data *this = dev_get_drvdata(dev);
++    struct pciep_driver_data *this = dev_get_drvdata(dev);
+ 
+-	return sprintf(buf, "%d", this->read_req);
++    return sprintf(buf, "%d", this->read_req);
+ }
+ 
+ static ssize_t pciep_store_map_type(struct device *dev,
+-			     struct device_attribute *attr,
+-			     const char *buf, size_t len)
++	struct device_attribute *attr,
++	const char *buf, size_t len)
+ {
+-	struct pciep_driver_data *this = dev_get_drvdata(dev);
+-	unsigned long val;
+-	int ret;
++    struct pciep_driver_data *this = dev_get_drvdata(dev);
++    unsigned long val;
++    int ret;
+ 
+-	if (kstrtoul(buf, 0, &val))
+-		return -EINVAL;
++    if (kstrtoul(buf, 0, &val))
++	return -EINVAL;
+ 
+-	this->read_req = val;
+-	return sizeof(ret);
++    this->read_req = val;
++    return sizeof(ret);
+ }
+ 
+ 
+@@ -367,146 +371,151 @@ static ssize_t pciep_store_map_type(struct device *dev,
+  */
+ static int pciep_driver_file_mmap(struct file *file, struct vm_area_struct *vma)
+ {
+-	return 0;
++    return 0;
+ }
+ 
+ 
+ static int pciep_dma_buf_attach(struct dma_buf *dmabuf,
+-				  struct dma_buf_attachment *attachment)
++	struct dma_buf_attachment *attachment)
+ {
+-	struct pciep_driver_data *this = dmabuf->priv;
+-	struct pciep_dma_buf_attachment *a;
+-	int ret;
+-	void *virt;
+-	dma_addr_t phys;
+-
+-	a = kzalloc(sizeof(*a), GFP_KERNEL);
+-	if (!a)
+-		return -ENOMEM;
+-
+-	if (this->read_req) {
+-		virt = this->read_virt_addr;
+-		phys = this->read_phys_addr;
+-	} else {
+-		virt = this->write_virt_addr;
+-		phys = this->write_phys_addr;
+-	}
+-
+-	ret = dma_get_sgtable(this->dma_dev, &a->sgt, virt,
+-			      phys, this->alloc_size);
+-	if (ret < 0) {
+-		dev_err(this->dma_dev, "failed to get scatterlist from DMA API\n");
+-		kfree(a);
+-		return -EINVAL;
+-	}
++    struct pciep_driver_data *this = dmabuf->priv;
++    struct pciep_dma_buf_attachment *a;
++    int ret;
++    void *virt;
++    dma_addr_t phys;
++
++    a = kzalloc(sizeof(*a), GFP_KERNEL);
++    if (!a)
++	return -ENOMEM;
++
++    if(!(strcmp(dmabuf->exp_name,"fd1"))) {
++	virt = this->read_virt_addr[0];
++	phys = this->read_phys_addr[0];
++    } else if(!(strcmp(dmabuf->exp_name,"fd2"))) {
++	virt = this->read_virt_addr[1];
++	phys = this->read_phys_addr[1];
++    } else if(!(strcmp(dmabuf->exp_name,"fd3"))) {
++	virt = this->read_virt_addr[2];
++	phys = this->read_phys_addr[2];
++    }
++
++    ret = dma_get_sgtable(this->dma_dev, &a->sgt, virt,
++	    phys, this->alloc_size);
++    if (ret < 0) {
++	dev_err(this->dma_dev, "failed to get scatterlist from DMA API\n");
++	kfree(a);
++	return -EINVAL;
++    }
+ 
+-	a->dev = attachment->dev;
+-	INIT_LIST_HEAD(&a->node);
+-	attachment->priv = a;
++    a->dev = attachment->dev;
++    INIT_LIST_HEAD(&a->node);
++    attachment->priv = a;
+ 
+-	mutex_lock(&this->lock);
+-	list_add(&a->node, &this->attachments);
+-	mutex_unlock(&this->lock);
++    mutex_lock(&this->lock);
++    list_add(&a->node, &this->attachments);
++    mutex_unlock(&this->lock);
+ 
+-	return 0;
++    return 0;
+ }
+ 
+ static void pciep_dma_buf_detatch(struct dma_buf *dmabuf,
+-				    struct dma_buf_attachment *attachment)
++	struct dma_buf_attachment *attachment)
+ {
+-	struct pciep_dma_buf_attachment *a = attachment->priv;
+-	struct pciep_driver_data *this = dmabuf->priv;
+-
+-	mutex_lock(&this->lock);
+-	list_del(&a->node);
+-	mutex_unlock(&this->lock);
+-	sg_free_table(&a->sgt);
+-	kfree(a);
++    struct pciep_dma_buf_attachment *a = attachment->priv;
++    struct pciep_driver_data *this = dmabuf->priv;
++
++    mutex_lock(&this->lock);
++    list_del(&a->node);
++    mutex_unlock(&this->lock);
++    sg_free_table(&a->sgt);
++    kfree(a);
+ }
+ 
+ 
+-static struct sg_table *
++    static struct sg_table *
+ pciep_map_dma_buf(struct dma_buf_attachment *attachment,
+-		    enum dma_data_direction dir)
++	enum dma_data_direction dir)
+ {
+-	struct pciep_dma_buf_attachment *a = attachment->priv;
+-	struct sg_table *table;
++    struct pciep_dma_buf_attachment *a = attachment->priv;
++    struct sg_table *table;
+ 
+-	table = &a->sgt;
++    table = &a->sgt;
+ 
+-	if (!dma_map_sg(attachment->dev, table->sgl, table->nents, dir))
+-		return ERR_PTR(-ENOMEM);
++    if (!dma_map_sg(attachment->dev, table->sgl, table->nents, dir))
++	return ERR_PTR(-ENOMEM);
+ 
+-	return table;
++    return table;
+ }
+ 
+ static void pciep_unmap_dma_buf(struct dma_buf_attachment *attach,
+-				  struct sg_table *table,
+-				  enum dma_data_direction dir)
++	struct sg_table *table,
++	enum dma_data_direction dir)
+ {
+-	dma_unmap_sg(attach->dev, table->sgl, table->nents, dir);
++    dma_unmap_sg(attach->dev, table->sgl, table->nents, dir);
+ }
+ 
+ static int pciep_mmap(struct dma_buf *dmabuf,
+-			struct vm_area_struct *vma)
++	struct vm_area_struct *vma)
+ {
+-	struct pciep_driver_data *this = dmabuf->priv;
+-	size_t size = vma->vm_end - vma->vm_start;
+-	void *virt;
+-	dma_addr_t phys;
+-
+-	if (this->read_req) {
+-		virt = this->read_virt_addr;
+-		phys = this->read_phys_addr;
+-	} else {
+-		virt = this->write_virt_addr;
+-		phys = this->write_phys_addr;
+-	}
+-
+-	return dma_mmap_coherent(this->dma_dev, vma, virt,
+-				 phys, this->alloc_size);
++    struct pciep_driver_data *this = dmabuf->priv;
++    size_t size = vma->vm_end - vma->vm_start;
++    void *virt;
++    dma_addr_t phys;
++
++    if(!(strcmp(dmabuf->exp_name,"fd1"))) {
++	virt = this->read_virt_addr[0];
++	phys = this->read_phys_addr[0];
++    } else if(!(strcmp(dmabuf->exp_name,"fd2"))) {
++	virt = this->read_virt_addr[1];
++	phys = this->read_phys_addr[1];
++    } else if(!(strcmp(dmabuf->exp_name,"fd3"))) {
++	virt = this->read_virt_addr[2];
++	phys = this->read_phys_addr[2];
++    }
++
++    return dma_mmap_coherent(this->dma_dev, vma, virt,
++	    phys, this->alloc_size);
+ }
+ static int pciep_dmabuf_import(struct pciep_driver_data *this,char __user *user_args){
+-	printk("%s \n",__func__);
+-	struct pcie_dmabuf_args args;
+-	struct pcie_dmabuf_mem *dbuf_mem;
+-	struct dma_buf *dbuf;
+-	struct dma_buf_attachment *dbuf_attach;
+-	enum dma_data_direction dir;
+-	struct sg_table *sgt;
+-	long ret;
+-
+-	if (copy_from_user(&args, user_args, sizeof(args))) {
+-		ret = -EFAULT;
+-		dev_err(this->dma_dev, "failed to copy from user\n");
+-		goto err;
+-	}
+-	
+-if (args.flag ==1){
++    struct pcie_dmabuf_args args;
++    struct pcie_dmabuf_mem *dbuf_mem;
++    struct dma_buf *dbuf;
++    struct dma_buf_attachment *dbuf_attach;
++    enum dma_data_direction dir;
++    struct sg_table *sgt;
++    long ret;
++
++    if (copy_from_user(&args, user_args, sizeof(args))) {
++	ret = -EFAULT;
++	dev_err(this->dma_dev, "failed to copy from user\n");
++	goto err;
++    }
++    if (args.flag == 1){
+ 	dbuf = dma_buf_get(args.dbuf_fd);
+ 	if (IS_ERR(dbuf)) {
+-		dev_err(this->dma_dev, "failed to get dmabuf\n");
+-		return PTR_ERR(dbuf);
++	    dev_err(this->dma_dev, "failed to get dmabuf\n");
++	    ret -1;
++	    goto err;
+ 	}
+ 
+ 	dbuf_attach = dma_buf_attach(dbuf, this->dma_dev);
+ 	if (IS_ERR(dbuf_attach)) {
+-		dev_err(this->dma_dev, "failed to attach dmabuf\n");
+-		ret = PTR_ERR(dbuf_attach);
+-		goto err_put;
++	    dev_err(this->dma_dev, "failed to attach dmabuf\n");
++	    ret = PTR_ERR(dbuf_attach);
++	    goto err_put;
+ 	}
+ 	args.dir = PCIE_DMABUF_DIR_BIDIR;
+ 	switch (args.dir) {
+-	case PCIE_DMABUF_DIR_BIDIR:
++	    case PCIE_DMABUF_DIR_BIDIR:
+ 		dir = DMA_BIDIRECTIONAL;
+ 		break;
+-	case PCIE_DMABUF_DIR_TO_DEV:
++	    case PCIE_DMABUF_DIR_TO_DEV:
+ 		dir = DMA_TO_DEVICE;
+ 		break;
+-	case PCIE_DMABUF_DIR_FROM_DEV:
++	    case PCIE_DMABUF_DIR_FROM_DEV:
+ 		dir = DMA_FROM_DEVICE;
+ 		break;
+-	default:
++	    default:
+ 		/* Not needed with check. Just here for any future change  */
+ 		dev_err(this->dma_dev, "invalid direction\n");
+ 		ret = -EINVAL;
+@@ -515,76 +524,80 @@ if (args.flag ==1){
+ 
+ 	sgt = dma_buf_map_attachment(dbuf_attach, dir);
+ 	if (IS_ERR(sgt)) {
+-		dev_err(this->dma_dev, "failed to get dmabuf scatterlist\n");
+-		ret = PTR_ERR(sgt);
+-		goto err_detach;
++	    dev_err(this->dma_dev, "failed to get dmabuf scatterlist\n");
++	    ret = PTR_ERR(sgt);
++	    goto err_detach;
+ 	}
+-/* Accept only contiguous one */
++	/* Accept only contiguous one */
+ 	if (sgt->nents != 1) {
+-			printk("$$$$$$$$$$$$$$$$ nents  \n");
+-		dma_addr_t next_addr = sg_dma_address(sgt->sgl);
+-		struct scatterlist *s;
+-		unsigned int i;
+-
+-		for_each_sg(sgt->sgl, s, sgt->nents, i) {
+-			printk("$$$$$$$$$$$$$$$$ looping \n");
+-			if (!sg_dma_len(s))
+-				continue;
+-
+-			if (sg_dma_address(s) != next_addr) {
+-				dev_err(this->dma_dev,
+-					"dmabuf not contiguous\n");
+-				ret = -EINVAL;
+-				goto err_unmap;
+-			}
+-
+-			next_addr = sg_dma_address(s) + sg_dma_len(s);
++	    dma_addr_t next_addr = sg_dma_address(sgt->sgl);
++	    struct scatterlist *s;
++	    unsigned int i;
++
++	    for_each_sg(sgt->sgl, s, sgt->nents, i) {
++		if (!sg_dma_len(s))
++		    continue;
++
++		if (sg_dma_address(s) != next_addr) {
++		    dev_err(this->dma_dev,
++			    "dmabuf not contiguous\n");
++		    ret = -EINVAL;
++		    goto err_unmap;
+ 		}
++
++		next_addr = sg_dma_address(s) + sg_dma_len(s);
++	    }
+ 	}
+ 	this->write_phys_addr = sg_dma_address(sgt->sgl);
+-	}
+-	else if(args.flag == 0) {
++    }
++    else if(args.flag == 0) {
+ 	dma_buf_unmap_attachment(dbuf_attach,sgt,args.dir);
+ 	dma_buf_detach(dbuf,dbuf_attach);
+ 	dma_buf_put(dbuf);
+-	}
+-	return 0;
++    }
++    return 0;
+ 
+-err_free:
+-	kfree(dbuf_mem);
+ err_unmap:
+-	dma_buf_unmap_attachment(dbuf_attach, sgt, dir);
++    dma_buf_unmap_attachment(dbuf_attach, sgt, dir);
+ err_detach:
+-	dma_buf_detach(dbuf, dbuf_attach);
++    dma_buf_detach(dbuf, dbuf_attach);
+ err_put:
+-	dma_buf_put(dbuf);
++    dma_buf_put(dbuf);
+ err:
+-       return ret;
++    return ret;
+ }
+ static int  pciep_direct_copy(struct pciep_driver_data *this, char __user *argp)
+ {
+-        int ret = 0;
+-        pr_info("Info message no. %s\n",__func__);
++    int ret = 0;
++    struct pciep_alloc_dma_buf bp;
++    int i;
++
++    if (copy_from_user(&bp, argp, sizeof(bp)))
++	return -EFAULT;
++    for (i = 0; i < NUM_BUFFERS; i++) {
++	if (this->fd[i] == bp.fd) {
++	    this->write_phys_addr = this->read_phys_addr[i];
++	    break;
++	}
++    }
+ 
+-        this->write_phys_addr = this->read_phys_addr;
+-        return ret;
++    return ret;
+ }
+ static int pciep_dmabuf_free(struct pciep_driver_data *this, char __user *argp)
+ {
+ 
+-	void *virt;
+-	dma_addr_t phys;
+-	
+-	if (this->read_req) {
+-		virt = this->read_virt_addr;
+-		phys = this->read_phys_addr;
+-	} else {
+-		virt = this->write_virt_addr;
+-		phys = this->write_phys_addr;
+-	}
++    void *virt;
++    dma_addr_t phys;
++    int i;
++
++    for (i = 0; i < NUM_BUFFERS; i++) {
++	virt = this->read_virt_addr[i];
++	phys = this->read_phys_addr[i];
+ 	dma_free_coherent(this->dma_dev, this->alloc_size,
+-                 virt, phys);
+-	return 0;
++		virt, phys);
++    }
++    this->alloc_size = 0; 
++    return 0;
+ }
+ 
+ static void pciep_release(struct dma_buf *dmabuf)
+@@ -593,184 +606,242 @@ static void pciep_release(struct dma_buf *dmabuf)
+ }
+ 
+ static const struct dma_buf_ops pciep_dma_buf_ops = {
+-	.attach = pciep_dma_buf_attach,
+-	.detach = pciep_dma_buf_detatch,
+-	.map_dma_buf = pciep_map_dma_buf,
+-	.unmap_dma_buf = pciep_unmap_dma_buf,
+-	.mmap = pciep_mmap,
+-	.release = pciep_release,
++    .attach = pciep_dma_buf_attach,
++    .detach = pciep_dma_buf_detatch,
++    .map_dma_buf = pciep_map_dma_buf,
++    .unmap_dma_buf = pciep_unmap_dma_buf,
++    .mmap = pciep_mmap,
++    .release = pciep_release,
+ };
+ 
+-static int pciep_dmabuf_alloc(struct pciep_driver_data *this, char __user *argp)
++
++
++static int pciep_dmabuf_map(struct pciep_driver_data *this, char __user *argp)
+ {
+-	struct pciep_alloc_dma_buf bp;
+-	DEFINE_DMA_BUF_EXPORT_INFO(exp_info);
+-	int err;
+-	void *virt;
+-	dma_addr_t phys;
+-	struct dma_buf *dmabuf;
++    struct pciep_alloc_dma_buf bp;
++    int i; 
++    int fd;
++
++    for (i = 0; i < NUM_BUFFERS; i++) {
++	if (!this->fd_inuse[i]) {
++	    fd = this->fd[i];
++	    this->fd_inuse[i] = 1;
++	    active_index = i;
++	    break;
++	}
++    }
++    if (i == NUM_BUFFERS) {
++	return -EFAULT;
++    }
++    bp.size = this->alloc_size;
++    bp.fd = fd;
++    if (copy_to_user(argp, &bp, sizeof(bp))) {
++	return -EFAULT;
++    }
++    return 0;
++}
+ 
+-	if (copy_from_user(&bp, argp, sizeof(bp)))
+-		return -EFAULT;
++static int pciep_dmabuf_unmap(struct pciep_driver_data *this, char __user *argp)
++{
++    struct pciep_alloc_dma_buf bp;
++    int i;	
++    if (copy_from_user(&bp, argp, sizeof(bp)))
++	return -EFAULT;
++    for (i = 0; i < NUM_BUFFERS; i++) {
++	if (this->fd[i] == bp.fd) {
++	    this->fd_inuse[i] = 0;
++	    break;
++	}
++    }
++    bp.size = 0;
++    return 0;
++}
+ 
+-	INIT_LIST_HEAD(&this->attachments);
+-	mutex_init(&this->lock);
+ 
+-	/* allocate read buffer */
++static int pciep_dmabuf_alloc(struct pciep_driver_data *this, char __user *argp)
++{
++    struct pciep_alloc_dma_buf bp;
++    struct dma_buf_export_info exp_info[3];
++    int err;
++    int i;
++    void *virt;
++    dma_addr_t phys;
++    struct dma_buf *dmabuf;
++    int fd;
++    if (copy_from_user(&bp, argp, sizeof(bp)))
++	return -EFAULT;
++
++    INIT_LIST_HEAD(&this->attachments);
++    mutex_init(&this->lock);
++
++    /* allocate read buffer */
++    for (i = 0; i < NUM_BUFFERS; i++) {
+ 	virt = dma_alloc_coherent(this->dma_dev, bp.size,
+-			&phys, GFP_KERNEL);
++		&phys, GFP_KERNEL);
+ 	if (IS_ERR_OR_NULL(virt)) {
+-		dev_err(this->dma_dev, "%s dma_alloc_coherent() failed\n",
+-				__func__);
+-		this->read_virt_addr = NULL;
+-		return -ENOMEM;
+-	}
+-	if (this->read_req) {
+-		this->read_virt_addr = virt;
+-		this->read_phys_addr = phys;
+-	} else {
+-		this->write_virt_addr = virt;
+-		this->write_phys_addr = phys;
++	    dev_err(this->dma_dev, "%s dma_alloc_coherent() failed\n",
++		    __func__);
++	    this->read_virt_addr[i] = NULL;
++	    goto err_alloc;
+ 	}
+-
+-	exp_info.ops = &pciep_dma_buf_ops;
+-	exp_info.size = bp.size;
+-	exp_info.flags = O_RDWR;
+-	exp_info.priv = this;
+-	dmabuf = dma_buf_export(&exp_info);
++	this->read_virt_addr[i] = virt;
++	this->read_phys_addr[i] = phys;
++	exp_info[i].owner = THIS_MODULE;
++	exp_info[i].exp_name = fd_names[i];
++	exp_info[i].ops = &pciep_dma_buf_ops;
++	exp_info[i].size = bp.size;
++	exp_info[i].flags = O_RDWR;
++	exp_info[i].priv = this;
++	dmabuf = dma_buf_export(&exp_info[i]);
+ 	if (IS_ERR(dmabuf)) {
+-		err = PTR_ERR(dmabuf);
+-		dma_free_coherent(this->dma_dev, bp.size,
+-                 virt, phys);
+-		return err;
++	    dev_err(this->dma_dev, "%s dma_buf_export() failed\n",__func__);
++	    goto err1;
+ 	}
+-
+-	bp.fd = dma_buf_fd(dmabuf, O_ACCMODE);
+-	if (bp.fd < 0) {
+-		dma_buf_put(dmabuf);
+-		return -EINVAL;
+-	}
+-
+-	if (copy_to_user(argp, &bp, sizeof(bp))) {
+-		dma_buf_put(dmabuf);
+-		return -EFAULT;
++	fd = dma_buf_fd(dmabuf, O_ACCMODE);
++	if (fd < 0) {
++	    dev_err(this->dma_dev, "%s dma_buf_fd() failed\n",__func__);
++	    goto err_buf_fd;
+ 	}
+-	if (this->read_req)
+-		this->read_dmabuf = dmabuf;
+-	else
+-		this->write_dmabuf = dmabuf;
+-
++	this->fd[i] = fd;
++	this->fd_inuse[i] = 0;
+ 	this->alloc_size = bp.size;
+-	return 0;
++    }
++    bp.fd = 0;
++    if (copy_to_user(argp, &bp, sizeof(bp))) {
++	dev_err(this->dma_dev, "%s copy to user failed\n",__func__);
++	goto err_buf_fd;
++    }
++    return 0;
++
++err_buf_fd :
++
++    dma_buf_put(dmabuf);
++err1 :
++    for (i = 0; i < NUM_BUFFERS; i++) {
++	virt = this->read_virt_addr[i];
++	phys = this->read_phys_addr[i];
++	dma_free_coherent(this->dma_dev, this->alloc_size,
++		virt, phys);
++    }
++    bp.size = 0;
++err_alloc :
++    return -1;
++
+ }
+ 
+ static long pciep_driver_file_ioctl(struct file *file, unsigned int cmd,
+-			unsigned long arg)
++	unsigned long arg)
+ {
+-	struct pciep_driver_data *this = file->private_data;
+-	unsigned int value;
+-	u64 value1;
+-	u64 size;
+-	struct resolution res;
+-	int ret;
+-	char __user *argp = (char __user *)arg;
+-
+-	switch (cmd) {
++    struct pciep_driver_data *this = file->private_data;
++    unsigned int value;
++    u64 value1;
++    u64 size;
++    struct resolution res;
++    int ret;
++    char __user *argp = (char __user *)arg;
++
++    switch (cmd) {
+ 	case GET_FILE_LENGTH:
+-			value = reg_read(this, PCIRC_READ_FILE_LENGTH);
+-			value1 = reg_read(this, (PCIRC_READ_FILE_LENGTH - 4));
+-			size = value | value1 << 32;
+-			ret = copy_to_user((u64 *) arg, &size, sizeof(size));
+-			return ret;
+-	
++	    value = reg_read(this, PCIRC_READ_FILE_LENGTH);
++	    value1 = reg_read(this, (PCIRC_READ_FILE_LENGTH - 4));
++	    size = value | value1 << 32;
++	    ret = copy_to_user((u64 *) arg, &size, sizeof(size));
++	    return ret;
++
+ 	case GET_KERNEL_MODE:
+-			value = reg_read(this, PCIRC_KERNEL_MODE);
+-			ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-			return ret;
++	    value = reg_read(this, PCIRC_KERNEL_MODE);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 
+ 	case GET_FILTER_TYPE:
+-			value = reg_read(this, PCIRC_FILTER_TYPE);
+-			ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-			return ret;
++	    value = reg_read(this, PCIRC_FILTER_TYPE);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 
+ 	case GET_RESOLUTION:
+-			value = reg_read(this, PCIRC_RAW_RESOLUTION);
+-			res.width = (value>>WIDTH_SHIFT) & WIDTH_MASK;
+-			res.height = (value>>HEIGHT_SHIFT) & HEIGHT_MASK;
+-			ret = copy_to_user((struct resolution *) arg, &res, sizeof(res));
+-			return ret;
++	    value = reg_read(this, PCIRC_RAW_RESOLUTION);
++	    res.width = (value>>WIDTH_SHIFT) & WIDTH_MASK;
++	    res.height = (value>>HEIGHT_SHIFT) & HEIGHT_MASK;
++	    ret = copy_to_user((struct resolution *) arg, &res, sizeof(res));
++	    return ret;
+ 	case GET_HDMI_PID :
+-			value = reg_read(this, PCIRC_PID_SET);
+-                        ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-                        return ret;
++	    value = reg_read(this, PCIRC_PID_SET);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 
+ 	case SET_READ_OFFSET:
+-			ret = copy_from_user(&value1, (u64 *) arg, sizeof(value1));
+-			reg_write(this, PCIEP_READ_BUFFER_OFFSET, value1);
+-		    value = reg_read(this, PCIEP_READ_BUFFER_READY);
+-		    value &= ~READ_BUF_HIGH_OFFSET;
+-		    value |= (value1 >> 16) & READ_BUF_HIGH_OFFSET;
+-		    reg_write(this, PCIEP_READ_BUFFER_READY, value);
+-			return ret;
++	    ret = copy_from_user(&value1, (u64 *) arg, sizeof(value1));
++	    reg_write(this, PCIEP_READ_BUFFER_OFFSET, value1);
++	    value = reg_read(this, PCIEP_READ_BUFFER_READY);
++	    value &= ~READ_BUF_HIGH_OFFSET;
++	    value |= (value1 >> 16) & READ_BUF_HIGH_OFFSET;
++	    reg_write(this, PCIEP_READ_BUFFER_READY, value);
++	    return ret;
+ 
+ 	case SET_WRITE_OFFSET:
+-			ret = copy_from_user(&value1, (u64 *) arg, sizeof(value1));
+-			reg_write(this, PCIEP_WRITE_BUFFER_OFFSET, value1);
+-		    value = reg_read(this, PCIEP_WRITE_BUFFER_READY);
+-		    value &= ~WRITE_BUF_HIGH_OFFSET;
+-		    value |= (value1 >> 16) & WRITE_BUF_HIGH_OFFSET;
+-		    reg_write(this, PCIEP_WRITE_BUFFER_READY, value);
+-			return ret;
++	    ret = copy_from_user(&value1, (u64 *) arg, sizeof(value1));
++	    reg_write(this, PCIEP_WRITE_BUFFER_OFFSET, value1);
++	    value = reg_read(this, PCIEP_WRITE_BUFFER_READY);
++	    value &= ~WRITE_BUF_HIGH_OFFSET;
++	    value |= (value1 >> 16) & WRITE_BUF_HIGH_OFFSET;
++	    reg_write(this, PCIEP_WRITE_BUFFER_READY, value);
++	    return ret;
+ 
+ 	case SET_READ_TRANSFER_DONE:
+-			reg_write(this, PCIEP_READ_TRANSFER_DONE, 0xef);
+-			return 0;
++	    reg_write(this, PCIEP_READ_TRANSFER_DONE, 0xef);
++	    return 0;
+ 
+ 	case SET_WRITE_TRANSFER_DONE:
+-			reg_write(this, PCIEP_WRITE_TRANSFER_DONE, 0xef);
+-			return 0;
++	    reg_write(this, PCIEP_WRITE_TRANSFER_DONE, 0xef);
++	    return 0;
+ 
+ 	case CLR_READ_TRANSFER_DONE:
+-			reg_write(this, PCIEP_READ_TRANSFER_DONE, 0x00);
+-			return 0;
++	    reg_write(this, PCIEP_READ_TRANSFER_DONE, 0x00);
++	    return 0;
+ 
+ 	case CLR_WRITE_TRANSFER_DONE:
+-			reg_write(this, PCIEP_WRITE_TRANSFER_DONE, 0x00);
+-			return 0;
++	    reg_write(this, PCIEP_WRITE_TRANSFER_DONE, 0x00);
++	    return 0;
+ 
+ 	case GET_FPS:
+-			value = reg_read(this, PCIRC_SET_FPS);
+-			ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-			return ret;
++	    value = reg_read(this, PCIRC_SET_FPS);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 
+ 	case GET_FORMAT:
+-			value = reg_read(this, PCIRC_FORMAT_SET);
+-			ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-			return ret;
++	    value = reg_read(this, PCIRC_FORMAT_SET);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 	case GET_USE_CASE:
+-                        value = reg_read(this, PCIRC_UCASE_SET);
+-                        ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-                        return ret;
++	    value = reg_read(this, PCIRC_UCASE_SET);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 	case GET_KERNEL_NAME:
+-                        value = reg_read(this, PCIEP_KERNEL_NAME);
+-                        ret = copy_to_user((u32 *) arg, &value, sizeof(value));
+-                        return ret;
++	    value = reg_read(this, PCIEP_KERNEL_NAME);
++	    ret = copy_to_user((u32 *) arg, &value, sizeof(value));
++	    return ret;
+ 	case ALLOC_DMA_BUFF:
+-			ret = pciep_dmabuf_alloc(this, argp);
+-			return ret;
+-    
++	    ret = pciep_dmabuf_alloc(this, argp);
++	    return ret;
++
+ 	case RELEASE_DMA_BUFF:
+-			ret = pciep_dmabuf_free(this, argp);
+-			return ret;
++	    ret = pciep_dmabuf_free(this, argp);
++	    return ret;
++	case MAP_DMA_BUFF:
++	    ret = pciep_dmabuf_map(this, argp);
++	    return ret;
++	case UNMAP_DMA_BUFF:
++	    ret = pciep_dmabuf_unmap(this, argp);
++	    return ret;
+ 	case DIRECT_COPY:
+-                        ret = pciep_direct_copy(this, argp);
+-                        return ret; 
++	    ret = pciep_direct_copy(this, argp);
++	    return ret; 
+ 	case PCIE_DMABUF_IMPORT:
+-                        ret = pciep_dmabuf_import(this, argp);
+-                        return ret; 
++	    ret = pciep_dmabuf_import(this, argp);
++	    return ret; 
+ 	default:
+-		return -ENOTTY;
+-	}
++	    return -ENOTTY;
++    }
+ }
+ 
+ /**
+@@ -782,26 +853,25 @@ static long pciep_driver_file_ioctl(struct file *file, unsigned int cmd,
+  * Return:	Transferred size.
+  */
+ static ssize_t pciep_driver_file_read(struct file *file, char __user *buff,
+-				      size_t count, loff_t *ppos)
++	size_t count, loff_t *ppos)
+ {
+-	struct pciep_driver_data *this = file->private_data;
+-	u32 value;
+-	int ret = 0;
+-
+-	/* check the size */
+-	if (count <= 0)
+-		return -EINVAL;
+-
+-	reg_write(this, PCIEP_READ_BUFFER_ADDR, this->read_phys_addr);
+-	reg_write(this, PCIEP_READ_BUFFER_SIZE, count);
+-	value = reg_read(this, PCIEP_READ_BUFFER_READY);
+-	value |= SET_BUFFER_RDY;
+-	reg_write(this, PCIEP_READ_BUFFER_READY, value);
+-
+-	/* wait for done event */
+-	wait_for_completion_interruptible(&this->read_complete);
+-
+-	return ret;
++    struct pciep_driver_data *this = file->private_data;
++    u32 value;
++    int ret = 0;
++
++    /* check the size */
++    if (count <= 0)
++	return -EINVAL;
++    reg_write(this, PCIEP_READ_BUFFER_ADDR, this->read_phys_addr[active_index]);
++    reg_write(this, PCIEP_READ_BUFFER_SIZE, count);
++    value = reg_read(this, PCIEP_READ_BUFFER_READY);
++    value |= SET_BUFFER_RDY;
++    reg_write(this, PCIEP_READ_BUFFER_READY, value);
++
++    /* wait for done event */
++    wait_for_completion_interruptible(&this->read_complete);
++
++    return ret;
+ }
+ 
+ /**
+@@ -813,51 +883,51 @@ static ssize_t pciep_driver_file_read(struct file *file, char __user *buff,
+  * Return:	Transferred size.
+  */
+ static ssize_t pciep_driver_file_write(struct file *file,
+-				       const char __user *buff,
+-				       size_t count, loff_t *ppos)
++	const char __user *buff,
++	size_t count, loff_t *ppos)
+ {
+-	struct pciep_driver_data *this = file->private_data;
+-	int ret = 0;
+-	u32 value;
+-
+-	/* check the size */
+-	if (count <= 0)
+-		return -EINVAL;
+-
+-	reg_write(this, PCIEP_WRITE_BUFFER_ADDR, this->write_phys_addr);
+-	reg_write(this, PCIEP_WRITE_BUFFER_SIZE, count);
+-	value = reg_read(this, PCIEP_WRITE_BUFFER_READY);
+-	value |= SET_BUFFER_RDY;
+-	reg_write(this, PCIEP_WRITE_BUFFER_READY, value);
+-
+-	/* wait for done event */
+-	wait_for_completion_interruptible(&this->write_complete);
+-	return ret;
++    struct pciep_driver_data *this = file->private_data;
++    int ret = 0;
++    u32 value;
++
++    /* check the size */
++    if (count <= 0)
++	return -EINVAL;
++
++    reg_write(this, PCIEP_WRITE_BUFFER_ADDR, this->write_phys_addr);
++    reg_write(this, PCIEP_WRITE_BUFFER_SIZE, count);
++    value = reg_read(this, PCIEP_WRITE_BUFFER_READY);
++    value |= SET_BUFFER_RDY;
++    reg_write(this, PCIEP_WRITE_BUFFER_READY, value);
++
++    /* wait for done event */
++    wait_for_completion_interruptible(&this->write_complete);
++    return ret;
+ }
+ 
+ 
+ static loff_t pciep_driver_file_lseek(struct file *file,loff_t offset, int orig)
+ {
+-	struct pciep_driver_data *this = file->private_data;
+-	u32 value;
+-
+-	reg_write(this, PCIEP_READ_BUFFER_OFFSET, offset);
+-	value = reg_read(this, PCIEP_READ_BUFFER_READY);
+-	value &= ~READ_BUF_HIGH_OFFSET;
+-	value |= (offset >> 16) & READ_BUF_HIGH_OFFSET;
+-	reg_write(this, PCIEP_READ_BUFFER_READY, value);
+-	return offset;
++    struct pciep_driver_data *this = file->private_data;
++    u32 value;
++
++    reg_write(this, PCIEP_READ_BUFFER_OFFSET, offset);
++    value = reg_read(this, PCIEP_READ_BUFFER_READY);
++    value &= ~READ_BUF_HIGH_OFFSET;
++    value |= (offset >> 16) & READ_BUF_HIGH_OFFSET;
++    reg_write(this, PCIEP_READ_BUFFER_READY, value);
++    return offset;
+ }
+ 
+ static const struct file_operations pciep_driver_file_ops = {
+-	.owner   = THIS_MODULE,
+-	.open    = pciep_driver_file_open,
+-	.release = pciep_driver_file_release,
+-	.mmap    = pciep_driver_file_mmap,
+-	.read    = pciep_driver_file_read,
+-	.write   = pciep_driver_file_write,
+-	.llseek  = pciep_driver_file_lseek,
+-	.unlocked_ioctl = pciep_driver_file_ioctl,
++    .owner   = THIS_MODULE,
++    .open    = pciep_driver_file_open,
++    .release = pciep_driver_file_release,
++    .mmap    = pciep_driver_file_mmap,
++    .read    = pciep_driver_file_read,
++    .write   = pciep_driver_file_write,
++    .llseek  = pciep_driver_file_lseek,
++    .unlocked_ioctl = pciep_driver_file_ioctl,
+ };
+ 
+ 
+@@ -870,16 +940,16 @@ static const struct file_operations pciep_driver_file_ops = {
+  */
+ static irqreturn_t xilinx_pciep_read_irq_handler(int irq, void *data)
+ {
+-	struct pciep_driver_data *driver_data = data;
+-	u32 value;
++    struct pciep_driver_data *driver_data = data;
++    u32 value;
+ 
+-	value = reg_read(driver_data, PCIEP_READ_BUFFER_READY);
+-	value &= ~SET_BUFFER_RDY;
+-	reg_write(driver_data, PCIEP_READ_BUFFER_READY, value);
+-	complete(&driver_data->read_complete);
+-	reg_read(driver_data, PCIRC_READ_BUFFER_TRANSFER_DONE_INTR);
++    value = reg_read(driver_data, PCIEP_READ_BUFFER_READY);
++    value &= ~SET_BUFFER_RDY;
++    reg_write(driver_data, PCIEP_READ_BUFFER_READY, value);
++    complete(&driver_data->read_complete);
++    reg_read(driver_data, PCIRC_READ_BUFFER_TRANSFER_DONE_INTR);
+ 
+-	return IRQ_HANDLED;
++    return IRQ_HANDLED;
+ }
+ 
+ /**
+@@ -891,17 +961,17 @@ static irqreturn_t xilinx_pciep_read_irq_handler(int irq, void *data)
+  */
+ static irqreturn_t xilinx_pciep_write_irq_handler(int irq, void *data)
+ {
+-	u32 value;
+-	struct pciep_driver_data *driver_data = data;
++    u32 value;
++    struct pciep_driver_data *driver_data = data;
+ 
+-	value = reg_read(driver_data, PCIEP_WRITE_BUFFER_READY);
+-	value &= ~SET_BUFFER_RDY;
+-	reg_write(driver_data, PCIEP_WRITE_BUFFER_READY, value);
++    value = reg_read(driver_data, PCIEP_WRITE_BUFFER_READY);
++    value &= ~SET_BUFFER_RDY;
++    reg_write(driver_data, PCIEP_WRITE_BUFFER_READY, value);
+ 
+-	complete(&driver_data->write_complete);
+-	reg_read(driver_data, PCIRC_WRITE_BUFFER_TRANSFER_DONE_INTR);
++    complete(&driver_data->write_complete);
++    reg_read(driver_data, PCIRC_WRITE_BUFFER_TRANSFER_DONE_INTR);
+ 
+-	return IRQ_HANDLED;
++    return IRQ_HANDLED;
+ }
+ 
+ /**
+@@ -913,13 +983,13 @@ static irqreturn_t xilinx_pciep_write_irq_handler(int irq, void *data)
+  */
+ static irqreturn_t xilinx_pciep_host_done_irq_handler(int irq, void *data)
+ {
+-	struct pciep_driver_data *driver_data = data;
++    struct pciep_driver_data *driver_data = data;
+ 
+-	reg_read(driver_data, PCIRC_HOST_DONE_INTR);
+-	reg_write(driver_data, PCIEP_READ_TRANSFER_DONE, PCIEP_CLR_REG);
+-	reg_write(driver_data, PCIEP_WRITE_TRANSFER_DONE, PCIEP_CLR_REG);
++    reg_read(driver_data, PCIRC_HOST_DONE_INTR);
++    reg_write(driver_data, PCIEP_READ_TRANSFER_DONE, PCIEP_CLR_REG);
++    reg_write(driver_data, PCIEP_WRITE_TRANSFER_DONE, PCIEP_CLR_REG);
+ 
+-	return IRQ_HANDLED;
++    return IRQ_HANDLED;
+ }
+ /**
+  * pciep_driver_create() -  Create pciep driver data structure.
+@@ -933,100 +1003,100 @@ static irqreturn_t xilinx_pciep_host_done_irq_handler(int irq, void *data)
+  * It does all the memory allocation and registration for the device.
+  */
+ static struct pciep_driver_data *pciep_driver_create(const char *name,
+-						     struct device *parent,
+-						     u32 minor, u32 size,
+-						     char *channel)
++	struct device *parent,
++	u32 minor, u32 size,
++	char *channel)
+ {
+-	struct pciep_driver_data *this = NULL;
+-	const unsigned int DONE_ALLOC_MINOR   = (1 << 0);
+-	const unsigned int DONE_CHRDEV_ADD    = (1 << 1);
+-	const unsigned int DONE_ALLOC_CMA     = (1 << 2);
+-	const unsigned int DONE_DEVICE_CREATE = (1 << 3);
+-	unsigned int done = 0;
+-
+-	/* allocate device minor number */
+-	if (minor < DEVICE_MAX_NUM) {
+-		if (ida_simple_get(&pciep_device_ida, minor, minor+1,
+-				   GFP_KERNEL) < 0) {
+-			dev_err(parent, "couldn't allocate minor number(=%d)\n",
+-				minor);
+-			goto failed;
+-		}
+-	} else {
+-		dev_err(parent, "invalid minor num(=%d),valid range: 0 to %d\n",
+-			minor, DEVICE_MAX_NUM-1);
+-		goto failed;
+-	}
+-	done |= DONE_ALLOC_MINOR;
+-	/* create (pciep_driver_data*) this. */
+-	this = kzalloc(sizeof(*this), GFP_KERNEL);
+-	if (IS_ERR_OR_NULL(this))
+-		goto failed;
+-	/* make this->device_number */
+-	this->device_number = MKDEV(MAJOR(pciep_device_number), minor);
+-	/* register /sys/class/ */
+-	this->sys_dev = device_create(pciep_sys_class,
+-			parent,
+-			this->device_number,
+-			(void *)this,
+-			DEVICE_NAME_FORMAT, MINOR(this->device_number));
+-
+-	if (IS_ERR_OR_NULL(this->sys_dev)) {
+-		this->sys_dev = NULL;
+-		goto failed;
++    struct pciep_driver_data *this = NULL;
++    const unsigned int DONE_ALLOC_MINOR   = (1 << 0);
++    const unsigned int DONE_CHRDEV_ADD    = (1 << 1);
++    const unsigned int DONE_ALLOC_CMA     = (1 << 2);
++    const unsigned int DONE_DEVICE_CREATE = (1 << 3);
++    unsigned int done = 0;
++
++    /* allocate device minor number */
++    if (minor < DEVICE_MAX_NUM) {
++	if (ida_simple_get(&pciep_device_ida, minor, minor+1,
++		    GFP_KERNEL) < 0) {
++	    dev_err(parent, "couldn't allocate minor number(=%d)\n",
++		    minor);
++	    goto failed;
+ 	}
+-	done |= DONE_DEVICE_CREATE;
+-
+-	/* setup dma_dev */
+-	this->dma_dev = parent;
+-
+-	of_dma_configure(this->dma_dev, NULL, true);
+-	dma_set_mask(this->dma_dev, DMA_BIT_MASK(sizeof(dma_addr_t) * 4));
+-	dma_set_coherent_mask(this->dma_dev,
+-			      DMA_BIT_MASK(sizeof(dma_addr_t) * 4));
+-
+-	done |= DONE_ALLOC_CMA;
+-
+-	/* add chrdev */
+-	cdev_init(&this->cdev, &pciep_driver_file_ops);
+-	this->cdev.owner = THIS_MODULE;
+-	if (cdev_add(&this->cdev, this->device_number, MAX_INSTANCES) != 0) {
+-		dev_err(parent, "cdev_add() failed\n");
+-		goto failed;
+-	}
+-	done |= DONE_CHRDEV_ADD;
+-
+-	dev_info(this->sys_dev, "major number   = %d\n",
+-		 MAJOR(this->device_number));
+-	dev_info(this->sys_dev, "minor number   = %d\n",
+-		MINOR(this->device_number));
+-	init_completion(&this->read_complete);
+-	init_completion(&this->write_complete);
+-
+-	pr_err("pcie end point driver initialization success\n");
+-	return this;
++    } else {
++	dev_err(parent, "invalid minor num(=%d),valid range: 0 to %d\n",
++		minor, DEVICE_MAX_NUM-1);
++	goto failed;
++    }
++    done |= DONE_ALLOC_MINOR;
++    /* create (pciep_driver_data*) this. */
++    this = kzalloc(sizeof(*this), GFP_KERNEL);
++    if (IS_ERR_OR_NULL(this))
++	goto failed;
++    /* make this->device_number */
++    this->device_number = MKDEV(MAJOR(pciep_device_number), minor);
++    /* register /sys/class/ */
++    this->sys_dev = device_create(pciep_sys_class,
++	    parent,
++	    this->device_number,
++	    (void *)this,
++	    DEVICE_NAME_FORMAT, MINOR(this->device_number));
++
++    if (IS_ERR_OR_NULL(this->sys_dev)) {
++	this->sys_dev = NULL;
++	goto failed;
++    }
++    done |= DONE_DEVICE_CREATE;
++
++    /* setup dma_dev */
++    this->dma_dev = parent;
++
++    of_dma_configure(this->dma_dev, NULL, true);
++    dma_set_mask(this->dma_dev, DMA_BIT_MASK(sizeof(dma_addr_t) * 4));
++    dma_set_coherent_mask(this->dma_dev,
++	    DMA_BIT_MASK(sizeof(dma_addr_t) * 4));
++
++    done |= DONE_ALLOC_CMA;
++
++    /* add chrdev */
++    cdev_init(&this->cdev, &pciep_driver_file_ops);
++    this->cdev.owner = THIS_MODULE;
++    if (cdev_add(&this->cdev, this->device_number, MAX_INSTANCES) != 0) {
++	dev_err(parent, "cdev_add() failed\n");
++	goto failed;
++    }
++    done |= DONE_CHRDEV_ADD;
++
++    dev_info(this->sys_dev, "major number   = %d\n",
++	    MAJOR(this->device_number));
++    dev_info(this->sys_dev, "minor number   = %d\n",
++	    MINOR(this->device_number));
++    init_completion(&this->read_complete);
++    init_completion(&this->write_complete);
++
++    pr_err("pcie end point driver initialization success\n");
++    return this;
+ failed:
+-	if (done & DONE_CHRDEV_ADD)
+-		cdev_del(&this->cdev);
+-	if (done & DONE_DEVICE_CREATE)
+-		device_destroy(pciep_sys_class, this->device_number);
+-	if (done & DONE_ALLOC_MINOR)
+-		ida_simple_remove(&pciep_device_ida, minor);
+-	if (this != NULL)
+-		kfree(this);
+-	return NULL;
++    if (done & DONE_CHRDEV_ADD)
++	cdev_del(&this->cdev);
++    if (done & DONE_DEVICE_CREATE)
++	device_destroy(pciep_sys_class, this->device_number);
++    if (done & DONE_ALLOC_MINOR)
++	ida_simple_remove(&pciep_device_ida, minor);
++    if (this != NULL)
++	kfree(this);
++    return NULL;
+ }
+ 
+ static DEVICE_ATTR(map_type, S_IRUGO | S_IWUSR,
+-		   pciep_show_map_type, pciep_store_map_type);
++	pciep_show_map_type, pciep_store_map_type);
+ 
+ static struct attribute *pciep_attributes[] = {
+-	&dev_attr_map_type.attr,
+-	NULL,
++    &dev_attr_map_type.attr,
++    NULL,
+ };
+ 
+ static const struct attribute_group pciep_attr_group = {
+-	.attrs = pciep_attributes,
++    .attrs = pciep_attributes,
+ };
+ 
+ 
+@@ -1039,83 +1109,83 @@ static const struct attribute_group pciep_attr_group = {
+  */
+ static int pciep_platform_driver_probe(struct platform_device *pdev)
+ {
+-	int retval = 0;
+-	u32 minor_number = 0;
+-	struct pciep_driver_data *driver_data;
+-	struct device_node *node = pdev->dev.of_node;
+-	struct resource *res;
+-	int status;
+-	int ret;
+-	u32 size=4096;
+-	char channel[5];
+-
+-	/* create (pciep_driver_data*)this. */
+-	driver_data = pciep_driver_create(DRIVER_NAME, &pdev->dev, minor_number,
+-					  size, channel);
+-	if (IS_ERR_OR_NULL(driver_data)) {
+-		dev_err(&pdev->dev, "driver create fail.\n");
+-		retval = PTR_ERR(driver_data);
+-		goto failed;
+-	}
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	driver_data->regs= devm_ioremap_resource(&pdev->dev, res);
+-	if (IS_ERR_OR_NULL(driver_data->regs))
+-		return PTR_ERR(driver_data->regs);
+-
+-	driver_data->rd_irq = irq_of_parse_and_map(node, 0);
+-	if (driver_data->rd_irq < 0) {
+-		pr_err("Unable to get IRQ for pcie");
+-		return driver_data->rd_irq;
+-	}
+-
+-	ret = devm_request_irq(&pdev->dev, driver_data->rd_irq,
+-			       xilinx_pciep_read_irq_handler, IRQF_SHARED,
+-			       "xilinx_pciep_read", driver_data);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Unable to register IRQ\n");
+-		goto failed;
+-	}
+-
+-	driver_data->wr_irq = irq_of_parse_and_map(node, 1);
+-	if (driver_data->wr_irq < 0) {
+-		pr_err("Unable to get IRQ1 for pcie");
+-		return driver_data->wr_irq;
+-	}
+-
+-	ret = devm_request_irq(&pdev->dev, driver_data->wr_irq,
+-			       xilinx_pciep_write_irq_handler, IRQF_SHARED,
+-			       "xilinx_pciep_write", driver_data);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Unable to register IRQ\n");
+-		goto failed;
+-	}
+-
+-	driver_data->host_done_irq = irq_of_parse_and_map(node, 2);
+-	if (driver_data->host_done_irq < 0) {
+-		pr_err("Unable to get IRQ1 for pcie");
+-		return driver_data->host_done_irq;
+-	}
+-
+-	ret = devm_request_irq(&pdev->dev, driver_data->host_done_irq,
+-			       xilinx_pciep_host_done_irq_handler, IRQF_SHARED,
+-			       "xilinx_host_done", driver_data);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "Unable to register IRQ\n");
+-		goto failed;
+-	}
+-	ret = sysfs_create_group(&pdev->dev.kobj, &pciep_attr_group);
+-	if (ret) {
+-		dev_err(&pdev->dev, "sysfs creation failed\n");
+-		return ret;
+-	}
+-	dev_set_drvdata(&pdev->dev, driver_data);
+-	dev_info(&pdev->dev, "pcie driver probe success.\n");
+-	return 0;
++    int retval = 0;
++    u32 minor_number = 0;
++    struct pciep_driver_data *driver_data;
++    struct device_node *node = pdev->dev.of_node;
++    struct resource *res;
++    int status;
++    int ret;
++    u32 size=4096;
++    char channel[5];
++
++    /* create (pciep_driver_data*)this. */
++    driver_data = pciep_driver_create(DRIVER_NAME, &pdev->dev, minor_number,
++	    size, channel);
++    if (IS_ERR_OR_NULL(driver_data)) {
++	dev_err(&pdev->dev, "driver create fail.\n");
++	retval = PTR_ERR(driver_data);
++	goto failed;
++    }
++
++    res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++    driver_data->regs= devm_ioremap_resource(&pdev->dev, res);
++    if (IS_ERR_OR_NULL(driver_data->regs))
++	return PTR_ERR(driver_data->regs);
++
++    driver_data->rd_irq = irq_of_parse_and_map(node, 0);
++    if (driver_data->rd_irq < 0) {
++	pr_err("Unable to get IRQ for pcie");
++	return driver_data->rd_irq;
++    }
++
++    ret = devm_request_irq(&pdev->dev, driver_data->rd_irq,
++	    xilinx_pciep_read_irq_handler, IRQF_SHARED,
++	    "xilinx_pciep_read", driver_data);
++    if (ret < 0) {
++	dev_err(&pdev->dev, "Unable to register IRQ\n");
++	goto failed;
++    }
++
++    driver_data->wr_irq = irq_of_parse_and_map(node, 1);
++    if (driver_data->wr_irq < 0) {
++	pr_err("Unable to get IRQ1 for pcie");
++	return driver_data->wr_irq;
++    }
++
++    ret = devm_request_irq(&pdev->dev, driver_data->wr_irq,
++	    xilinx_pciep_write_irq_handler, IRQF_SHARED,
++	    "xilinx_pciep_write", driver_data);
++    if (ret < 0) {
++	dev_err(&pdev->dev, "Unable to register IRQ\n");
++	goto failed;
++    }
++
++    driver_data->host_done_irq = irq_of_parse_and_map(node, 2);
++    if (driver_data->host_done_irq < 0) {
++	pr_err("Unable to get IRQ1 for pcie");
++	return driver_data->host_done_irq;
++    }
++
++    ret = devm_request_irq(&pdev->dev, driver_data->host_done_irq,
++	    xilinx_pciep_host_done_irq_handler, IRQF_SHARED,
++	    "xilinx_host_done", driver_data);
++    if (ret < 0) {
++	dev_err(&pdev->dev, "Unable to register IRQ\n");
++	goto failed;
++    }
++    ret = sysfs_create_group(&pdev->dev.kobj, &pciep_attr_group);
++    if (ret) {
++	dev_err(&pdev->dev, "sysfs creation failed\n");
++	return ret;
++    }
++    dev_set_drvdata(&pdev->dev, driver_data);
++    dev_info(&pdev->dev, "pcie driver probe success.\n");
++    return 0;
+ 
+ failed:
+-	dev_info(&pdev->dev, "driver install failed.\n");
+-	return retval;
++    dev_info(&pdev->dev, "driver install failed.\n");
++    return retval;
+ }
+ 
+ /**
+@@ -1127,14 +1197,14 @@ static int pciep_platform_driver_probe(struct platform_device *pdev)
+  */
+ static int pciep_driver_destroy(struct pciep_driver_data *this)
+ {
+-	if (!this)
+-		return -ENODEV;
+-
+-	sysfs_remove_group(&this->dma_dev->kobj, &pciep_attr_group);
+-	ida_simple_remove(&pciep_device_ida, MINOR(this->device_number));
+-	cdev_del(&this->cdev);
+-	kfree(this);
+-	return 0;
++    if (!this)
++	return -ENODEV;
++
++    sysfs_remove_group(&this->dma_dev->kobj, &pciep_attr_group);
++    ida_simple_remove(&pciep_device_ida, MINOR(this->device_number));
++    cdev_del(&this->cdev);
++    kfree(this);
++    return 0;
+ }
+ 
+ /**
+@@ -1146,22 +1216,22 @@ static int pciep_driver_destroy(struct pciep_driver_data *this)
+  */
+ static int pciep_platform_driver_remove(struct platform_device *pdev)
+ {
+-	struct pciep_driver_data *this = dev_get_drvdata(&pdev->dev);
+-	int retval = 0;
+-
+-	retval = pciep_driver_destroy(this);
+-	if (retval != 0)
+-		return retval;
+-	dev_set_drvdata(&pdev->dev, NULL);
+-	return 0;
++    struct pciep_driver_data *this = dev_get_drvdata(&pdev->dev);
++    int retval = 0;
++
++    retval = pciep_driver_destroy(this);
++    if (retval != 0)
++	return retval;
++    dev_set_drvdata(&pdev->dev, NULL);
++    return 0;
+ }
+ 
+ /**
+  * Open Firmware Device Identifier Matching Table
+  */
+ static const struct of_device_id pciep_of_match[] = {
+-	{ .compatible = "xlnx,pcie-reg-space-v1-0-1.0", },
+-	{ /* end of table */}
++    { .compatible = "xlnx,pcie-reg-space-v1-0-1.0", },
++    { /* end of table */}
+ };
+ MODULE_DEVICE_TABLE(of, pciep_of_match);
+ 
+@@ -1169,13 +1239,13 @@ MODULE_DEVICE_TABLE(of, pciep_of_match);
+  * Platform Driver Structure
+  */
+ static struct platform_driver pciep_platform_driver = {
+-	.probe  = pciep_platform_driver_probe,
+-	.remove = pciep_platform_driver_remove,
+-	.driver = {
+-		.owner = THIS_MODULE,
+-		.name  = DRIVER_NAME,
+-		.of_match_table = pciep_of_match,
+-	},
++    .probe  = pciep_platform_driver_probe,
++    .remove = pciep_platform_driver_remove,
++    .driver = {
++	.owner = THIS_MODULE,
++	.name  = DRIVER_NAME,
++	.of_match_table = pciep_of_match,
++    },
+ };
+ 
+ 
+@@ -1185,11 +1255,11 @@ static struct platform_driver pciep_platform_driver = {
+ static void __exit pciep_module_exit(void)
+ {
+ 
+-	if (pciep_platform_driver_done)
+-		platform_driver_unregister(&pciep_platform_driver);
+-	if (pciep_device_number != 0)
+-		unregister_chrdev_region(pciep_device_number, 0);
+-	ida_destroy(&pciep_device_ida);
++    if (pciep_platform_driver_done)
++	platform_driver_unregister(&pciep_platform_driver);
++    if (pciep_device_number != 0)
++	unregister_chrdev_region(pciep_device_number, 0);
++    ida_destroy(&pciep_device_ida);
+ }
+ 
+ /**
+@@ -1197,33 +1267,33 @@ static void __exit pciep_module_exit(void)
+  */
+ static int __init pciep_module_init(void)
+ {
+-	int retval = 0;
+-
+-	ida_init(&pciep_device_ida);
+-	retval = alloc_chrdev_region(&pciep_device_number, 0, MAX_INSTANCES,
+-				     DRIVER_NAME);
+-	if (retval != 0) {
+-		pr_err("%s: couldn't allocate device major number\n",
+-		       DRIVER_NAME);
+-		pciep_device_number = 0;
+-		goto failed;
+-	}
+-	pciep_sys_class = class_create(THIS_MODULE, DRIVER_NAME);
+-	if (IS_ERR_OR_NULL(pciep_sys_class)) {
+-		pr_err("%s: couldn't create sys class\n", DRIVER_NAME);
+-		retval = PTR_ERR(pciep_sys_class);
+-		pciep_sys_class = NULL;
+-		goto failed;
+-	}
+-	retval = platform_driver_register(&pciep_platform_driver);
+-	if (retval)
+-		pr_err("%s: couldn't register platform driver\n", DRIVER_NAME);
+-	else
+-		pciep_platform_driver_done = 1;
+-	return 0;
++    int retval = 0;
++
++    ida_init(&pciep_device_ida);
++    retval = alloc_chrdev_region(&pciep_device_number, 0, MAX_INSTANCES,
++	    DRIVER_NAME);
++    if (retval != 0) {
++	pr_err("%s: couldn't allocate device major number\n",
++		DRIVER_NAME);
++	pciep_device_number = 0;
++	goto failed;
++    }
++    pciep_sys_class = class_create(THIS_MODULE, DRIVER_NAME);
++    if (IS_ERR_OR_NULL(pciep_sys_class)) {
++	pr_err("%s: couldn't create sys class\n", DRIVER_NAME);
++	retval = PTR_ERR(pciep_sys_class);
++	pciep_sys_class = NULL;
++	goto failed;
++    }
++    retval = platform_driver_register(&pciep_platform_driver);
++    if (retval)
++	pr_err("%s: couldn't register platform driver\n", DRIVER_NAME);
++    else
++	pciep_platform_driver_done = 1;
++    return 0;
+ failed:
+-	pciep_module_exit();
+-	return retval;
++    pciep_module_exit();
++    return retval;
+ }
+ 
+ module_init(pciep_module_init);
+-- 
+2.17.1
+

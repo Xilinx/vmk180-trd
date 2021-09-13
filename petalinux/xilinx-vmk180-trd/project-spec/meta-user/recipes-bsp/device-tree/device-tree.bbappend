@@ -1,6 +1,12 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:${SYSCONFIG_PATH}:"
 
-SRC_URI_append = " file://config file://system-user.dtsi"
+SRC_URI += "file://config \
+	 	file://system-user.dtsi \
+		file://ina226-power-monitor.dtsi \
+		file://pl-custom.dtsi \
+		file://single-capture.dtsi \ 
+		file://display.dtsi \
+		file://pcie.dtsi" 
 
 python () {
     if d.getVar("CONFIG_DISABLE"):
