@@ -9,7 +9,7 @@ VMK180 TRD demonstrates the following functionalities,
 
 Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing .
 
-.. image:: ../media/sc_image_landing.jpg
+.. image:: ../media/sc_image_landing.PNG
    :width: 1200
    :alt:  Smart Camera Landing
    
