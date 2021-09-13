@@ -163,7 +163,7 @@ host_package: The host package installs the PCIe QDMA driver on the host machine
 You can choose any of the following next steps:
 
 * Read [Hardware Architecture of the Platform](hw_arch_platform.md) 
-* Go back to the [VMK180 Multimedia TRD start page](../platform1_landing.md)
+* Go back to the [VMK180 TRD start page](../platform1_landing.md)
 
 **License**
 
