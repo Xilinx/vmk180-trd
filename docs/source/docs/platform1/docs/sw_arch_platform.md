@@ -15,29 +15,29 @@ Software Architecture of the Platform
 
 Introduction
 --------------
- This chapter describes the application processing unit (APU) Linux software stack. The stack and vertical domains are shown in the following figure.
+
+This chapter describes the application processing unit (APU) Linux software stack and PS application running on the end receives control information using the PCIe BAR map memory and data through the QDMA. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
+
+The  software stack and details on how the control information & data is interpreted between the x86 host and the target is shown in the following figures.
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
 
 The stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
-
-	- Jupyter notebooks with a simple control and visualization interface
-	- smartcam application to invoke various gstreamer pipelines
-	- GStreamer multimedia framework with python bindings for video pipeline control
-
+	- G-streamer/Jupyter notebooks with a simple control and visualization interface     
+	- GStreamer multimedia framework with python bindings for video pipeline control(MIPI → Filtered → HDMI)   
+	- Gstreamer based application to capture data from MIPI on endpoint, process and transfer to host machine via pcie and display on HOST machine.
+	- Gstreamer based application to receive data host machine, process the data on EP and transfer to host machine via pcie and display on HOST machine
 * Middleware layer (user-space)
-
 	- Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer
 	- Provides access to kernel frameworks
-
 * Operating system (OS) layer (kernel-space)
 	- Provides a stable, well-defined API to user-space
-	- Includes device drivers and kernel frameworks (subsystems)
+ 	- Includes device drivers and kernel frameworks (subsystems)
 	- Access to hardware IPs
 
-Vertically, the software components are divided by domain:
+Vertically, the software components are divided by domain:Vertically, the software components are divided by domain:
 
 Video Capture
 ---------------
