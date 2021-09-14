@@ -46,7 +46,6 @@ VMK180_TRD_PACKAGES = " \
 	trd-files \
 	ttf-bitstream-vera \
 	tzdata \
-	${MOVIE_PACKAGES} \
 	"
 
 RDEPENDS_${PN} = "${VMK180_TRD_PACKAGES}"
