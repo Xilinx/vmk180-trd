@@ -384,24 +384,15 @@ Run Host and EP applications
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
 
-* Execute following command to run the Host application(pcie_host_app)
+* Execute following command to run the Host application(pcie_host_app) which will prompt for user inputs.
 
 
 	```
-	./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  
-	```
+	./pcie_host_app 
 	
-	For 1080p, 30fps:
-	``` 
-   ./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4 
-   
-    ```
-  
-	For 4K, 30fps: 
-	``` 
-   ./pcie_host_app -i file.yuy2 -d 3840x2160 -t 4 
-   
-   ```
+	```
+Depending on the pipeline/Use case host applcation will prompt for user inputs linke resolution,filter typs,file input etc. 
+
 Following Table lists the supported filter configuration in the design.
 
 |Filter_type |Filter name|
