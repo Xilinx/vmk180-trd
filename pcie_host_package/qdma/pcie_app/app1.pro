@@ -56,7 +56,7 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-INCLUDEPATH +=/usr/include
+INCLUDEPATH +=/usr/local/include/opencv4/
 #INCLUDEPATH +=/home/for_test/opencv/opencv-3.4/opencv2
 
 
