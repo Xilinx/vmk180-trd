@@ -53,7 +53,7 @@ extensions = [
     'sphinx.ext.githubpages',
 	'recommonmark',
 	#'edit_on_github',
-    # Auto-generate section labels.
+     Auto-generate section labels.
     'sphinx.ext.autosectionlabel',
     'sphinx_markdown_tables'
 ]

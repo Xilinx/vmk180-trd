@@ -1,4 +1,4 @@
-﻿<table class="sphinxhide">
+<table class="sphinxhide">
  <tr>
    <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit TRD Tutorial</h1>
    </td>
@@ -16,18 +16,18 @@ Setting up the Board and Application Deployment
 Introduction
 ------------
 
-This document shows how to set up the board and run the Multimedia TRD application.
+This document shows how to set up the board and run the VMK180 TRD application.
 
 Setting up the Board
 ------------------------
 
 ### Flash the SD Card
-  * Download  the `vmk180_multimedia_trd_prebuilt_2021.1.zip` package, unzip and save it on your computer. Alternatively, Go through tutorials section to build `petalinux-sdimage.wic` locally.
+  * Download  the `vmk180_trd_prebuilt_2021.2.zip` package, unzip and save it on your computer. Alternatively, Go through tutorials section to build `petalinux-sdimage.wic` locally.
   
   * To uncompress wic file use following command 
 
 	```
-	cd vmk180_multimedia_trd_prebuilt_2021.1
+	cd vmk180_trd_prebuilt_2021.2
 	xz -d -v petalinux-sdimage.wic.xz
 	```
 
@@ -51,8 +51,8 @@ Setting up the Board
 
 Below diagram shows Board and hardware connections.
 
-![GitHub Logo](../../media/vmk180-setup.jpg)
-
+  
+![GitHub Logo](../../media/vmk180-setup.png)
 
    
   * **Board jumper and switch settings**
@@ -81,7 +81,7 @@ Below diagram shows Board and hardware connections.
 	
 	* In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
   
-	![BoardUI](../../media/boardui.jpg)
+   ![BoardUI](../../media/boardui.jpg)
 
    * Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.
    * Close the BoardUI utility.
@@ -102,10 +102,7 @@ Below diagram shows Board and hardware connections.
     * Stop: 1 bit
     * Flow Control: None
 
-  * You may also use a USB webcam as an input device.
-
-    The webcam is optional video input device supported in the application. Recommended webcam is the [Logitech BRIO](https://www.logitech.com/en-in/products/webcams/brio-4k-hdr-webcam.960-001105.html).
-
+  
   * **Network connection**:
 
     Connect the Ethernet cable to your local network with DHCP enabled to run Jupyter Notebooks
@@ -153,7 +150,7 @@ http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
 
 ```
 
-  > **Note**: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:
+  > **Note**: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix the IP address and restart the jupyter server as shown below:
 
 ```
 
@@ -192,7 +189,7 @@ Run the Application
   
 to run the notebooks, follow the below steps:
 
-1. On the left pane of the browser, 8 notebooks are available under the folder VMK180 TRD.
+1. On the left pane of the browser, 4 notebooks are available under the folder VMK180 TRD.
 2. Double click to open the notebook
 3. Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run's all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.
 
@@ -231,7 +228,7 @@ Following are the list of directories in `pcie_host_package` directory.
 lspci -vd 10ee:
 ```
 
- On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint: 
+On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint: 
   
   ```
   03:00.0 RAM memory: Xilinx Corporation Device b03f
@@ -253,13 +250,14 @@ This struct defines the PCIe Device IDs that are recognized by the driver in the
 
 ```
 {PCI_DEVICE (0x10ee, 0xb03f),}, 
+
 ```
 
 Add, remove, or modify the PCIe Device IDs in this struct. The PCIe DMA driver will only recognize device IDs identified in this struct as PCIe QDMA devices. User can also remove PCIe Device IDs that are not be used in their solution.
 On every modification, the driver must be un-installed and recompiled, if compiled previously.
 
  For additional information refer https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html
- 
+
   * follow below steps to Install the QDMA driver
 > **NOTE** : Root permissions will be required to install qdma driver. 
 
@@ -268,7 +266,7 @@ cd pcie_host_package/qdma
 make 
  ```
  
-  * Install the QDMA driver
+* Install the QDMA driver
 ```
 make install-mods
 
@@ -287,17 +285,16 @@ Ex: (Assuming PCIe BDF - 03:00.0)
 ./scripts/qdma_generate_conf_file.sh 0x03 1 0 1 0
 
 ```
-	
-  * For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)
+ * For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)
 ```
 modprobe qdma-pf
 ```
-	
-  * Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
+ * Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
   Allocate the Queues to a function. QDMA IP supports maximum of 2048 queues. 
 	By default, all functions have 0 queues assigned.
 	qmax configuration parameter enables the user to update the number of queues for a PF. 
 	This configuration parameter indicates “Maximum number of queues associated for the current pf”.
+
 To set 1024 as qmax for PF0:
 
 ```
@@ -316,7 +313,7 @@ Ex: (Assuming PCIe BDF - 03:00.0)
 ```
 dma-ctl qdma03000 q add idx 0 mode mm dir h2c
 dma-ctl qdma03000 q add idx 1 mode mm dir c2h 
-       
+
  ```
 
   * To start a Queue:
@@ -340,12 +337,13 @@ cd pcie_app/
 
 ```
 	
-   * modify macros `H2C_DEVICE` , `C2H_DEVICE` , `REG_DEVICE_NAME` in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its `Bus:Device:Function number`.
+  * modify macros `H2C_DEVICE` , `C2H_DEVICE` , `REG_DEVICE_NAME` in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its `Bus:Device:Function number`.
 	
  Ex: Assuming PCIe BDF as `03:00.0` the above macros need to be set as:	
    * If H2C queue index is 0 device node is `/dev/qdma03000-MM-0`  (Queue index for H2C is set in above "Add a queue" step)
    * If C2H queue index is 1 device node is `/dev/qdma03000-MM-1`  (Queue index for C2H is set in above "Add a queue" step)
 		
+
    REG_DEVICE_NAME is `/sys/bus/pci/devices/0000:03:00.0/resource0`
 
    * Modify pcie_app/app1.pro line no 35 and 39 for opencv library path and opencv include path before compilation
@@ -387,6 +385,7 @@ Run Host and EP applications
 
 
 * Execute following command to run the Host application(pcie_host_app)
+
 
 	```
 	./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  

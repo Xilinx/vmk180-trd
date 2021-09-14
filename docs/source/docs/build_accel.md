@@ -19,7 +19,7 @@ This document provides the steps to integrate the overlay consisting of accelera
 
 Prerequisites:
 --------------
-* Vitis Unified Software Platform 2021.1
+* Vitis Unified Software Platform 2021.2
 
 Accessing the Tutorial Reference Files
 --------------------------------------
@@ -44,17 +44,8 @@ Integrating an overlay (accelerator functions) into a Vitis Extensible platform
 2. To compile and integrate the overlay into the platform, run the following command. The Makefile calls a lower level Makefile to run Vitis. If a platform is not already available it builds that as well. 
 
    ```
-   make overlay PFM=<val> OVERLAY=<val> 
+   make overlay PFM=vmk180_TRD OVERLAY=filter2d_pl 
    ```
-
-   Overlay currently supported are listed below
-
-   |Application name |Platform name(PFM)| Overlay(OVERLAY) Supported |
-   |----|----|----|
-   |Multimedia TRD |vmk180_multimedia_platform| filter2d_pl |
-   |PCIe TRD |vmk180_pcie_platform| filter2d_pl |
-   
-
 
 3. The generated XSA and xclbin will be located at 
 

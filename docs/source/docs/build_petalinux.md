@@ -15,10 +15,9 @@ Building Petalinux
 
 Introduction
 ------------
-This tutorial walks through the typical steps of creating and customizing a
-bootable Linux image for the VMK180 Evaluation Board. 
+This tutorial walks through the typical steps of creating and customizing a bootable Linux image for the VMK180 Evaluation Board. 
 
-In the follwing sections, you will:
+In the following sections, you will:
 
 1. Build the BSP with the default rootfs configuration.
 2. Learn how to add your own Vivado or Vitis generated bitstream/xclbin firmware
@@ -26,7 +25,7 @@ In the follwing sections, you will:
 
 Prerequisites
 --------------
-1. PetaLinux 2021.1 tools installation
+1. PetaLinux 2021.2 tools installation
 
 Accessing the Tutorial Reference Files
 --------------------------------------
@@ -52,35 +51,21 @@ cd $working_dir/
 ``` 
 2   To build and  generate sdcard image (wic), run the following command. The Makefile calls a lower level Makefile to build petalinux. If a platform is not already available it builds and integrate overlay as well.
 ```
-make all sdcard PFM=<val> OVERLAY=<val> YES=1
+make all sdcard PFM=vmk180_TRD OVERLAY=filter2d_pl YES=1
 
 ```
-
-
-   |Application name |Platform name(PFM)| Overlay(OVERLAY) Supported |
-   |----|----|----|
-   |Multimedia TRD |vmk180_multimedia_platform| filter2d_pl |
-   |PCIe TRD |vmk180_pcie_platform| filter2d_pl |
-
-
+   
 Modifying/Configure the petalinux project manually
 --------------------------------
 
-* Source the PetaLinux 2021.1 tool settings.sh script.
+* Source the PetaLinux 2021.2 tool settings.sh script.
 
 Run the following command to create a new Petalinux project from the working directory
 
 ```
 cd petalinux/xilinx-vmk180-trd
-./trd.cfg -p <PFM>
+./trd.cfg -p vmk180_TRD
 ```
- Applications and their corresponding platform names are listed in the table below
-
-|Application |Platform name(PFM)|
-   |----|----|
-   |Multimedia TRD |vmk180_multimedia_platform|
-   |PCIe TRD |vmk180_pcie_platform|
-
 Next the project needs to be configured with the xsa file from the Vivado project.
 
 ```
@@ -122,10 +107,7 @@ equivalent to the prebuilt sdcard image provided with package
 
 Build the SDK
 ---------------
-A cross-compilation SDK is useful for application development on a host machine
-for a specific target architecture e.g. X86 host and ARM 64-bit target. Run the
-below command to generate a cross-compilation that can be used outside the
-PetaLinux:
+A cross-compilation SDK is useful for application development on a host machine for a specific target architecture e.g. X86 host and ARM 64-bit target. Run the below command to generate a cross-compilation that can be used outside the PetaLinux:
 
 ```
 petalinux-build -s
@@ -134,15 +116,13 @@ petalinux-build -s
 The resulting self-extracting shell script installer file is located at
 `images/linux/sdk.sh`.
 
-The SDK installer script can be copied to the application developer's host
-machine and installed by simply running the script. Follow the prompts on the
-screen.
+The SDK installer script can be copied to the application developer's host machine and installed by simply running the script. Follow the prompts on the screen.
 
 ```
 $ images/linux/sdk.sh
-PetaLinux SDK installer version 2021.1
+PetaLinux SDK installer version 2021.2
 ============================================
-Enter target directory for SDK (default: /opt/petalinux/2021.1): ./images/linux/sdk
+Enter target directory for SDK (default: /opt/petalinux/2021.2): ./images/linux/sdk
 ```
 
 Once the SDK is installed, source the file
@@ -154,8 +134,8 @@ to set up the cross-development environment.
 **Next Step**
 
 * Setting up the Board and Application Deployment Tutorial
-  * [Multimedia TRD](./platform1/docs/app_deployment.md)
-  * [PCIe TRD](./platform2/docs/app_deployment_aib.md)
+  * [VMK180 TRD](./platform1/docs/app_deployment.md)
+
 * Go back to the [VMK180 Targeted Reference Designs start page](../index.html)
 
 **References**

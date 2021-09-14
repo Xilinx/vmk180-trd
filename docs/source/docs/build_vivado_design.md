@@ -19,7 +19,7 @@ This tutorial shows how to build the hardware design for applications running on
 
 ### Prerequisites
 
-* Vivado Design Suite 2021.1
+* Vivado Design Suite 2021.2
 
 #### Accessing the Tutorial Reference Files
 
@@ -39,18 +39,9 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 1. Go to the platform directory specific to the application
 
    ```
-   cd $working_dir/platforms/vivado/<platform_name>
+   cd $working_dir/platforms/vivado/vmk180_TRD
    ```
-
-   Applications and their corresponding platform names are listed in the table below
-
-   |Application |Platform name|
-   |----|----|
-   |Multimedia TRD |vmk180_multimedia_platform|
-   |PCIe TRD |vmk180_pcie_platform|
-
-
-
+  
 2. To build the XSA, Source Vivado and run the following command. The Makefile uses scripts/main.tcl file to create a Vivado project, populate the block design and finally build a XSA. The XSA generation may take couple of hours depending on the system specification
 
    ```
@@ -60,7 +51,7 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 3. The generated XSA will be located at:
 
    ```
-   $working_dir/platforms/vivado/<platform_name>/project/<platform_name>.xsa
+   $working_dir/platforms/vivado/vmk180_TRD/project/vmk180_TRD.xsa
    ```
 
 
@@ -72,13 +63,13 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 1. Go to the directory specific to the platform design
 
    ```
-   cd $working_dir/platforms/vivado/<platform_name>
+   cd $working_dir/platforms/vivado/vmk180_TRD
    ```
 
 2. To open the Vivado project, first open the Vivado GUI, then run the following command from the Vivado tcl console:
 
    ```
-   open_project ./project/<platform_name>.xpr
+   open_project ./project/vmk180_TRD.xpr
    ```
 
 3. In the Flow Navigator pane on the left-hand side under IP integrator, click on Open Block Design. An IP integrator block design becomes visible that contains the Processing System (PS) IP and other PL IPs.
@@ -95,7 +86,7 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 6. To write out a new extensible platform XSA file, run the following command from the Vivado tcl console:
 
    ```
-   write_hw_platform -force -file <platform_name>.xsa
+   write_hw_platform -hw -force -file vmk180_TRD.xsa
    ```
 
 
