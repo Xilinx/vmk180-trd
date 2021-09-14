@@ -47,13 +47,13 @@
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
               HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
+              SOURCELINK_SUFFIX: ''
           };
       </script>
         <script type="text/javascript" src="../../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -65,8 +65,6 @@
   <link rel="stylesheet" href="../../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/pro.min.css" media="all" />
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Hardware Architecture of the Accelerator" href="hw_arch_accel.html" />
     <link rel="prev" title="Software Architecture of the Platform" href="sw_arch_platform.html" /> 
 	</head>
@@ -342,17 +340,17 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../platform1_landing.html">Multimedia TRD</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../platform1_landing.html">VMK180 TRD</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#features">Features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#quick-start">Quick Start</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#tutorials">Tutorials</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../platform1_landing.html#architecture-documents">Architecture Documents</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="sw_arch_platform.html">Software Architecture of the Platform</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Hardware Architecture of the Platform</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Hardware Architecture of the Platform</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#capture">Capture</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#display">Display</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#clocks">Clocks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hardware-architecture-of-the-host-to-end-point">Hardware Architecture of the host to end point</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="hw_arch_accel.html">Hardware Architecture of the Accelerator</a></li>
@@ -363,7 +361,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../platform2/platform2_landing.html">PCIe TRD</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
@@ -375,7 +372,7 @@
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/hw_arch_platform.rst.txt"
+				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/hw_arch_platform.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -421,7 +418,7 @@
     
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../platform1_landing.html">Multimedia TRD</a> &raquo;</li>
+          <li><a href="../platform1_landing.html">VMK180 TRD</a> &raquo;</li>
         
       <li>Hardware Architecture of the Platform</li>
     
@@ -429,7 +426,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../../_sources/docs/platform1/docs/hw_arch_platform.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/docs/platform1/docs/hw_arch_platform.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -446,34 +443,37 @@
 <h1>Hardware Architecture of the Platform<a class="headerlink" href="#hardware-architecture-of-the-platform" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>This section describes the design implemented on Processing System (PS) and Programmable Logic (PL) on the VMK180 board and the LIIMX274MIPI-FMC image sensor daughter card.</p>
+<p>This section describes the design implemented on Processing System (PS) and Programmable Logic (PL) on the VMK180 board , LIIMX274MIPI-FMC image sensor daughter card and x86 host machine (root complex).</p>
 <p>The following figure shows the top level hardware architecture of the reference design.</p>
 <a class="reference internal image-reference" href="../../../_images/Hardware_Block_Diagram.png"><img alt="../../../_images/Hardware_Block_Diagram.png" src="../../../_images/Hardware_Block_Diagram.png" style="width: 800px;" /></a>
 <p>At a high level, the design comprises of three pipelines</p>
 <p>Capture/Input pipeline: This comprises of pipelines through which video data are captured.</p>
 <ul class="simple">
-<li>USB capture pipeline (PS)</li>
 <li>MIPI CSI-2 capture pipeline (PL)</li>
+<li>Media file from x86 host</li>
 </ul>
 <p>Display/Output pipeline: This comprises of pipelines through which video data are outputted.</p>
 <ul class="simple">
 <li>DisplayPort pipeline (PL)</li>
+<li>DisplayPort (Host)</li>
 </ul>
-<p>Video Accelerator/processing pipeline: This comprises of mem to mem pipelines through video data is processed/decrypted.</p>
+<p>Video Accelerator/processing pipeline: This comprises of mem to mem pipelines through which video data is processed/decrypted.</p>
 <ul class="simple">
 <li>The 2D Filter accelerator (PL) integrated into the platform using Vitis.</li>
-<li>VP9 Decoder and demux (PS)</li>
 </ul>
 <p><strong>Note:</strong>  The PS interconnects in the figure are conceptual.</p>
 </div>
 <div class="section" id="capture">
 <h2>Capture<a class="headerlink" href="#capture" title="Permalink to this headline">¶</a></h2>
-<p>A capture pipeline receives video frames from an external source and writes it into memory. The single sensor MIPI CSI-2 receiver capture pipeline is shown in the following figure.</p>
+<p>A capture pipeline receives video frames and writes it into memory.Video frames are received from :</p>
+<p>** Single sensor MIPI CSI-2 camera</p>
+<p>** x86 host</p>
+<p>** If the input source is a single sensor MIPI CSI-2 receiver then the following figure describes the components present.</p>
 <a class="reference internal image-reference" href="../../../_images/CSI_Video_Capture_Pipeline.png"><img alt="../../../_images/CSI_Video_Capture_Pipeline.png" src="../../../_images/CSI_Video_Capture_Pipeline.png" style="width: 800px;" /></a>
 <p>This pipeline consists of six components, four of which are controlled by the APU via an AXI4-Lite-based register interface, one is controlled by the APU via an I2C register interface, and one is configured statically.</p>
 <ul class="simple">
 <li>The Sony IMX274 sensor is a 1/2.5 inch CMOS digital image sensor with an active imaging pixel array of 3864H x 2196V. The image sensor is controlled by an I2C interface using an AXI I2C controller in the PL. It is mounted on an FMC daughter card and has a MIPI output interface that is connected to the MIPI CSI-2 RX subsystem inside the PL. For more information, see the LIIMX274 MIPI FMC data sheet.</li>
-<li>The MIPI CSI-2 receiver subsystem (CSI RX) includes a MIPI D-PHY core that connects four data lanes and one clock lane to the sensor on the FMC card. It implements a CSI-2 receive interface according to the MIPI CSI-2 standard v2.0 with underlying MIPI D-PHY standard v1.2. The subsystem captures images from the IMX274 sensor in RAW10 format and outputs AXI4-Stream video data. For more information, see the MIPI CSI-2 Receiver Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/mipi_csi2_rx_subsystem/v5_0/pg232-mipi-csi2-rx.pdf">PG232</a>).</li>
+<li>The MIPI CSI-2 receiver subsystem (CSI RX) includes a MIPI D-PHY core that connects four data lanes and one clock lane to the sensor on the FMC card. It implements a CSI-2 receive interface according to the MIPI CSI-2 standard v2.0 with underlying MIPI D-PHY standard v1.2. The subsystem captures images from the IMX274 sensor in RAW10 format and outputs AXI4-Stream video data. For more information, see the MIPI CSI-2 Receiver Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/content/dam/xilinx/support/documentation/ip_documentation/mipi_csi2_rx_subsystem/v5_1/pg232-mipi-csi2-rx.pdf">PG232</a>).</li>
 <li>The AXI subset converter is a statically-configured IP core that converts the raw 10-bit (RAW10) AXI4-Stream input data to raw 8-bit (RAW8) AXI4-Stream output data by truncating the two least significant bits (LSB) of each data word.</li>
 <li>The Image Single Processing IP available in the Vitis vision librarires (<a class="reference external" href="https://github.com/Xilinx/Vitis_Libraries/tree/master/vision/L1">https://github.com/Xilinx/Vitis_Libraries/tree/master/vision/L1</a>) implements the following functions.
 * The Badpixelcorrection module removes the defective pixels in the image as an image sensor may have a certain number of defective/bad pixels that may be the result of manufacturing faults or variations in pixel voltage levels based on temperature or exposure.<ul>
@@ -486,33 +486,35 @@ transported via AXI4-Stream. At 4 ppc, the AXIS width is 96-bit. A GPIO from the
 used to reset the IP between resolution changes.</li>
 </ul>
 </li>
-<li>The video processing subsystem (VPSS) is a collection of video processing IP sub-cores. This instance is uses the color space converter (CSC) configuration to perform color correction tasks including contrast, brightness, and red/green/blue gain control. The CSC takes AXI4-Stream input data and produces AXI4-Stream output data, both in 24-bit RGB format. A GPIO is used to reset the subsystem between resolution changes. For more information, see the Video Processing Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_proc_ss/v2_3/pg231-v-proc-ss.pdf">PG231</a>).</li>
+<li>The video processing subsystem (VPSS) is a collection of video processing IP sub-cores. This instance uses the color space converter (CSC) configuration to perform color correction tasks including contrast, brightness, and gain control of red/green/blue colors . The CSC takes AXI3-Stream input data and produces AXI4-Stream output data, both in 24-bit RGB format. A GPIO is used to reset the subsystem between resolution changes. For more information, see the Video Processing Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_proc_ss/v2_3/pg231-v-proc-ss.pdf">PG231</a>).</li>
 <li>The video frame buffer takes YUV 4:2:0 sub-sampled AXI4-Stream input data and converts it to the memory mapped AXI4 format, which is written to memory as 12-bit packed YUYV. The memory mapped AXI interface is connected to the system DDR via the NoC. For each video frame transfer, an interrupt is generated. A GPIO is used to reset the IP between resolution changes.</li>
 </ul>
-<p>All of the IPs in this pipeline are configured to transport 4 ppc, enabling up to 2160p60
-performance.</p>
+<p>All of the IPs in this pipeline are configured to transport 4 ppc, enabling up to 2160p60 performance.</p>
+<p>** If the media file is transfered from host x86 to the VMK180 evaluation board (endpoint) through the PCIe Queue DMA (QDMA).</p>
+<p>Then the design uses the CPM PCI Express (PCIe) Endpoint Hard block in an Gen3 x8 configuration along with QDMA for data transfers between the host system memory and the endpoint.</p>
+<p>The QDMA provides protocol conversion between PCIe transaction layer packets (TLPs) and AXI transactions. The DMA cores are used for data transfer between the programmable logic (PL) to the host.DMA transfers data between host and the memory controller (DDR). The CPM contains AXI Bridge core for AXI-to-host communication. The downstream AXI4-Lite slaves include user-space registers, which are responsible for a hand-shaking mechanism between the host and the endpoint.</p>
 </div>
 <div class="section" id="display">
 <h2>Display<a class="headerlink" href="#display" title="Permalink to this headline">¶</a></h2>
-<p>The HDMI TX display pipeline (in the PL) is controlled by the video frame buffer read, which
-fetches the video layer from memory and sends the data to the HDMI TX subsystem. The HDMI
-TX subsystem processes data and sends it out to an external display device. The HDMI
+<p>Display pipeline fetches video frames from DDR memory and displays it onto HDMI monitor connected to :</p>
+<p>** VMK180 Evaluation Board</p>
+<p>** X86 host</p>
+<p>** The HDMI TX display pipeline (in the PL) is controlled by the video frame buffer read, which fetches the video layer from memory and sends the data to the HDMI TX subsystem. The HDMI TX subsystem processes data and sends it out to an external display device. The HDMI
 transmitter display pipeline is shown in the following figure.</p>
 <a class="reference internal image-reference" href="../../../_images/HDMI_Transmitter_Display_Pipeline.png"><img alt="../../../_images/HDMI_Transmitter_Display_Pipeline.png" src="../../../_images/HDMI_Transmitter_Display_Pipeline.png" style="width: 800px;" /></a>
-<p>As shown in the figure, the pipeline comprises three main components, each of them controlled
-by the APU via an AXI4-Lite base register interface. These components are described in the
-following paragraphs.</p>
+<p>As shown in the figure, the pipeline comprises three main components, each of them controlled by the APU via an AXI4-Lite base register interface. These components are described in the following paragraphs.</p>
 <ul class="simple">
 <li>The video frame buffer read IP provides high-bandwidth direct memory access between memory and AXI4-Stream video type target peripherals, which support the AXI4-Stream video protocol. IP takes memory mapped AXI4 input data from DDR and converts it to AXI4-Stream format. The output is connected to HDMI transmitter subsystem. For each video frame transfer, an interrupt is generated. A GPIO is used to reset the core between resolution changes. For more information, see the Video Frame Buffer Read and Video Frame Buffer Write LogiCORE IP Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_frmbuf/v2_2/pg278-v-frmbuf.pdf">PG278</a>).</li>
-<li>The HDMI transmitter subsystem (HDMI TX) interfaces with PHY layers and provides HDMI encoding functionality. The subsystem is a hierarchical IP that bundles a collection of HDMI TXrelated IP sub-cores and outputs them as a single IP. The subsystem generates an HDMI stream from the incoming AXI4-Stream video data and sends the generated TMDS data to the video PHY layer. For more information, see the HDMI 1.4/2.0 Transmitter Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_hdmi_tx_ss/v3_1/pg235-v-hdmi-tx-ss.pdf">PG235</a>).</li>
+<li>The HDMI transmitter subsystem (HDMI TX) interfaces with PHY layers and provides HDMI encoding functionality. The subsystem is a hierarchical IP that bundles a collection of HDMI TXrelated IP sub-cores and outputs them as a single IP. The subsystem generates an HDMI stream from the incoming AXI4-Stream video data and sends the generated TMDS data to the video PHY layer. For more information, see the HDMI 1.4/2.0 Transmitter Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/content/dam/xilinx/support/documentation/ip_documentation/v_hdmi_tx_ss/v3_2/pg235-v-hdmi-tx-ss.pdf">PG235</a>).</li>
 <li>The HDMI GT controller (PHY) enables plug-and-play connectivity with video transmit or receive subsystems. The interface between the media access control (MAC) and physical (PHY) layers are standardized to enable ease of use in accessing shared gigabit-transceiver (GT) resources. The data recovery unit (DRU) supports lower line rates for the HDMI protocol. An AXI4-Lite register interface is provided to enable dynamic accesses of transceiver controls/status. For more information, see the HDMI GT Controller LogiCORE IP Product Guide (<cite>PG334 &lt;https://www.xilinx.com/support/documentation/ip_documentation/hdmi_gt_controller/v1_0/pg334-hdmi-gt-controller.pdf&gt;_</cite>).</li>
 </ul>
-</div>
-<div class="section" id="clocks">
-<h2>Clocks<a class="headerlink" href="#clocks" title="Permalink to this headline">¶</a></h2>
+<p>** For the HDMI dispay on host monitor the design uses the CPM PCI Express (PCIe) Endpoint Hard block in an Gen3 x8 configuration along with QDMA for data transfers between the endpoint and the host system memory . The QDMA provides protocol conversion between PCIe transaction layer packets (TLPs) and AXI transactions. The DMA cores are used for data transfer between the memory controller (DDR) in PL to the host memory . AXI Bridge core in the CPM is used for AXI-to-host communication. AXI4-Lite slaves has the user space registers which are used for hand shaking between host and endpoint.</p>
+<blockquote>
+<div>Clocks</div></blockquote>
+<hr class="docutils" />
 <p><strong>PS Clocks</strong></p>
 <p>The following table lists the clock frequencies of key PS components.</p>
-<table border="1" class="colwidths-given docutils" id="id1">
+<table border="1" class="docutils" id="id1">
 <caption><span class="caption-text"><strong>Table 1: Key Component Clock Frequencies</strong></span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="30%" />
@@ -540,7 +542,7 @@ following paragraphs.</p>
 </table>
 <p><strong>System Clocks</strong></p>
 <p>The following table identifies the main clocks of the PL design, their source, their clock frequency, and their function.</p>
-<table border="1" class="colwidths-given docutils" id="id2">
+<table border="1" class="docutils" id="id2">
 <caption><span class="caption-text"><strong>Table 2: System Clocks</strong></span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
 <col width="19%" />
@@ -588,9 +590,43 @@ following paragraphs.</p>
 </tr>
 </tbody>
 </table>
-<p>The PL0 clock is provided by the PPLL inside the PMC domain and is used as the reference input clock for the clocking wizard instance inside the PL. This clock does not drive any loads directly. A clocking wizard instance is used to deskew the clock and to provide three phase-aligned output clocks, Clk_out1, Clk_100MHz, and Clk_200MHz.</p>
-<p>The Clk_100MHz clock is generated by the clocking wizard instance. It is used to drive most of the AXI4-Lite control interfaces in the PL. AXI4-Lite interfaces are typically used in the control path to configure IP registers and, consequently, can operate at a lower frequency than datapath interfaces.</p>
-<p>The Clk_out1 clock is generated by the clocking wizard instance. It is used to drive the memory mapped AXI interfaces of the capture pipelines in the PL. These interfaces are in the datapath and, consequently, are needed to support the maximum performance of 2160p60, which roughly corresponds to a 150 MHz clock at 4 ppc. The HLS-based IP core interfaces and Vitis generated modules are based on Clk_out1 rather than Clk_100MHz (HLS IPs typically share a common input clock between control and data interfaces).</p>
+<p>The PL0 clock is provided by the PPLL inside the PMC domain and is used as the reference input clock for the clocking wizard instance inside the PL. This clock does not drive any loads directly. A clocking wizard instance is used to deskew the clock and to provide threephase-aligned output clocks, Clk_out1, Clk_out2, and Clk_out3.</p>
+<p>The Clk_out2 clock is generated by the clocking wizard instance. It is used to drive most of the AXI4-Lite control interfaces in the PL. AXI4-Lite interfaces are typically used in the control path to configure IP registers and, consequently, can operate at a lower frequency than datapath interfaces.</p>
+<p>The Clk_out1 clock is generated by the clocking wizard instance. It is used to drive the memory mapped AXI interfaces of the capture pipelines in the PL. These interfaces are in the datapath and, consequently, are needed to support the maximum performance of 2160p60, which roughly corresponds to a 150 MHz clock at 4 ppc. The HLS-based IP core interfaces and Vitis generated modules are based on Clk_out1 (HLS IPs typically share a common input clock between control and data interfaces).</p>
+</div>
+<div class="section" id="hardware-architecture-of-the-host-to-end-point">
+<h2>Hardware Architecture of the host to end point<a class="headerlink" href="#hardware-architecture-of-the-host-to-end-point" title="Permalink to this headline">¶</a></h2>
+<p>In the host to endpoint direction, the QDMA block moves data from the host memory to the PLside through the PCIe and then writes the data to the memory controller (DDR) via the NOC. Then, the 2D filter accelerator IP reads data from the DDR, performs filtering, and writes it back again to memory. Finally, in the endpoint to host direction, the QDMA reads the DDR via the NOC interface and writes to the host system memory through the PCIe. The following figure shows a detailed hardware block diagram.</p>
+<img alt="../../../_images/PCIe_Platform_Hardware_Block_Diagram.png" src="../../../_images/PCIe_Platform_Hardware_Block_Diagram.png" />
+<p>The submodules described in this section are :</p>
+<p>## Network On Chip</p>
+<p>Versal™ ACAP devices are designed around a network on chip (NoC) interconnect, which provides high-bandwidth communication between different areas of the device. In the base platform, the NoC is used for the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Connects the CPM module to DDR memory, allowing the host server to have DMA to the DDR memory controllers.</li>
+<li>Allows the Arm®-A72 processor within the processor subsystem (PS) to connect to the DDR memory.</li>
+<li>Allows the platform management controller (PMC) to communicate to or from the PCIe and the DDR memory.</li>
+<li>Allows all the CPM and PS Cortex-A72 masters to access the programmable logic (PL) peripherals.</li>
+<li>Exposes the platform interfaces to connect the accelerator to the base platform, which allows the accelerators to access the DDR      memory.</li>
+</ul>
+</div></blockquote>
+<p>## DDR Memory Controllers</p>
+<p>The VM1802 device contains four hardened DDR memory controllers (MCs) that are accessed via the NoC. NoC configuration into the MCs can support individual access to each of the four MCs, or alternatively, can support MC interleaving in either pairs or as a group of four. This NoC interleaving ability makes interleaved MCs appear as a single block of memory.</p>
+<p>As illustrated in the above figure, the platform design configures all four MCs as a single interleaved bank of memory that in theory can provide up to ~60 Gbytes/second of bandwidth. This memory structure was chosen as a starting point primarily because it is required to support maximum accelerator performance.</p>
+<p>## CCIX PCIe Module</p>
+<p>The CCIX PCIe module (CPM) is the CCIX and the PCIe module, including DMA (QDMA), that is hardened in Versal ACAP devices.</p>
+<p>The CPM is configured for Gen3 x8 operation, connecting to the eight adjacent GTY transceivers via the XPIPE dedicated interface as illustrated in the above figure. The PCIe Gen3 x8 transfers data between the accelerator card. The QDMA supports memory mapped AXI operation over the Versal ACAP NoC to allow the host server initiated writes and reads to and from the hardened
+DDR MCs. This operation is typically known as the QDMA memory mapped operation.</p>
+<p>## Control Interfaces and Processing System</p>
+<p>The control interfaces and processing system (CIPS in the Versal ACAP device contains highperformance Arm Cortex-A72 processors. On-chip and cache memory is included along with a suite of hardened communication peripherals.</p>
+<p>A Cortex-A72 device is employed and is given access to 2 GBytes of DDR RAM. This 2 Gbytes of address space is intended solely for the use of the Cortex-A72. Embedded Linux is run on the Cortex-A72, and runs an application to offload the filtering part using XRT by performing scheduling of customer accelerator functions and monitoring for accelerator function completion.</p>
+<p>Of the provided PS peripherals, the peripherals required for the accelerator card are as follows:</p>
+<ul class="simple">
+<li>JTAG/UART: for connection to the Vivado® lab tools (e.g., for bitstream download and debug) and to the on-card satellite controller</li>
+<li>I2C: for connection to board peripherals, such as the onboard fan and programmable clock sources .</li>
+</ul>
+<p>## Programmable Logic Infrastructure</p>
+<p>The PL logic is shown to stem from the NoC instance . From these NoC connections, the PL peripherals are either directly connected or connected via the intermediate SmartConnect.</p>
 <p><strong>Next Steps</strong></p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -598,10 +634,10 @@ following paragraphs.</p>
 </ul>
 </div>
 <p><strong>License</strong></p>
-<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
+<p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
 [<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
-<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
 </div>
 </div>
 
@@ -634,7 +670,7 @@ following paragraphs.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on April 17, 2021.
       </span>
 
     </p>

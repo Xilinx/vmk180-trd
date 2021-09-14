@@ -47,13 +47,13 @@
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
               HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
+              SOURCELINK_SUFFIX: ''
           };
       </script>
         <script type="text/javascript" src="../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -65,8 +65,6 @@
   <link rel="stylesheet" href="../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/css/pro.min.css" media="all" />
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Design Overview" href="docs/introduction.html" />
     <link rel="prev" title="VMK180 TRD Documentation" href="../../index.html" /> 
 	</head>
@@ -342,7 +340,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Multimedia TRD</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="">VMK180 TRD</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/introduction.html">Design Overview</a></li>
@@ -371,7 +369,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../platform2/platform2_landing.html">PCIe TRD</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
@@ -383,7 +380,7 @@
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="../../_sources/docs/platform1/platform1_landing.rst.txt"
+				  <li class="toctree-l1"><a href="../../_sources/docs/platform1/platform1_landing.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -429,13 +426,13 @@
     
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Multimedia TRD</li>
+      <li>VMK180 TRD</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/docs/platform1/platform1_landing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/docs/platform1/platform1_landing.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -448,17 +445,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="multimedia-trd">
-<h1>Multimedia TRD<a class="headerlink" href="#multimedia-trd" title="Permalink to this headline">¶</a></h1>
-<p>The multimedia TRD demonstrates video capture from either a file source, USB webcam or MIPI image sensor and displays it on a Jupyter Notebook or a HDMI monitor. Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter.</p>
-<a class="reference internal image-reference" href="../../_images/sc_image_landing.jpg"><img alt="Smart Camera Landing" src="../../_images/sc_image_landing.jpg" style="width: 1200px;" /></a>
+  <div class="section" id="vmk180-trd">
+<h1>VMK180 TRD<a class="headerlink" href="#vmk180-trd" title="Permalink to this headline">¶</a></h1>
+<p>VMK180 TRD demonstrates the following functionalities,</p>
+<ul class="simple">
+<li>Video captured from MIPI image sensor is processed and displayed on a Jupyter Notebook or a HDMI monitor connected to x86 host machine (root complex) .</li>
+<li>Video frames are looped from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing and displayed onto the HDMI monitor connected to the host.</li>
+<li>Video frames are transferred from x86 host machine (root complex) to VMK180 evaluation board (end point) processed and displayed onto the HDMI monitor connected to VMK180 evaluation board.</li>
+</ul>
+<p>Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing .</p>
+<a class="reference internal image-reference" href="../../_images/sc_image_landing.PNG"><img alt="Smart Camera Landing" src="../../_images/sc_image_landing.PNG" style="width: 1200px;" /></a>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>4k resolution images from a sensor</li>
 <li>HDMI or Jupyter notebook display</li>
+<li>Demonstration of Board as PCIe End-Point accelerator Card</li>
 <li>User programmable 2D filter</li>
-<li>Video file decode and display</li>
+<li>Loop Back of processed 4k Video data over PCIe</li>
+<li>Live Display of Loop backed video on Host</li>
 <li>Jupyter notebook based power and performance monitoring</li>
 </ul>
 </div>
@@ -507,10 +512,10 @@
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
+<p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
 [<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
-<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
 </div>
 </div>
 
@@ -543,7 +548,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on April 17, 2021.
       </span>
 
     </p>
