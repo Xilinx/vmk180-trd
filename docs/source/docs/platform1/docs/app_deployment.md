@@ -205,16 +205,18 @@ to run the notebooks, follow the below steps:
 5. Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.
 
 Host Machine Software setup
-Directory and file description
+-----------------------------
+
+* Directory and file description
 
 Following are the list of directories in pcie_host_package directory.
 
-apps: QDMA User space application to configure and control QDMA
-docs: Documentation for the Xilinx QDMA Linux Driver
-driver/src: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers
-driver/libqdma: QDMA library to configure and control the QDMA IP
-scripts: Sample scripts for perform DMA operations
-Makefile: Makefile to compile the driver
+**apps: QDMA User space application to configure and control QDMA
+**docs: Documentation for the Xilinx QDMA Linux Driver
+**driver/src: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers
+**driver/libqdma: QDMA library to configure and control the QDMA IP
+**scripts: Sample scripts for perform DMA operations
+**Makefile: Makefile to compile the driver
 pcie_app: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver
 NOTE : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully
 
