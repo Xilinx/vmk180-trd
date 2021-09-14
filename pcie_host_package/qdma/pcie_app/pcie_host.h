@@ -28,7 +28,6 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 typedef struct circular_buffer
 {
 char *buffer;
@@ -44,19 +43,31 @@ extern "C"{
 extern circular_buffer queue_frame;
 extern bool app_running;
 /**
- * test_dma : Function initializes dma write and read  transactions from host to channel and channel to host respectively as per below.
- * a. Opens qdma device file of h2c,c2h and  resource0, initializes three threads.
- * b. Creates a shared memory map of PCIe Bar memory register.
- * c. Get file size of input file and initializes frame queues.
- * d. Initializes three threads.  
- * Thread1 : To read input file.
- * Thread2 : To PCIe dma read.
- * Thread3 : To PCIe dma write.
- * @h2c_device :  qdma host to channel device node for dma write transaction.
- * @c2h_device : qdma channel to host device node for dma read transaction.
- * @infname : file to be  transferred between host and channel for dma transaction.
+ * mipi_displayonhost 	: Function to provide control from host to Endpoint and initialize a mipi capture pipeline from endpoint (i.e., appsrc)    *			    and process frames into filter plugin then to displayonhost through appsink. 
+ * frm 			: A Qtwindow frame to display on host.
+ * c2h_device		: qdma channel to host device node for dma read transaction.
  */
-static int test_dma(char *h2c_device, char *c2h_device, char *infname);
+int mipi_displayonhost(struct MainWindow *frm, char *c2h_device );
+
+/**
+ * host2host   : Function to provide control from host to Endpoint and transfer a video file from host to EP via pcie. (i.e., appsrc)    
+ *               and process frames into filter plugin then to displayonhost through appsink. 
+ * frm         : A Qtwindow frame to display on host.
+ * h2c_device  : qdma host to channel device node for dma write transaction
+ * c2h_device  : qdma channel to host device node for dma read transaction.
+ */
+int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device);
+
+/**
+ * host2host_without_filter   : Function to provide control from host to Endpoint and transfer a video file from host to EP via pcie.(i.e.,appsrc)
+ *               		and process frames into filter plugin then to displayonhost through appsink. 
+ * frm         		      : A Qtwindow frame to display on host.
+ * h2c_device  		      : qdma host to channel device node for dma write transaction
+ * c2h_device  : qdma channel to host device node for dma read transaction.
+ */
+
+int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_device);
+
 /**
  * pcie_dma_read :  Thread function to start dma write transaction from host to channel.
  * @vargp : takes nothing as argument.
@@ -72,7 +83,8 @@ void *pcie_dma_write(void * vargp);
  */
 void *file_read(void * vargp);
 int cb_deque(circular_buffer *cb, char *data);
-int cmaincall(int argc, char *argv[]);
+int cmaincall(struct MainWindow *frm, int argc, char *argv[]);
+
 
 }
 #endif // PCIE_HOST_APP_H

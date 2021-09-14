@@ -38,28 +38,38 @@
 using namespace cv;
 videofrm::videofrm(QWidget *parent) : QWidget(parent)
 {
-
-
+    counter = 0;
+    t = new QTimer();
+    QObject::connect(this,SIGNAL(updateFPS(int)),this,SLOT(updateFPSslot(int)));
+    QObject::connect(this,SIGNAL(stopTimersig()),this,SLOT(stopTimer()));
+    QObject::connect(t,SIGNAL(timeout()),this,SLOT(updateframe()));
+    t->setInterval(1000.0/(30)); // TODO NEED to modify.
+    t->start();
+}
+void videofrm :: updateFPSslot(int fps){
+    t->setInterval(1000.0/(fps));
+    t->start();
+}
+void videofrm :: stopTimer(){
+    t->stop();
 }
 void videofrm :: setResolution(int wi, int he, int fp){
     WID = wi;
     HEI = he;
     FPS = fp;
+//    t->setInterval(1000.0/(fp));
 }
 
 void videofrm :: config_frame(){
-    t = new QTimer();
-    t->setInterval(1000.0/(FPS));
     sizeval = WID * HEI;
     dfrm = (uchar*)malloc(WID * HEI * 5 * sizeof(char));
     yuvfrm = (char*)malloc(WID * HEI *5 * sizeof(char));
-    counter = 0;
-    QObject::connect(t,SIGNAL(timeout()),this,SLOT(updateframe()));
-    t->start();
+    emit updateFPS(FPS);
     namedWindow("Video",1);
 }
 void videofrm:: updateframe(){
         if(waitBuf || queue_frame.index >= 30)  {
+        hasWindow = true;
         waitBuf = true;
         int val = sizeval*yuvfrac;
         int rc = cb_deque(&queue_frame, yuvfrm);
@@ -74,10 +84,16 @@ void videofrm:: updateframe(){
             waitBuf = false;
         }
 	}
-	    if(app_running == false && queue_frame.index == 0){
-                destroyWindow("Video");
-                exit(0);
-            }
+	if(app_running == false && queue_frame.index == 0 ){
+	    //destroyWindow("Video");
+            emit stopTimersig();
+            waitBuf = false;
+            hasWindow = false;
+	    destroyAllWindows();
+            free(dfrm);
+            free(yuvfrm);
+	    //exit(0);
+	}
 }
 
 int videofrm::convert_yuv_to_rgb_buffer(unsigned char *yuv, unsigned char *rgb, unsigned int width, unsigned int height)
