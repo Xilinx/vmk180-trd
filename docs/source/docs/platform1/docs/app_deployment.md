@@ -207,32 +207,41 @@ to run the notebooks, follow the below steps:
 Host Machine Software setup
 -----------------------------
 
-* Directory and file description
+**Directory and file description
 
 Following are the list of directories in pcie_host_package directory.
 
 **apps: QDMA User space application to configure and control QDMA
+
 **docs: Documentation for the Xilinx QDMA Linux Driver
+
 **driver/src: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers
+
 **driver/libqdma: QDMA library to configure and control the QDMA IP
+
 **scripts: Sample scripts for perform DMA operations
+
 **Makefile: Makefile to compile the driver
-pcie_app: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver
-NOTE : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully
+
+**pcie_app: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver
+
+* NOTE : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully
 
 Power on the HOST machine
-Execute following command on HOST machine's terminal to check If the Board is linking up:
-lspci -vd 10ee:
+-------------------------
+ -- Execute following command on HOST machine's terminal to check If the Board is linking up:
+	lspci -vd 10ee:
 
-On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint:
+ -- On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint:
 
-03:00.0 RAM memory: Xilinx Corporation Device b03f
+	03:00.0 RAM memory: Xilinx Corporation Device b03f
 
-If above entry is missing QDMA driver will not be able to recognized PCIe endpoint device.
+ -- If above entry is missing QDMA driver will not be able to recognized PCIe endpoint device.
 
-if not already done, copy pcie_host_package directory to PCIe host machine.
+ -- if not already done, copy pcie_host_package directory to PCIe host machine.
 
 Updating the PCIe device ID (if needed)
+---------------------------------------
 
 Make sure that PCIe Device ID in the driver is matching to Device ID observed in linkup status. in above output b03f is device ID.
 
@@ -246,7 +255,8 @@ Add, remove, or modify the PCIe Device IDs in this struct. The PCIe DMA driver w
 
 For additional information refer https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html
 
-follow below steps to Install the QDMA driver
+steps to Install the QDMA driver
+---------------------------------
 NOTE : Root permissions will be required to install qdma driver.
 
 cd pcie_host_package/qdmamake
@@ -267,14 +277,16 @@ modprobe qdma-pf
 Setup and Enable Queues for H2C and C2H: (Refer link in NOTE_1 for more details) Allocate the Queues to a function. QDMA IP supports maximum of 2048 queues. By default, all functions have 0 queues assigned. qmax configuration parameter enables the user to update the number of queues for a PF. This configuration parameter indicates “Maximum number of queues associated for the current pf”. To set 1024 as qmax for PF0:
  echo 1024 > /sys/bus/pci/drivers/qdma-pf/$BDF/qdma/qmax
 
-To Add a Queue:
+**To Add a Queue:
+
  dma-ctl qdma<bbddf> q add idx <N> [mode <st|mm>] [dir <h2c|c2h|bi>]  
 
 Ex: (Assuming PCIe BDF - 03:00.0)
 
 dma-ctl qdma03000 q add idx 0 mode mm dir h2cdma-ctl qdma03000 q add idx 1 mode mm dir c2h        
 
-To start a Queue:
+**To start a Queue:
+
 dma-ctl qdma<bbddf> q start idx <N> [dir <h2c|c2h|bi>]
 
 Ex: (Assuming PCIe BDF - 03:00.0)
@@ -282,6 +294,7 @@ Ex: (Assuming PCIe BDF - 03:00.0)
 dma-ctl qdma03000 q start idx 0 dir h2cdma-ctl qdma03000 q start idx 1 dir c2h     
 
 Build host application:
+-----------------------
 cd pcie_app/ 
 
 modify macros H2C_DEVICE , C2H_DEVICE , REG_DEVICE_NAME in pcie_host.cpp , using /dev/ nodes generated for the pcie device based on its Bus:Device:Function number.
@@ -300,6 +313,7 @@ compile application:
 ./do_compile.sh 
 
 Generate of Raw video Input file.
+---------------------------------
 Note:: : Ensure that Gstreamer packages installed on the Linux PC. If using Ubuntu distribution, ensure that the version is atleast 16.04.
 
 Download VP9 encoded sample file such as Big_Buck_Bunny
