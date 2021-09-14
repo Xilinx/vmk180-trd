@@ -7,10 +7,10 @@ PWD = $(shell readlink -f .)
 
 # the platform directory has to be an absolute path when passed to v++
 PFM_DIR = $(PWD)/platforms
-PFM_VER = 202110_1
+PFM_VER = 2021_2
 
 # valid platforms / overlays
-PFM_LIST = vmk180_multimedia_platform vmk180_pcie_platform 
+PFM_LIST = vmk180_TRD 
 OVERLAY_LIST = filter2d_pl
 
 PFM_XPFM = $(PFM_DIR)/xilinx_$(PFM)_$(PFM_VER)/$(PFM).xpfm
