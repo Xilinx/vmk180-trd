@@ -36,4 +36,6 @@
 
 #include "single-capture.dtsi"
 #include "display.dtsi"
+#include "pcie.dtsi"
 #include "ina226-power-monitor.dtsi"
+
