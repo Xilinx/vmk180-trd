@@ -49,7 +49,7 @@ if { $list_projs eq "" } {
 
 # CHANGE DESIGN NAME HERE
 variable design_name
-set design_name vmk180_pcie_platform
+set design_name vmk180_TRD
 
 # If you do not already have an existing IP Integrator design open,
 # you can create a design using the following command:
