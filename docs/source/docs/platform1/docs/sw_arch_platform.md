@@ -1,6 +1,6 @@
 ﻿<table class="sphinxhide">
  <tr>
-   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Multimedia TRD Tutorial</h1>
+   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit TRD Tutorial</h1>
    </td>
  </tr>
  <tr>
@@ -15,29 +15,30 @@ Software Architecture of the Platform
 
 Introduction
 --------------
- This chapter describes the application processing unit (APU) Linux software stack. The stack and vertical domains are shown in the following figure.
+
+This chapter describes the application processing unit (APU) Linux software stack and PS application running on the end receives control information using the PCIe BAR map memory and data through the QDMA. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
+
+The  software stack and details on how the control information & data is interpreted between the x86 host and the target is shown in the following figures.
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
+![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
 
 The stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
-
-	- Jupyter notebooks with a simple control and visualization interface
-	- smartcam application to invoke various gstreamer pipelines
-	- GStreamer multimedia framework with python bindings for video pipeline control
-
+	- G-streamer/Jupyter notebooks with a simple control and visualization interface     
+	- GStreamer multimedia framework with python bindings for video pipeline control(MIPI → Filtered → HDMI)   
+	- Gstreamer based application to capture data from MIPI on endpoint, process and transfer to host machine via pcie and display on HOST machine.
+	- Gstreamer based application to receive data host machine, process the data on EP and transfer to host machine via pcie and display on HOST machine
 * Middleware layer (user-space)
-
 	- Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer
 	- Provides access to kernel frameworks
-
 * Operating system (OS) layer (kernel-space)
 	- Provides a stable, well-defined API to user-space
-	- Includes device drivers and kernel frameworks (subsystems)
+ 	- Includes device drivers and kernel frameworks (subsystems)
 	- Access to hardware IPs
 
-Vertically, the software components are divided by domain:
+Vertically, the software components are divided by domain:Vertically, the software components are divided by domain:
 
 Video Capture
 ---------------
@@ -148,13 +149,99 @@ Libdrm
 
 The framework exposes two device nodes per display pipeline to user space: the /dev/dri/card* device node and an emulated /dev/fb* device node for backward compatibility with the legacy fbdev Linux framework. The latter is not used in this design. libdrm was created to facilitate the interface of user space programs with the DRM subsystem. This library is merely a wrapper that provides a function written in C for every ioctl of the DRM API, as well as constants, structures and other helper elements. The use of libdrm not only avoids exposing the kernel interface directly to user space, but presents the usual advantages of reusing and sharing code between programs.
 
+Host Software components
+-------------------------
+Data is transferred between the host and the target using the QDMA. QDMA device drivers are installed on the host, are used to configure the QDMA IP on the endpoint and to initiate data transfer from the host. The host reads the media file from the disk, sends control information to the endpoint, also sends the media file to the endpoint using DMA. After receiving filtered output back from the endpoint, the data is displayed on the host monitor. At the device side, the OpenCL-based application is used to receive the data, filter it, and send the data back to the host.
+
+ A dedicated BAR is used to send control information between Host and the Device and vice-versa.
+
+host_package: The host package installs the PCIe QDMA driver on the host machine. It identifies the PCIe endpoint  Board connected to the host machine. This package has the application for sending files from the host machine along with the input parameters for 2dfilter on the Versal PCIe endpoint, and displays received content on the monitor.
+
+Please refer to below link for more details on QDMA drivers:
+
+https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel
+
+* Device Software components:
+
+In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
+
+Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective). 
+
+* G-streamer plugins :
+		Following G-streamer plugins are supported and provided as part of package.
+
+* Appsrc plugin: 
+		Appsrc plugin interacts with PCIe EP driver and gets the media content from the Host over PCIe interface.
+
+* Appsync Plugin: 
+ 		Appsync plugin interacts with PCIe EP driver and sends the media content to the Host over PCIe interface.
+
+* 2dfilter plugin: 
+  		2dfilter plugin gets media content from Appsrc, passes it through PL filter and sends filtered content to Appsync.
+
+* SDXFilter2d: 
+		SDX filter2d plugin is used to configure 2dfilter in PL
+
+* pcie_lib: 
+		This library provides abstract APIs for pcie_transcode applications that interact with PCIe user space configuration. 
+
+* pcie_ep_driver: 
+		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
+
+![Linux SW components](../../media/software_components.png )
+
+Supported Use cases:
+Following use cases are supported in this release.
+
+1. MIPI --> 2D Image Processing --> HDMI
+
+2. MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
+
+3. Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
+
+Usecase-1(MIPI --> 2D Image Processing --> HDMI):
+----------------------------------------------------
+
+Data is captured using MIPI camera, captured frame is fed through Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port. 
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Device application provides user interface to configure  Plan-id and Sync parameters 
+
+![USECASE !](../../media/software_usecase1.png )
+
+
+Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
+--------------------------------------------------------------------------------
+
+Data is captured using MIPI camera, processed using Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent to the Host using appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Host application provides user interface to configure following parameters Height, Width,  Input-format, Kernel-preset, Kernel-mode, Kernel-name, Framerate. Host send all these parameters to the device using the control interface and actual media data is transferred using DMA through PCIe.
+
+Device application provides user interface to configure  Plan-id and Sync parameters 
+
+![USECASE 2](../../media/software_usecase2.png )
+
+Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Data is captured from the file source, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent back to the Host using Appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Host application provides user interface to configure following parameters Height, Width,  Input-format, Kernel-preset, Kernel-mode, Kernel-name, Framerate. Host send all these parameters to the device using the control interface and actual media data is transferred using DMA through PCIe.
+
+Device application provides user interface to configure  Plan-id and Sync parameters 
+
+![USECASE 3](../../media/software_usecase3.png )
 
 **Next Steps**
 
 You can choose any of the following next steps:
 
 * Read [Hardware Architecture of the Platform](hw_arch_platform.md) 
-* Go back to the [VMK180 Multimedia TRD start page](../platform1_landing.md)
+* Go back to the [VMK180 TRD start page](../platform1_landing.md)
 
 **License**
 
@@ -166,4 +253,4 @@ You may obtain a copy of the License at
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-<p align="center">Copyright&copy; 2021 Xilinx</p>
+<align="center">Copyright&copy; 2021 Xilinx</p>

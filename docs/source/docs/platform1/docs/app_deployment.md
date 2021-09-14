@@ -1,6 +1,6 @@
 ﻿<table class="sphinxhide">
  <tr>
-   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Multimedia TRD Tutorial</h1>
+   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit TRD Tutorial</h1>
    </td>
  </tr>
  <tr>
@@ -185,13 +185,10 @@ Run the Application
  This TRD includes the following jupyter notebooks:
 
 1. **vmk180-trd-nb1.ipynb**: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.
-2. **vmk180-trd-nb2.ipynb**: Demonstrates streaming video from a v4l2 device on the target to the Jupyter notebook using the GStreamer multimedia framework.
-3. **vmk180-trd-nb3.ipynb**: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.
-4. **vmk180-trd-nb4.ipynb**: Demonstrates two simultaneous streaming pipelines, one from file source and another from a v4l2 device onto two individual planes of a HDMI monitor using the GStreamer multimedia framework.
-5. **vmk180-trd-nb5.ipynb**: Demonstrates the 2D filter software kernel inserted into the video pipeline of notebook 2.
-6. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
-7. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
-8. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
+2. **vmk180-trd-nb3.ipynb**: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.
+3. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
+4. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
+5. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
   
 to run the notebooks, follow the below steps:
 
@@ -209,8 +206,239 @@ to run the notebooks, follow the below steps:
 
 > **NOTE** : Please follow ''step 3 to step 5'', without this you may observe incorrect behavior while moving to different notebook. 
 
+Host Machine Software setup
+--------------------------------
+ **Directory and file description**
+
+Following are the list of directories in `pcie_host_package` directory.
+
+  * **apps**: QDMA User space application to configure and control QDMA
+  * **docs**: Documentation for the Xilinx QDMA Linux Driver	
+  * **driver/src**: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers
+  * **driver/libqdma**: QDMA library to configure and control the QDMA IP	
+  * **scripts**: Sample scripts for perform DMA operations
+  * **Makefile**: Makefile to compile the driver
+  * **pcie_app**: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver
+
+
+> **NOTE** : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully
+
+* Power on the HOST machine
+
+* Execute following command on HOST machine's terminal to check If the Board is linking up:
+
+```
+lspci -vd 10ee:
+```
+
+ On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint: 
+  
+  ```
+  03:00.0 RAM memory: Xilinx Corporation Device b03f
+  ```
+
+ If above entry is missing QDMA driver will not be able to recognized PCIe endpoint device. 
+  
+* if not already done, copy `pcie_host_package` directory to PCIe host machine. 
+
+  
+Updating the PCIe device ID (if needed)
+---------------------------
+Make sure that PCIe Device ID in the driver is matching to Device ID observed in linkup status. in above output `b03f` is device ID.
+
+During the PCIe DMA IP customization in Vivado you can specify a PCIe Device ID. This Device ID must be recognized by the driver in order to properly identify the PCIe QDMA device. 
+
+To Check/modify the PCIe Device ID in the driver, open the `$vmk180-trd/pcie_host_package/qdma/driver/src/pci_ids.h` file (line no : 320) from the driver source and search for the pcie_device_id struct. 
+This struct defines the PCIe Device IDs that are recognized by the driver in the following format: 
+
+```
+{PCI_DEVICE (0x10ee, 0xb03f),}, 
+```
+
+Add, remove, or modify the PCIe Device IDs in this struct. The PCIe DMA driver will only recognize device IDs identified in this struct as PCIe QDMA devices. User can also remove PCIe Device IDs that are not be used in their solution.
+On every modification, the driver must be un-installed and recompiled, if compiled previously.
+
+ For additional information refer https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html
+ 
+  * follow below steps to Install the QDMA driver
+> **NOTE** : Root permissions will be required to install qdma driver. 
+
+```
+cd pcie_host_package/qdma
+make 
+ ```
+ 
+  * Install the QDMA driver
+```
+make install-mods
+
+``` 
+
+  * Configure the QDMA module paramters using following script:
+
+```
+./scripts/qdma_generate_conf_file.sh <bus_num> <num_pfs> <mode> <config_bar> <master_pf>` 
+
+```
+	
+Ex: (Assuming PCIe BDF - 03:00.0)
+	
+```
+./scripts/qdma_generate_conf_file.sh 0x03 1 0 1 0
+
+```
+	
+  * For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)
+```
+modprobe qdma-pf
+```
+	
+  * Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
+  Allocate the Queues to a function. QDMA IP supports maximum of 2048 queues. 
+	By default, all functions have 0 queues assigned.
+	qmax configuration parameter enables the user to update the number of queues for a PF. 
+	This configuration parameter indicates “Maximum number of queues associated for the current pf”.
+To set 1024 as qmax for PF0:
+
+```
+ echo 1024 > /sys/bus/pci/drivers/qdma-pf/$BDF/qdma/qmax
+ 
+``` 
+
+  * To Add a Queue:
+	
+```
+ dma-ctl qdma<bbddf> q add idx <N> [mode <st|mm>] [dir <h2c|c2h|bi>] 
+ 
+```
+Ex: (Assuming PCIe BDF - 03:00.0)
+
+```
+dma-ctl qdma03000 q add idx 0 mode mm dir h2c
+dma-ctl qdma03000 q add idx 1 mode mm dir c2h 
+       
+ ```
+
+  * To start a Queue:
+
+```
+dma-ctl qdma<bbddf> q start idx <N> [dir <h2c|c2h|bi>]
+```
+
+Ex: (Assuming PCIe BDF - 03:00.0)
+
+```
+dma-ctl qdma03000 q start idx 0 dir h2c
+dma-ctl qdma03000 q start idx 1 dir c2h  
+   
+```
+	
+  * Build host application:
+  
+```
+cd pcie_app/
+
+```
+	
+   * modify macros `H2C_DEVICE` , `C2H_DEVICE` , `REG_DEVICE_NAME` in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its `Bus:Device:Function number`.
+	
+ Ex: Assuming PCIe BDF as `03:00.0` the above macros need to be set as:	
+   * If H2C queue index is 0 device node is `/dev/qdma03000-MM-0`  (Queue index for H2C is set in above "Add a queue" step)
+   * If C2H queue index is 1 device node is `/dev/qdma03000-MM-1`  (Queue index for C2H is set in above "Add a queue" step)
+		
+   REG_DEVICE_NAME is `/sys/bus/pci/devices/0000:03:00.0/resource0`
+
+   * Modify pcie_app/app1.pro line no 35 and 39 for opencv library path and opencv include path before compilation
+
+   * set `QMAKE_PATH` to installed QT qmake path
+
+```
+export QMAKE_PATH=/opt/Qt5.9/5.9/gcc_64/bin/qmake`
+```
+
+compile application:
+``` 
+./do_compile.sh
+
+```
+
+ Generate of Raw video Input file.
+------------------------------------
+
+> **Note**:: : Ensure that Gstreamer packages installed on the Linux PC. If using Ubuntu distribution, ensure that the version is atleast 16.04.
+
+1. Download VP9 encoded sample file such as [Big_Buck_Bunny](https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.vp9.webm)
+
+2. Run following GST command to create 3840x2160 resolution raw file with YUY2 format with 30fps
+
+```
+gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=3840, height=2160, format=YUY2, framerate=30/1 ! filesink location=<file_path>/4k30.yuv
+```
+
+* Run following GST command to create 1920x1080 resolution raw file with YUY2 format with 30fps
+
+```
+gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=1920, height=1080, format=YUY2, framerate=30/1 ! filesink location=<file_path>/1080p30.yuv
+```
+		
+Run Host and EP applications
+----------------------------
+> **Note:**  Make sure, HOST application is launched before starting EP application.
+
+
+* Execute following command to run the Host application(pcie_host_app)
+
+	```
+	./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  
+	```
+	
+	For 1080p, 30fps:
+	``` 
+   ./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4 
+   
+    ```
+  
+	For 4K, 30fps: 
+	``` 
+   ./pcie_host_app -i file.yuy2 -d 3840x2160 -t 4 
+   
+   ```
+Following Table lists the supported filter configuration in the design.
+
+|Filter_type |Filter name|
+   |----|----|
+   |0 |No Filter-Pass through|
+   |1 |Blur filter|
+   |2 |Edge filter|
+   |3 |Horizontal Edge filter| 
+   |4 |Vertical Edge filter|      
+   |5 |Emboss filter| 
+   |6 |HGRAD filter|      
+   |7 |VGRAD filter| 
+   |8 |Identity filter|      
+   |9 |Sharpe filter| 
+   |10 |Horizontal Sobel filter| 
+   |11 |Vertical Sobel filter|
+   
+
+* Execute following command on Target(EP) to start application(pcie-testapp)
+
+ * login into UART Terminal with `root` user & `root` as password
+ * set the following environment variable:
+   ```
+	export XILINX_XRT=/usr
+	export XCL_BINDIR=/media/sd-mmcblk0p1/ 
+   ```
+   
+ * execute following command to run EP Application
+  ```	
+  pcie-testapp 
+  
+  ```
+A filter version of big buck bunny video will start playing on DP monitor.
+
 **Next Steps**
-* Go back to the [VMK180 Multimedia TRD design start page](../platform1_landing.md)
+* Go back to the [VMK180 TRD design start page](../platform1_landing.md)
 
 **License**
 
