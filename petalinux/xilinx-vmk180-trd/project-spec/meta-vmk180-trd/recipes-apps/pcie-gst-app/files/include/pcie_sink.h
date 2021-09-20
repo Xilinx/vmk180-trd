@@ -26,8 +26,8 @@
 /**
  * @brief The callback API when appsink receives a new sample
  *
- * @param sink GstElement sink object
- * @param data user data
+ * @param[out] sink GstElement sink object
+ * @param[in] data user data
  *
  * @return GST_FLOW_OK on success
  */

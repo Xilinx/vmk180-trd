@@ -43,7 +43,8 @@
 #include <glib.h>
 #include <gst/gst.h>
 
-#define DEVICE_NAME  "/dev/pciep0"
+#define DEVICE_NAME             "/dev/pciep0"
+#define MAX_BUFFER_POOL_SIZE    3
 
 typedef struct resolution {
     guint width;
@@ -74,31 +75,32 @@ gint pcie_open();
 /**
  * @brief get file length of file to be transferred.
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] file_length length of file
  *
- * @return  total file length
+ * @return  0 on success
  */
-gulong pcie_get_file_length(gint fpga_fd);
+gulong pcie_get_file_length(gint fpga_fd, gulong *file_length);
 
 /**
- * @brief read data from host using dma.
+ * @brief Trigger dma read (use after dma map)
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param size size of data to be transferred.
- * @param offset offset of the buffer.
- * @param buff address of the buffer to be transferred.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] size size of data to be transferred.
+ * @param[in] offset offset of the buffer.
+ * @param[in] buff address of the buffer to be transferred.
  *
  * @return 0 on success
  */
 gint pcie_read(gint fpga_fd, gint size, gulong offset, gchar* buff);
 
 /**
- * @brief write back data to host using dma.
+ * @brief Trigger dma write (use after dma import)
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param size size of data to be read.
- * @param offset offset of the buffer.
- * @param buff address of the buffer to be read.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] size size of data to be read.
+ * @param[in] offset offset of the buffer.
+ * @param[out] buff address of the buffer to be read.
  *
  * @return 0 on success
  */
@@ -107,7 +109,7 @@ gint pcie_write(gint fpga_fd, gint size, gint offset, gchar *buff);
 /**
  * @brief set read transfer done register
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
  *
  * @return 0 on success
  */
@@ -116,7 +118,7 @@ gint pcie_set_read_transfer_done(gint fpga_fd);
 /**
  * @brief set write transfer done register
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
  *
  * @return 0 on success
  */
@@ -125,7 +127,7 @@ gint pcie_set_write_transfer_done(gint fpga_fd);
 /**
  * @brief clear read transfer done register
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
  *
  * @return 0 on success
  */
@@ -134,7 +136,7 @@ gint pcie_clr_read_transfer_done(gint fpga_fd);
 /**
  * @brief clear write transfer done register
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
  *
  * @return 0 on success
  */
@@ -143,8 +145,8 @@ gint pcie_clr_write_transfer_done(gint fpga_fd);
 /**
  * @brief  Get input resolution of file.
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param input_res get instance of input resolution.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] input_res input resolution from host
  *
  * @return input resolution
  */
@@ -153,55 +155,83 @@ gint pcie_get_input_resolution(gint fpga_fd, struct resolution* input_res);
 /**
  * @brief Get kernel mode
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] kernel_mode kernel mode from host
  *
  * @return kernel mode
  */
-gint pcie_get_kernel_mode(gint fpga_fd);
+gint pcie_get_kernel_mode(gint fpga_fd, guint *kernel_mode);
 
 /**
  * @brief Get filter type
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] filter type from host
  *
  * @return filter type
  */
-gint pcie_get_filter_type(gint fpga_fd);
+gint pcie_get_filter_type(gint fpga_fd, guint *filter_type);
 
 /**
  * @brief Get frame rate of frames to be transferred
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] fps output fps
  *
  * @return fps
  */
-gint pcie_get_fps(gint fpga_fd);
+gint pcie_get_fps(gint fpga_fd, guint *fps);
 
 /**
- * @brief Export dma buf type fd from user space
+ * @brief Initialize bufferpool
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param dma_export dma buffer export object
+ * Driver will allocate memory and store FDs internally. It won't export any FD
+ * to user. User need to use pcie_dma_map/unmap calls in order to get available
+ * FD from driver.
+ *
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] dma_export dma buffer export object
  *
  * @return 0 on success
  */
 gint pcie_dma_export(gint fpga_fd, struct dma_buf_export* dma_export);
 
 /**
- * @brief Release dma_export file descriptor
+ * @brief Release allocated bufferpool memory
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param dma_export dma buffer export object
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] dma_export dma buffer export object
  *
  * @return 0 on success
  */
 gint pcie_dma_export_release(gint fpga_fd, struct dma_buf_export* dma_export);
 
 /**
+ * @brief Export the available FD from bufferpool. It should be unmap using
+ * pcie_dma_unmap() after usage.
+ *
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] dma_map object to store mapped fd
+ *
+ * @return 0 on success
+ */
+gint pcie_dma_map(gint fpga_fd, struct dma_buf_export *dma_map);
+
+/**
+ * @brief Unmap the already mapped FD
+ *
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] dma_map mapped fd
+ *
+ * @return 0 on success
+ */
+gint pcie_dma_unmap(gint fpga_fd, struct dma_buf_export *dma_map);
+
+/**
  * @brief Import the dma buf file descriptor
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param dma_import dma import object
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] dma_import dma import object
  *
  * @return 0 on success
  */
@@ -210,8 +240,8 @@ gint pcie_dma_import(gint fpga_fd, struct dma_buf_imp* dma_import);
 /**
  * @brief release Import the dma buf file descriptor
  *
- * @param fpga_fd pcie ep device node file  descriptor.
- * @param dma_import dma import object
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] dma_import dma import object
  *
  * @return 0 on success
  */
@@ -220,25 +250,17 @@ gint pcie_dma_import_release(gint fpga_fd, struct dma_buf_imp* dma_import);
 /**
  * @brief get the supported usecase type
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] usecase usecase type
  *
  * @return 0 on success
  */
-gint pcie_get_usecase_type(gint fpga_fd);
-
-/**
- * @brief set export fd direction.
- *
- * @param val 1 is for read export fd and 0 for write export fd
- *
- * @return 0 on success
- */
-gint set_export_fd_dir(guint val);
+gint pcie_get_usecase_type(gint fpga_fd, guint *usecase);
 
 /**
  * @brief closes pcie end point device node.
  *
- * @param fpga_fd pcie ep device node file  descriptor.
+ * @param[in] fpga_fd pcie ep device node file descriptor.
  */
 void pcie_close(gint fpga_fd);
 

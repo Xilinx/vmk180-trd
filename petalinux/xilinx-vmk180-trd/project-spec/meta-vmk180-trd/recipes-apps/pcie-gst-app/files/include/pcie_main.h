@@ -36,33 +36,27 @@
 #define VGST_V4L2_IO_MODE_DMABUF_EXPORT 4
 #define MAX_FRAME_RATE_DENOM            1
 #define VIDEOPARSE_FORMAT_YUY2          "YUY2"
-#define PCIE_TRANSCODE_APP_FAIL         -1
+#define PCIE_GST_APP_FAIL               -1
 #define VGST_FILTER_KERNEL_NAME         "filter2d_pl_accel"
-#define INPUT_FILE_RES_WIDTH_1080P      1920
-#define INPUT_FILE_RES_HEIGHT_1080P     1080
-#define APPSRC_FD_RELEASE_DELAY_DEFAULT 18000 /* 18ms */
-#define APPSRC_FD_RELEASE_DELAY_1080P   5000 /* 16ms */
-#define READ_DMA_EXPORT_MAP_TYPE_VAL    1
 
-typedef struct host_params {
+typedef struct {
     guint64 length;
     guint input_format, fps, kernel_name;
     guint filter_preset, kernel_mode, usecase;
 } host_params;
 
-typedef struct _App {
+typedef struct {
     gint fd;
-    guint sourceid;
+    guint sourceid, dma_map_idx;
     GMainLoop *loop;
     gboolean eos_flag;
     host_params h_param;
     resolution input_res;
-    gchar *data, sync_val;
     dma_buf_imp dma_import;
-    dma_buf_export dma_export;
+    dma_buf_export dma_export, dma_map[MAX_BUFFER_POOL_SIZE];
     GstElement *inputsrc, *videosink, *sdxfilter2d, *perf;
     GstElement *pipeline, *pciesrc, *capsfilter, *pciesink;
-    guint64 fd_release_sleep, appsrc_framecnt, appsink_framecnt;
+    guint64 appsrc_framecnt, appsink_framecnt;
     guint64 read_offset, total_len, yuv_frame_size, export_fd_size;
 } App;
 
@@ -99,46 +93,6 @@ typedef enum {
     VGST_FILTER_PRESET_VERICAL_SOBEL,
     VGST_FILTER_PRESET_MAX,
 } VGST_FILTER_PRESET;
-
-/**
- * @brief This API is required for user interactions to quit the app
- *
- * @param source GIOChannel type object
- * @param cond GIOCondition type object
- * @param data user data
- *
- * @return True on success
- */
-gboolean handle_keyboard (GIOChannel* source, GIOCondition cond, App* data);
-
-/**
- * @brief This API is to capture messages from pipeline
- *
- * @param bus GstBus type object
- * @param message contains message from bus
- * @param app user data
- *
- * @return TRUE on sucess
- */
-gboolean bus_message (GstBus* bus, GstMessage* message, App* app);
-
-/**
- * @brief This API is to configure the host parameters
- *
- * @param app user data
- *
- * @return 0 on success
- */
-gint set_host_parameters(App* app);
-
-/**
- * @brief This API is to set the gstreamer elements
- *
- * @param app user data
- *
- * @return 0 on success
- */
-gint gst_set_elements(App* app);
 
 #endif /* _PCIE_MAIN_H_ */
 

@@ -29,6 +29,7 @@ gboolean feed_data (GstElement *pciesrc, guint size, App *app)
     GstMemory*    memory     = NULL;
     GstAllocator* allocator  = NULL;
     gint          ret        = 0;
+    gint          unmap_idx  = 0;
 
     app->appsrc_framecnt++;
 
@@ -36,24 +37,25 @@ gboolean feed_data (GstElement *pciesrc, guint size, App *app)
         if(!app->eos_flag) {
           g_signal_emit_by_name (app->pciesrc, "end-of-stream", &ret);
           app->eos_flag = TRUE;
-          GST_DEBUG ("Emitting EOS");
+          GST_DEBUG ("Appsrc: Emitting EOS");
         }
         return TRUE;
     }
 
     buffer = gst_buffer_new ();
-    app->dma_export.fd = 0;
-    app->dma_export.size = app->export_fd_size;
+    app->dma_map[app->dma_map_idx].fd   = 0;
+    app->dma_map[app->dma_map_idx].size = app->export_fd_size;
 
     GST_DEBUG ("Appsrc: frame-count - %lu", app->appsrc_framecnt);
 
-    /* request driver to export fd */
-    ret = pcie_dma_export(app->fd, &app->dma_export);
+    /* request driver to map available fd */
+    ret = pcie_dma_map(app->fd, &(app->dma_map[app->dma_map_idx]));
     if (ret < 0) {
-        GST_ERROR ("Unable to Export the dma buf fd");
+        GST_ERROR ("Appsrc: dma fd map failed with %d", ret);
         return FALSE;
     }
-    GST_DEBUG ("Appsrc: dmabuf fd - %d", app->dma_export.fd);
+    GST_DEBUG ("Appsrc: dmabuf bufferpool fd - %d",
+               app->dma_map[app->dma_map_idx].fd);
 
     /* trigger dma transfer */
     pcie_read(app->fd, app->yuv_frame_size, 0, NULL);
@@ -62,10 +64,10 @@ gboolean feed_data (GstElement *pciesrc, guint size, App *app)
 
     /* allocate dmabuf type memory */
     memory = gst_dmabuf_allocator_alloc (allocator,
-                                         app->dma_export.fd,
-                                         app->dma_export.size);
+                                         app->dma_map[app->dma_map_idx].fd,
+                                         app->dma_map[app->dma_map_idx].size);
     if(!memory) {
-        GST_ERROR ("Not able to allocate dma type memory");
+        GST_ERROR ("Appsrc: Not able to allocate dma type memory");
         return FALSE;
     }
 
@@ -88,28 +90,35 @@ gboolean feed_data (GstElement *pciesrc, guint size, App *app)
     GST_BUFFER_TIMESTAMP(buffer) = (GstClockTime)
         ((app->appsrc_framecnt/(float)app->h_param.fps) * 1e9);
 
-    /* Push buffer to next element */
+    /* push buffer to next element */
+    gst_buffer_ref(buffer);
     g_signal_emit_by_name (app->pciesrc, "push-buffer", buffer, &ret);
     if(ret != GST_FLOW_OK) {
-        GST_ERROR ("Push-buffer failed, frame-count - %lu, error - %d",
-                  app->appsrc_framecnt, ret);
+        GST_ERROR ("Appsrc: Push-buffer failed, frame-count - %lu, error - %d",
+                    app->appsrc_framecnt, ret);
     }
 
+    /* This will help to decide when to send EOS */
     app->read_offset += app->yuv_frame_size;
 
-    /* NOTE: When we use dma export/import in main loop, we get
-             XRT related issues with pciesrc -> filter2d -> pciesink
-             pipeline, and when we use inside this callback we
-             see green strip & green frames issue on Display. By
-             Keeping below delay we have not observed the green
-             frames issue. */
-    usleep(app->fd_release_sleep);
+    /* start unmaping at MAX_BUFFER_POOL_SIZE frame */
+    if(app->appsrc_framecnt >= MAX_BUFFER_POOL_SIZE) {
+        unmap_idx = app->appsrc_framecnt % MAX_BUFFER_POOL_SIZE;
+        GST_DEBUG ("Appsrc: Unmapping dmabuf fd[%d] - %d",
+                    unmap_idx, app->dma_map[unmap_idx].fd);
 
-    /* release exported fd */
-    ret = pcie_dma_export_release(app->fd, &app->dma_export);
-    if (ret < 0)
-        GST_ERROR ("Appsrc: Unable to release exported fd - %d",
-                   app->dma_export.fd);
+        /* unmap oldest fd  */
+        ret = pcie_dma_unmap(app->fd, &(app->dma_map[unmap_idx]));
+        if (ret < 0)
+            GST_ERROR ("Appsrc: dma unmap failed with %d", ret);
+    }
+
+    /* circulate within available bufferpool */
+    if(app->dma_map_idx >= (MAX_BUFFER_POOL_SIZE-1)) {
+        app->dma_map_idx = 0;
+    }
+    else
+        app->dma_map_idx++;
 
     gst_buffer_unref (buffer);
     gst_object_unref(allocator);
