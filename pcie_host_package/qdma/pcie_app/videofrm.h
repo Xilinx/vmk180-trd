@@ -51,16 +51,18 @@ public:
     int HEI = 1080;
     int FPS = 30;
     int testcnt = 0;
-
+    bool hasWindow;
     int convert_yuv_to_rgb_buffer(unsigned char *yuv, unsigned char *rgb, unsigned int width, unsigned int height);
     void config_frame();
     void setResolution(int wi, int he, int fp);
 public slots:
     void updateframe();
+    void updateFPSslot(int val);
+    void stopTimer();
 signals:
+    void updateFPS(int);
+    void stopTimersig();
 };
-
-
 
 
 #endif // VIDEO_H
