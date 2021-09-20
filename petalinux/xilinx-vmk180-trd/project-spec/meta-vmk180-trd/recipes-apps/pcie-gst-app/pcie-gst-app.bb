@@ -7,16 +7,25 @@ DESCRIPTION = "PCIe GStreamer application driven by a PCIe host application to r
 LICENSE = "LGPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=b60ab04828851b8b8d8ad651889ac94d"
 
-BRANCH ?= "master"
-REPO   ?= "git://gitenterprise.xilinx.com/PAEG/vmk180_petalinux_bsp.git;protocol=https"
-SRCREV ?= "${AUTOREV}"
-
-BRANCHARG = "${@['nobranch=1', 'branch=${BRANCH}'][d.getVar('BRANCH', True) != '']}"
 SRC_URI = "${REPO};${BRANCHARG}"
+
+SRC_URI = " file://Makefile.am \
+            file://configure.ac \
+            file://autogen.sh \
+            file://LICENSE.md \
+            file://src/pcie_main.c \
+            file://src/pcie_src.c \
+            file://src/pcie_sink.c \
+            file://src/pcie_abstract.c \
+            file://include/pcie_main.h \
+            file://include/pcie_src.h \
+            file://include/pcie_abstract.h \
+            file://include/pcie_sink.h \
+          "
 
 #FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-S = "${WORKDIR}/git/single_plat"
+S = "${WORKDIR}/"
 
 CFLAGS_prepend = "-I${S}/include/"
 
