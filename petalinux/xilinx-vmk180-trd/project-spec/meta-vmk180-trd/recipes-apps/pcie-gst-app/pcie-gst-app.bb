@@ -14,6 +14,8 @@ SRCREV ?= "${AUTOREV}"
 BRANCHARG = "${@['nobranch=1', 'branch=${BRANCH}'][d.getVar('BRANCH', True) != '']}"
 SRC_URI = "${REPO};${BRANCHARG}"
 
+#FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+
 S = "${WORKDIR}/git/single_plat"
 
 CFLAGS_prepend = "-I${S}/include/"
