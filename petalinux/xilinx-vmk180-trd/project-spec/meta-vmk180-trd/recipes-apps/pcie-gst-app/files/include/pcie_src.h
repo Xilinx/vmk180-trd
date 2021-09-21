@@ -27,9 +27,9 @@
  * @brief This method is called by the need-data signal callback, we create a
  * dma type buffer with data and push it to the next element.
  *
- * @param appsrc GstElement type object
- * @param size size
- * @param app user data
+ * @param[out] appsrc GstElement type object
+ * @param[out] size size
+ * @param[in] app user data
  *
  * @return TRUE on success
  */
@@ -39,9 +39,9 @@ gboolean feed_data (GstElement* appsrc, guint size, App* app);
  * @brief This signal callback triggers when appsrc needs data. Here, we add
  * an idle handler to the mainloop to start pushing data into the appsrc
  *
- * @param source GstElement type object
- * @param size size
- * @param data user data
+ * @param[out] source GstElement type object
+ * @param[out] size size
+ * @param[in] data user data
  */
 void start_feed (GstElement* source, guint size, App* data);
 
@@ -49,8 +49,8 @@ void start_feed (GstElement* source, guint size, App* data);
  * @brief This callback triggers when appsrc has enough data so that we can stop
  * sending the data and remove the idle handler from the mainloop.
  *
- * @param source GstElement type object
- * @param data user data
+ * @param[out] source GstElement type object
+ * @param[in] data user data
  */
 void stop_feed (GstElement* source, App* data);
 

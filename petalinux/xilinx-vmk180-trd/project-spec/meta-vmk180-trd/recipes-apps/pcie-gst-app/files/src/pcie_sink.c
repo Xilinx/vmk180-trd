@@ -65,21 +65,24 @@ GstFlowReturn new_sample_cb (GstElement* elt, App* app)
     /* request driver to import the fd */
     ret = pcie_dma_import(app->fd,&app->dma_import);
     if (ret < 0 ) {
-        GST_ERROR ("Unable to get import fd");
+        GST_ERROR ("Failed to get import fd");
     }
+    GST_DEBUG ("Appsink: dma import successful");
 
     /* initiate dma write operation */
     ret = pcie_write(app->fd, app->yuv_frame_size, 0, NULL);
     if (ret < 0) {
         GST_ERROR ("pcie_write failed, err - %d", ret);
     }
+    GST_DEBUG ("Appsink: pcie write successful");
 
     /* all done, release the fd */
     ret = pcie_dma_import_release(app->fd,&app->dma_import);
     if (ret < 0 ) {
-        GST_ERROR ("Unable to release import dma buf fd - %d",
+        GST_ERROR ("Failed to release import dma buf fd - %d",
                 app->dma_import.dbuf_fd);
     }
+    GST_DEBUG ("Appsink: dma import release successful");
 
     gst_sample_unref (sample);
     GST_DEBUG ("Appsink: processed frame-count -> %lu", app->appsink_framecnt);
