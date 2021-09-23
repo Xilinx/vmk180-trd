@@ -1,0 +1,32 @@
+From e5934deff0adf0976fb9fedefd48c06fd9154de9 Mon Sep 17 00:00:00 2001
+From: thippesw <thippesw@xilinx.com>
+Date: Tue, 21 Sep 2021 11:30:33 -0600
+Subject: [PATCH] Removed attributes
+
+---
+ drivers/misc/xilinx_pci_endpoint.c | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/drivers/misc/xilinx_pci_endpoint.c b/drivers/misc/xilinx_pci_endpoint.c
+index 7b44dfd6b2bf..d62e457959dd 100644
+--- a/drivers/misc/xilinx_pci_endpoint.c
++++ b/drivers/misc/xilinx_pci_endpoint.c
+@@ -1107,15 +1107,6 @@ static struct pciep_driver_data *pciep_driver_create(const char *name,
+ }
+ 
+ 
+-static struct attribute *pciep_attributes[] = {
+-	&dev_attr_map_type.attr,
+-	NULL,
+-};
+-
+-static const struct attribute_group pciep_attr_group = {
+-	.attrs = pciep_attributes,
+-};
+-
+ 
+ /**
+  * pciep_platform_driver_probe() -  Probe call for the device.
+-- 
+2.17.1
+
