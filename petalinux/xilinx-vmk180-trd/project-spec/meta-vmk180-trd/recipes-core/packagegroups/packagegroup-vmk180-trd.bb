@@ -46,7 +46,7 @@ VMK180_TRD_PACKAGES = " \
 	trd-files \
 	ttf-bitstream-vera \
 	tzdata \
-	${MOVIE_PACKAGES} \
+	pcie-gst-app \
 	"
 
 RDEPENDS_${PN} = "${VMK180_TRD_PACKAGES}"
