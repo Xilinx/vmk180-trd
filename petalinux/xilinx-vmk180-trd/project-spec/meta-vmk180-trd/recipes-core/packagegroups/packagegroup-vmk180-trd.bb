@@ -27,7 +27,6 @@ VMK180_TRD_PACKAGES = " \
         python3-dev \
         python3-periphery \
 	${XRT_PACKAGES} \
-	xrt-ini \
 	packagegroup-petalinux-gstreamer \
 	gst-plugins-xlnx \
         gst-sdx \
