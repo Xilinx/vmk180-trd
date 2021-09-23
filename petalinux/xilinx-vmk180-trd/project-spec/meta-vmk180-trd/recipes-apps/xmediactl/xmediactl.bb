@@ -9,7 +9,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "file://xmedia-ctl \
 	   file://xmediactl.sh \
-	   file;//xmediactl_1080.sh \
+	   file://xmediactl_1080.sh \
 	"
 
 S = "${WORKDIR}"
