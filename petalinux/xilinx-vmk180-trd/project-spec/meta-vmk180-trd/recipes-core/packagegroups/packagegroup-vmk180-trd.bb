@@ -47,6 +47,7 @@ VMK180_TRD_PACKAGES = " \
 	ttf-bitstream-vera \
 	tzdata \
 	pcie-gst-app \
+	xmediactl \
 	"
 
 RDEPENDS_${PN} = "${VMK180_TRD_PACKAGES}"
