@@ -16,7 +16,7 @@
 			interrupts = <0 90 4>;
 			reg = <0x0 0xa4070000 0x0 0x10000>;
 		        clock-names = "s_axi_aclk";
-			clocks = <&misc_clk_4>;
+			clocks = <&misc_clk_0>;
 
 			imx274: sensor@1a{
 				compatible = "sony,imx274";
@@ -39,7 +39,7 @@
 			compatible = "xlnx,mipi-csi2-rx-subsystem-5.0";
 			reg = <0x0 0xa4060000 0x0 0x10000>;
 			clock-names = "lite_aclk", "dphy_clk_200M", "video_aclk";
-			clocks = <&misc_clk_4>, <&misc_clk_5>, <&misc_clk_0>;
+			clocks = <&misc_clk_0>, <&misc_clk_2>, <&misc_clk_2>;
 			interrupt-parent = <&gic>;
 			interrupts = <0 89 4>;
 
@@ -84,7 +84,7 @@
 		v_demosaic_0: v_demosaic@a40c0000 {
 			compatible = "xlnx,v-demosaic";
 			reg = <0x0 0xa40c0000 0x0 0x10000>;
-			clocks = <&misc_clk_0>;
+			clocks = <&misc_clk_2>;
 			reset-gpios = <&gpio0 27 1>;
 			xlnx,max-width = <3840>;
 			xlnx,max-height = <2160>;
@@ -120,7 +120,7 @@
 			compatible = "xlnx,v-vpss-scaler-2.2";
 			reg = <0x0 0xa4080000 0x0 0x40000>;
 			clock-names = "aclk_axis", "aclk_ctrl";
-			clocks = <&misc_clk_0>, <&misc_clk_0>;
+			clocks = <&misc_clk_2>, <&misc_clk_2>;
 			xlnx,num-hori-taps = <6>;
 			xlnx,num-vert-taps = <6>;
 			xlnx,pix-per-clk = <4>;
@@ -165,7 +165,7 @@
 			xlnx,pixels-per-clock = <4>;
 			xlnx,max-width = <3840>;
 			xlnx,max-height = <2160>;
-			clocks = <&misc_clk_0>;
+			clocks = <&misc_clk_2>;
 			clock-names = "ap_clk";
 		};
 
