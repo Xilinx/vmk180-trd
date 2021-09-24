@@ -21,3 +21,4 @@ do_install() {
 	     install -m 0755 ${S}/xmediactl_1080.sh ${D}/usr/bin
 }
 FILES_${PN} += ""
+INSANE_SKIP_${PN} = "file-rdeps"
