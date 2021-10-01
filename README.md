@@ -7,15 +7,16 @@
 
 
 
-The VMK180 TRD consists of a series of platforms, accelerators and Jupyter notebooks to demonstrate various aspects of the design and functionality of various Board interfaces. A platform is a Vivado design with a pre-instantiated set of I/O interfaces and a corresponding PetaLinux BSP and image that includes the required kernel drivers and user-space libraries to exercise those interfaces. Accelerators are mapped to FPGA logic resources and stitched into the platform using the Vitis toolchain. The reference design currently supports the VMK180 evaluation board. 
-Following is the list of Platform design available in 2021.1:
+The VMK180 TRD consists of a platform, accelerator and Jupyter notebooks to demonstrate various aspects of the design and functionality of various Board interfaces. A platform is a Vivado design with a pre-instantiated set of I/O interfaces and a corresponding PetaLinux BSP and image that includes the required kernel drivers and user-space libraries to exercise those interfaces. Accelerators are mapped to FPGA logic resources and stitched into the platform using the Vitis toolchain. The reference design currently supports the VMK180 evaluation board. 
 
-| Platform Name  | Description  |  Links |
-| -------------- | ------------- |----------------|
-| Platform 1: Multimedia TRD  |The multimedia TRD demonstrates video capture either from a file source, USB webcam or MIPI image sensor and displays it on a Jupyter Notebook or a HDMI monitor. Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter.  |   <ul><li><a href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/docs/platform1/platform1_landing.html">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_multimedia_trd_prebuilt_2021.1.zip">Pre-Built Package </a></li></ul>
-| Platform 2: PCIe TRD  |  The PCIe TRD demonstrates  video frames being transferred from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing.  A 2D filter has been used to demonstrate image processing on the end point and finally transfers it back to host where it is displayed on monitor.  | <ul><li><a href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/docs/platform2/platform2_landing.html">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_pcie_trd_pre-built_2021.1.zip">Pre-Built Package </a></li></ul>
+VMK180 TRD demonstrates ,
 
+* The video captured from MIPI image sensor and displays it on a Jupyter Notebook or a HDMI monitor connected to x86 host machine.
+* The video frames being transferred from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing and displays it on a HDMI monitor connected to either x86 host machine or VMK180 evaluation board . 
 
+Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter which demonstrates image processing .
+
+<ul><li><a href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/docs/platform1/platform1_landing.html">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_multimedia_trd_prebuilt_2021.1.zip">Pre-Built Package </a></li></ul>
 
 For more information about the VMK180 Evaluation Board , see [Versal Prime Series VMK180 Evaluation Kit](https://www.xilinx.com/products/boards-and-kits/vmk180.html)
 

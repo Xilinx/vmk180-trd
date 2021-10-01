@@ -47,13 +47,13 @@
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
               HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
+              SOURCELINK_SUFFIX: ''
           };
       </script>
         <script type="text/javascript" src="../../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -65,8 +65,6 @@
   <link rel="stylesheet" href="../../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/pro.min.css" media="all" />
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Tool Flow Overview" href="../../building_the_design.html" />
     <link rel="prev" title="Design Overview" href="introduction.html" /> 
 	</head>
@@ -342,14 +340,17 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../platform1_landing.html">Multimedia TRD</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../platform1_landing.html">VMK180 TRD</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#features">Features</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../platform1_landing.html#quick-start">Quick Start</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="introduction.html">Design Overview</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Setting up the Board and Application Deployment</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Setting up the Board and Application Deployment</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#setting-up-the-board">Setting up the Board</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#run-the-application">Run the Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#host-machine-software-setup">Host Machine Software setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#updating-the-pcie-device-id-if-needed">Updating the PCIe device ID (if needed)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-host-and-ep-applications">Run Host and EP applications</a></li>
 </ul>
 </li>
 </ul>
@@ -361,7 +362,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../platform2/platform2_landing.html">PCIe TRD</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
@@ -373,7 +373,7 @@
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/app_deployment.md.txt"
+				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/app_deployment.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -419,7 +419,7 @@
     
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../platform1_landing.html">Multimedia TRD</a> &raquo;</li>
+          <li><a href="../platform1_landing.html">VMK180 TRD</a> &raquo;</li>
         
       <li>Setting up the Board and Application Deployment</li>
     
@@ -427,7 +427,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../../_sources/docs/platform1/docs/app_deployment.md.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/docs/platform1/docs/app_deployment.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -440,87 +440,109 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <table class="sphinxhide">
- <tr>
-   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Multimedia TRD Tutorial</h1>
-   </td>
- </tr>
- <tr>
- <td align="center"><h1>Setting up the Board and Application Deployment</h1> </td>
- </tr>
-</table><div class="section" id="setting-up-the-board-and-application-deployment">
+  <dl class="docutils">
+<dt>&lt;table class=&#8221;sphinxhide&#8221;&gt;</dt>
+<dd><dl class="first docutils">
+<dt>&lt;tr&gt;</dt>
+<dd>&lt;td align=&#8221;center&#8221;&gt;&lt;img src=&#8221;../../media/xilinx-logo.png&#8221; width=&#8221;30%&#8221;/&gt;&lt;h1&gt; Versal Prime -VMK180 Evaluation Kit TRD Tutorial&lt;/h1&gt;
+&lt;/td&gt;</dd>
+</dl>
+<p>&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#8221;center&#8221;&gt;&lt;h1&gt;Setting up the Board and Application Deployment&lt;/h1&gt;</p>
+<p class="last">&lt;/td&gt;
+&lt;/tr&gt;</p>
+</dd>
+</dl>
+<p>&lt;/table&gt;</p>
+<div class="section" id="setting-up-the-board-and-application-deployment">
 <h1>Setting up the Board and Application Deployment<a class="headerlink" href="#setting-up-the-board-and-application-deployment" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>This document shows how to set up the board and run the Multimedia TRD application.</p>
+<p>This document shows how to set up the board and run the VMK180 TRD application.</p>
 </div>
 <div class="section" id="setting-up-the-board">
 <h2>Setting up the Board<a class="headerlink" href="#setting-up-the-board" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="flash-the-sd-card">
-<h3>Flash the SD Card<a class="headerlink" href="#flash-the-sd-card" title="Permalink to this headline">¶</a></h3>
-<ul>
-<li><p class="first">Download  the <code class="docutils literal"><span class="pre">vmk180_multimedia_trd_prebuilt_2021.1.zip</span></code> package, unzip and save it on your computer. Alternatively, Go through tutorials section to build <code class="docutils literal"><span class="pre">petalinux-sdimage.wic</span></code> locally.</p>
+<dl class="docutils">
+<dt>### Flash the SD Card</dt>
+<dd><ul class="first">
+<li><p class="first">Download  the <cite>vmk180_trd_prebuilt_2021.2.zip</cite> package, unzip and save it on your computer. Alternatively, Go through tutorials section to build <cite>petalinux-sdimage.wic</cite> locally.</p>
 </li>
 <li><p class="first">To uncompress wic file use following command</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">vmk180_multimedia_trd_prebuilt_2021</span><span class="o">.</span><span class="mi">1</span>
-<span class="n">xz</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">v</span> <span class="n">petalinux</span><span class="o">-</span><span class="n">sdimage</span><span class="o">.</span><span class="n">wic</span><span class="o">.</span><span class="n">xz</span>
-</pre></div>
-</div>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">cd</span> <span class="pre">vmk180_trd_prebuilt_2021.2</span>
+<span class="pre">xz</span> <span class="pre">-d</span> <span class="pre">-v</span> <span class="pre">petalinux-sdimage.wic.xz</span>
+<span class="pre">`</span></code></p>
 <p>This generates a output file named
-<code class="docutils literal"><span class="pre">petalinux-sdimage.wic</span></code>.</p>
+<cite>petalinux-sdimage.wic</cite>.</p>
+</div></blockquote>
 </li>
 <li><p class="first">Connect the microSD to your computer.</p>
 </li>
-<li><p class="first">Download the <a class="reference external" href="https://www.balena.io/etcher/">Balena Etcher tool</a> (recommended; available for Window, Linux, and
-macOS) required to flash the SD card.</p>
-</li>
-<li><p class="first">Follow the instructions in the tool and select the downloaded image to flash onto your microSD card.</p>
-<p><img alt="Balena Etcher" src="../../../_images/balena.png" /></p>
-</li>
-<li><p class="first">Eject the SD card from your computer.</p>
-<p>If you are looking for other OS specific tools to write the image to the SD card refer to <a class="reference external" href="https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/setting-up-the-sd-card-image.html">Setting up the SD Card Image</a></p>
+<li><p class="first">Download the [Balena Etcher tool](<a class="reference external" href="https://www.balena.io/etcher/">https://www.balena.io/etcher/</a>) (recommended; available for Window, Linux, and</p>
 </li>
 </ul>
-</div>
-<div class="section" id="hardware-setup">
-<h3>Hardware Setup:<a class="headerlink" href="#hardware-setup" title="Permalink to this headline">¶</a></h3>
+<p>macOS) required to flash the SD card.</p>
+<ul class="last">
+<li><p class="first">Follow the instructions in the tool and select the downloaded image to flash onto your microSD card.</p>
+<p>![Balena Etcher](../../media/balena.png)</p>
+</li>
+<li><p class="first">Eject the SD card from your computer.</p>
+<p>If you are looking for other OS specific tools to write the image to the SD card refer to [Setting up the SD Card Image](<a class="reference external" href="https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/setting-up-the-sd-card-image.html">https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/setting-up-the-sd-card-image.html</a>)</p>
+</li>
+</ul>
+</dd>
+</dl>
+<p>### Hardware Setup:</p>
 <p>Below diagram shows Board and hardware connections.</p>
-<p><img alt="GitHub Logo" src="../../../_images/vmk180-setup.jpg" /></p>
-<ul>
+<p>![GitHub Logo](../../media/vmk180-setup.png)</p>
+<blockquote>
+<div><ul>
 <li><p class="first"><strong>Board jumper and switch settings</strong></p>
-<p>This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.</p>
+<blockquote>
+<div><p>This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.</p>
+</div></blockquote>
 </li>
-<li><p class="first">Make sure you remove J326 (7-8) jumper.</p>
-</li>
-<li><p class="first">Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p>
-</li>
-<li><p class="first">Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p>
-</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Make sure you remove J326 (7-8) jumper.</li>
+<li>Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</li>
+<li>Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</li>
+</ul>
+</div></blockquote>
+<ul>
 <li><p class="first"><strong>microSD</strong>: Insert the SD card into slot at Versal microSD slot (top).</p>
-<p>Make sure you have the SYSCTRL uSD card inserted in the slot (bottom) and card has the SYSCTRL image. For Latest version of SYSCTRL image, refer to <a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit">Beam Tool Wiki Page</a></p>
+<blockquote>
+<div><p>Make sure you have the SYSCTRL uSD card inserted in the slot (bottom) and card has the SYSCTRL image. For Latest version of SYSCTRL image, refer to [Beam Tool Wiki Page](<a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit">https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit</a> )</p>
+</div></blockquote>
 </li>
 <li><p class="first"><strong>Monitor</strong> : Before booting, connect a 1080P/4K monitor to the board via either HDMI port. 4K monitor is preferred to demonstrate at the maximum supported resolution.</p>
 <blockquote>
-<div><p><strong>Note</strong>: The design has been validated with Dell Flat panel(U2718Q) &amp; Viewsonic (SS16024) monitors.</p>
+<div><p>&gt; <strong>Note</strong>: The design has been validated with Dell Flat panel(U2718Q) &amp; Viewsonic (SS16024) monitors.</p>
 </div></blockquote>
 </li>
 <li><p class="first"><strong>FMC and Vadj settings</strong>:
 Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
 Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:</p>
-<ul class="simple">
-<li>Download the BoardUI Utility from VMK180 Product Page: <a class="reference external" href="https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623">BoardUI/ Board Interface Test</a></li>
+<blockquote>
+<div><ul class="simple">
+<li>Download the BoardUI Utility from VMK180 Product Page: [BoardUI/ Board Interface Test](<a class="reference external" href="https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623">https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623</a> )</li>
 <li>Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.</li>
 <li>In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.</li>
 </ul>
-<p><img alt="BoardUI" src="../../../_images/boardui.jpg" /></p>
-</li>
-<li><p class="first">Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.</p>
-</li>
-<li><p class="first">Close the BoardUI utility.</p>
+</div></blockquote>
 </li>
 </ul>
 <blockquote>
-<div><strong>Note</strong>: For the IMX274 MIPI FMC v1.1, Vadj voltage rail is required to be set to 1.5V instead of 1.2V.</div></blockquote>
+<div><p>![BoardUI](../../media/boardui.jpg)</p>
+<ul class="simple">
+<li>Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.</li>
+<li>Close the BoardUI utility.</li>
+</ul>
+</div></blockquote>
+<p>&gt; <strong>Note</strong>: For the IMX274 MIPI FMC v1.1, Vadj voltage rail is required to be set to 1.5V instead of 1.2V.</p>
 <ul>
 <li><p class="first"><strong>Serial console settings</strong>: VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART ports should be visible in Device Manager:</p>
 <ul class="simple">
@@ -538,110 +560,369 @@ Perform the following steps to set the Vadj voltage rail to 1.2V using the Board
 <li>Flow Control: None</li>
 </ul>
 </li>
-<li><p class="first">You may also use a USB webcam as an input device.</p>
-<p>The webcam is optional video input device supported in the application. Recommended webcam is the <a class="reference external" href="https://www.logitech.com/en-in/products/webcams/brio-4k-hdr-webcam.960-001105.html">Logitech BRIO</a>.</p>
-</li>
 <li><p class="first"><strong>Network connection</strong>:</p>
 <p>Connect the Ethernet cable to your local network with DHCP enabled to run Jupyter Notebooks</p>
 </li>
 </ul>
-</div>
-<div class="section" id="power-on-the-board-and-boot-the-linux-image">
-<h3>Power on the board, and boot the Linux image.<a class="headerlink" href="#power-on-the-board-and-boot-the-linux-image" title="Permalink to this headline">¶</a></h3>
-<p>Follow these steps to boot the board into Linux:</p>
+</div></blockquote>
+<p>### Power on the board, and boot the Linux image.</p>
+<blockquote>
+<div><blockquote>
+<div><blockquote>
+<div>Follow these steps to boot the board into Linux:</div></blockquote>
 <ul class="simple">
 <li>Ensure all steps under the section ‘Board jumper and switch settings’ are verified.</li>
 <li>Insert the prepared micro SD card into the Versal SD card slot (refer to the image VMK180 Board Setup)</li>
 <li>Make physical connections to ethernet, HDMI, UART, webcam and power as shown in the image.</li>
 <li>Turn ON power switch SW13.</li>
 <li>On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”</li>
-<li>In about 60 seconds boot is complete. Observe the Linux prompt root&#64;xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:</li>
+<li>In about 60 seconds boot is complete. Observe the Linux prompt <a class="reference external" href="mailto:root&#37;&#52;&#48;xilinx-vmk180-es1-2020_2">root<span>&#64;</span>xilinx-vmk180-es1-2020_2</a> and autostart of JupyterLab server as shown in the example below:</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>root@xilinx-vmk180-2021_1:~#
-[W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
+</div></blockquote>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+<a class="reference external" href="mailto:root&#37;&#52;&#48;xilinx-vmk180-2021_1">root<span>&#64;</span>xilinx-vmk180-2021_1</a>:~#</p>
+</div></blockquote>
+<p>[W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
 [I 02:30:21.571 LabApp] JupyterLab extension loaded from /usr/lib/python3.5/site-packages/jupyterlab
 [I 02:30:21.572 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
 [I 02:30:21.580 LabApp] Serving notebooks from local directory: /usr/share/notebooks
 [I 02:30:21.581 LabApp] The Jupyter Notebook is running at:
-[I 02:30:21.581 LabApp] http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
+[I 02:30:21.581 LabApp] <a class="reference external" href="http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103">http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103</a>
 [I 02:30:21.581 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
-[C 02:30:23.092 LabApp]
-
-To access the notebook, open this file in a browser:
-    file:///home/root/.local/share/jupyter/runtime/nbserver-1889-open.html
-Or copy and paste one of these URLs:
-    http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
-</pre></div>
-</div>
-<p>Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.</p>
+[C 02:30:23.092 LabApp]</p>
 <blockquote>
-<div><strong>Note</strong>:  This demo is tested with Chrome browser only.</div></blockquote>
-<ul class="simple">
+<div><dl class="docutils">
+<dt>To access the notebook, open this file in a browser:</dt>
+<dd><a class="reference external" href="file:///home/root/.local/share/jupyter/runtime/nbserver-1889-open.html">file:///home/root/.local/share/jupyter/runtime/nbserver-1889-open.html</a></dd>
+<dt>Or copy and paste one of these URLs:</dt>
+<dd><a class="reference external" href="http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103">http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103</a></dd>
+</dl>
+<dl class="docutils">
+<dt><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></dt>
+<dd>Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.</dd>
+</dl>
+<p>&gt; <strong>Note</strong>:  This demo is tested with Chrome browser only.</p>
+<blockquote>
+<div><ul class="simple">
 <li>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
-</pre></div>
-</div>
+</div></blockquote>
+</div></blockquote>
+<p><a href="#id7"><span class="problematic" id="id8">``</span></a>`
+<a class="reference external" href="http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103">http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103</a></p>
+<p><a href="#id9"><span class="problematic" id="id10">``</span></a><a href="#id11"><span class="problematic" id="id12">`</span></a></p>
 <blockquote>
-<div><strong>Note</strong>: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:</div></blockquote>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
-<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">jupyterlab</span><span class="o">-</span><span class="n">server</span> <span class="n">stop</span>
-<span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">jupyterlab</span><span class="o">-</span><span class="n">server</span> <span class="n">start</span>
-</pre></div>
-</div>
-<p>To look up the jupyter server IP address and token on the target, run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span> <span class="nb">list</span>
-</pre></div>
-</div>
-<p>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
-http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
-</pre></div>
-</div>
+<div>&gt; <strong>Note</strong>: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix the IP address and restart the jupyter server as shown below:</div></blockquote>
+<p><a href="#id13"><span class="problematic" id="id14">``</span></a><a href="#id15"><span class="problematic" id="id16">`</span></a></p>
+<p>/etc/init.d/jupyterlab-server stop
+/etc/init.d/jupyterlab-server start</p>
+<p><a href="#id17"><span class="problematic" id="id18">``</span></a>`
+To look up the jupyter server IP address and token on the target, run:</p>
+<p><a href="#id19"><span class="problematic" id="id20">``</span></a>`
+jupyter notebook list</p>
+<p><a href="#id21"><span class="problematic" id="id22">``</span></a>`
+Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</p>
+<p><a href="#id23"><span class="problematic" id="id24">``</span></a><a href="#id25"><span class="problematic" id="id26">`</span></a></p>
+<p><a class="reference external" href="http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449">http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449</a></p>
+<p><a href="#id27"><span class="problematic" id="id28">``</span></a><a href="#id29"><span class="problematic" id="id30">`</span></a></p>
 <p>In case of a private network, user may have to assign a static address within the subnet of the host laptop</p>
-</div>
 </div>
 <div class="section" id="run-the-application">
 <h2>Run the Application<a class="headerlink" href="#run-the-application" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="run-the-jupyter-notebooks">
-<h3>Run the Jupyter Notebooks<a class="headerlink" href="#run-the-jupyter-notebooks" title="Permalink to this headline">¶</a></h3>
-<p>This TRD includes the following jupyter notebooks:</p>
-<ol class="simple">
+<p>### Run the Jupyter Notebooks</p>
+<blockquote>
+<div>This TRD includes the following jupyter notebooks:</div></blockquote>
+<ol class="arabic simple">
 <li><strong>vmk180-trd-nb1.ipynb</strong>: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb2.ipynb</strong>: Demonstrates streaming video from a v4l2 device on the target to the Jupyter notebook using the GStreamer multimedia framework.</li>
 <li><strong>vmk180-trd-nb3.ipynb</strong>: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb4.ipynb</strong>: Demonstrates two simultaneous streaming pipelines, one from file source and another from a v4l2 device onto two individual planes of a HDMI monitor using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb5.ipynb</strong>: Demonstrates the 2D filter software kernel inserted into the video pipeline of notebook 2.</li>
 <li><strong>vmk180-trd-apm.ipynb</strong>: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.</li>
 <li><strong>vmk180-trd-cpu.ipynb</strong>: Demonstrates how to plot the CPU usage while running applications and pipelines.</li>
 <li><strong>vmk180-trd-power.ipynb</strong>: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.</li>
 </ol>
 <p>to run the notebooks, follow the below steps:</p>
-<ol class="simple">
-<li>On the left pane of the browser, 8 notebooks are available under the folder VMK180 TRD.</li>
+<ol class="arabic simple">
+<li>On the left pane of the browser, 4 notebooks are available under the folder VMK180 TRD.</li>
 <li>Double click to open the notebook</li>
-<li>Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run’s all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.</li>
-</ol>
-<p><img alt="BoardUI" src="../../../_images/jnbh.png" /></p>
-<ol class="simple">
-<li>Click the rectangular icon to interrupt the kernel and stop the video stream.</li>
-</ol>
-<p><img alt="Interrupt" src="../../../_images/platform1_interrupt.PNG" /></p>
-<ol class="simple">
-<li>Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.</li>
+<li>Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run&#8217;s all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.</li>
 </ol>
 <blockquote>
-<div><strong>NOTE</strong> : Please follow ‘’step 3 to step 5’’, without this you may observe incorrect behavior while moving to different notebook.</div></blockquote>
-<p><strong>Next Steps</strong></p>
-<ul class="simple">
-<li>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 Multimedia TRD design start page</span></a></li>
+<div>![BoardUI](../../media/jnbh.png)</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Click the rectangular icon to interrupt the kernel and stop the video stream.</li>
+</ol>
+<blockquote>
+<div>![Interrupt](../../media/platform1_interrupt.PNG)</div></blockquote>
+<ol class="arabic simple" start="5">
+<li>Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.</li>
+</ol>
+<p>&gt; <strong>NOTE</strong> : Please follow &#8216;&#8217;step 3 to step 5&#8217;&#8216;, without this you may observe incorrect behavior while moving to different notebook.</p>
+</div>
+<div class="section" id="host-machine-software-setup">
+<h2>Host Machine Software setup<a class="headerlink" href="#host-machine-software-setup" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><strong>Directory and file description</strong></div></blockquote>
+<p>Following are the list of directories in <cite>pcie_host_package</cite> directory.</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>apps</strong>: QDMA User space application to configure and control QDMA</li>
+<li><strong>docs</strong>: Documentation for the Xilinx QDMA Linux Driver</li>
+<li><strong>driver/src</strong>: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers</li>
+<li><strong>driver/libqdma</strong>: QDMA library to configure and control the QDMA IP</li>
+<li><strong>scripts</strong>: Sample scripts for perform DMA operations</li>
+<li><strong>Makefile</strong>: Makefile to compile the driver</li>
+<li><strong>pcie_app</strong>: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver</li>
 </ul>
+</div></blockquote>
+<p>&gt; <strong>NOTE</strong> : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully</p>
+<ul class="simple">
+<li>Power on the HOST machine</li>
+<li>Execute following command on HOST machine&#8217;s terminal to check If the Board is linking up:</li>
+</ul>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">lspci</span> <span class="pre">-vd</span> <span class="pre">10ee:</span>
+<span class="pre">`</span></code></p>
+<p>On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint:</p>
+<blockquote>
+<div><blockquote>
+<div><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">03:00.0</span> <span class="pre">RAM</span> <span class="pre">memory:</span> <span class="pre">Xilinx</span> <span class="pre">Corporation</span> <span class="pre">Device</span> <span class="pre">b03f</span>
+<span class="pre">`</span></code></div></blockquote>
+<p>If above entry is missing QDMA driver will not be able to recognized PCIe endpoint device.</p>
+</div></blockquote>
+<ul class="simple">
+<li>if not already done, copy <cite>pcie_host_package</cite> directory to PCIe host machine.</li>
+</ul>
+</div>
+<div class="section" id="updating-the-pcie-device-id-if-needed">
+<h2>Updating the PCIe device ID (if needed)<a class="headerlink" href="#updating-the-pcie-device-id-if-needed" title="Permalink to this headline">¶</a></h2>
+<p>Make sure that PCIe Device ID in the driver is matching to Device ID observed in linkup status. in above output <cite>b03f</cite> is device ID.</p>
+<p>During the PCIe DMA IP customization in Vivado you can specify a PCIe Device ID. This Device ID must be recognized by the driver in order to properly identify the PCIe QDMA device.</p>
+<p>To Check/modify the PCIe Device ID in the driver, open the <cite>$vmk180-trd/pcie_host_package/qdma/driver/src/pci_ids.h</cite> file (line no : 320) from the driver source and search for the pcie_device_id struct.
+This struct defines the PCIe Device IDs that are recognized by the driver in the following format:</p>
+<p><a href="#id31"><span class="problematic" id="id32">``</span></a>`
+{PCI_DEVICE (0x10ee, 0xb03f),},</p>
+<p><a href="#id33"><span class="problematic" id="id34">``</span></a><a href="#id35"><span class="problematic" id="id36">`</span></a></p>
+<p>Add, remove, or modify the PCIe Device IDs in this struct. The PCIe DMA driver will only recognize device IDs identified in this struct as PCIe QDMA devices. User can also remove PCIe Device IDs that are not be used in their solution.
+On every modification, the driver must be un-installed and recompiled, if compiled previously.</p>
+<blockquote>
+<div><p>For additional information refer <a class="reference external" href="https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html">https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html</a></p>
+<blockquote>
+<div><ul class="simple">
+<li>follow below steps to Install the QDMA driver</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>&gt; <strong>NOTE</strong> : Root permissions will be required to install qdma driver.</p>
+<p><a href="#id37"><span class="problematic" id="id38">``</span></a>`
+cd pcie_host_package/qdma
+make</p>
+<blockquote>
+<div><a href="#id39"><span class="problematic" id="id40">``</span></a><a href="#id41"><span class="problematic" id="id42">`</span></a></div></blockquote>
+<ul class="simple">
+<li>Install the QDMA driver</li>
+</ul>
+<p><a href="#id43"><span class="problematic" id="id44">``</span></a>`
+make install-mods</p>
+<p><a href="#id45"><span class="problematic" id="id46">``</span></a><a href="#id47"><span class="problematic" id="id48">`</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li>Configure the QDMA module paramters using following script:</li>
+</ul>
+</div></blockquote>
+<p><a href="#id49"><span class="problematic" id="id50">``</span></a>`
+./scripts/qdma_generate_conf_file.sh &lt;bus_num&gt; &lt;num_pfs&gt; &lt;mode&gt; &lt;config_bar&gt; &lt;master_pf&gt;`</p>
+<p><a href="#id51"><span class="problematic" id="id52">``</span></a><a href="#id53"><span class="problematic" id="id54">`</span></a></p>
+<p>Ex: (Assuming PCIe BDF - 03:00.0)</p>
+<p><a href="#id55"><span class="problematic" id="id56">``</span></a>`
+./scripts/qdma_generate_conf_file.sh 0x03 1 0 1 0</p>
+<dl class="docutils">
+<dt><a href="#id57"><span class="problematic" id="id58">``</span></a><a href="#id59"><span class="problematic" id="id60">`</span></a></dt>
+<dd><ul class="first last simple">
+<li>For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)</li>
+</ul>
+</dd>
+</dl>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">modprobe</span> <span class="pre">qdma-pf</span>
+<span class="pre">`</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li>Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)</li>
+</ul>
+<blockquote>
+<div><dl class="docutils">
+<dt>Allocate the Queues to a function. QDMA IP supports maximum of 2048 queues.</dt>
+<dd>By default, all functions have 0 queues assigned.
+qmax configuration parameter enables the user to update the number of queues for a PF.
+This configuration parameter indicates “Maximum number of queues associated for the current pf”.</dd>
+</dl>
+</div></blockquote>
+</div></blockquote>
+<p>To set 1024 as qmax for PF0:</p>
+<dl class="docutils">
+<dt><a href="#id61"><span class="problematic" id="id62">``</span></a><a href="#id63"><span class="problematic" id="id64">`</span></a></dt>
+<dd>echo 1024 &gt; /sys/bus/pci/drivers/qdma-pf/$BDF/qdma/qmax</dd>
+</dl>
+<p><a href="#id65"><span class="problematic" id="id66">``</span></a><a href="#id67"><span class="problematic" id="id68">`</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li>To Add a Queue:</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt><a href="#id69"><span class="problematic" id="id70">``</span></a><a href="#id71"><span class="problematic" id="id72">`</span></a></dt>
+<dd>dma-ctl qdma&lt;bbddf&gt; q add idx &lt;N&gt; [mode &lt;st|mm&gt;] [dir &lt;h2c|c2h|bi&gt;]</dd>
+</dl>
+<p><a href="#id73"><span class="problematic" id="id74">``</span></a>`
+Ex: (Assuming PCIe BDF - 03:00.0)</p>
+<p><a href="#id75"><span class="problematic" id="id76">``</span></a>`
+dma-ctl qdma03000 q add idx 0 mode mm dir h2c
+dma-ctl qdma03000 q add idx 1 mode mm dir c2h</p>
+<blockquote>
+<div><p><a href="#id77"><span class="problematic" id="id78">``</span></a><a href="#id79"><span class="problematic" id="id80">`</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li>To start a Queue:</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">dma-ctl</span> <span class="pre">qdma&lt;bbddf&gt;</span> <span class="pre">q</span> <span class="pre">start</span> <span class="pre">idx</span> <span class="pre">&lt;N&gt;</span> <span class="pre">[dir</span> <span class="pre">&lt;h2c|c2h|bi&gt;]</span>
+<span class="pre">`</span></code></p>
+<p>Ex: (Assuming PCIe BDF - 03:00.0)</p>
+<p><a href="#id81"><span class="problematic" id="id82">``</span></a>`
+dma-ctl qdma03000 q start idx 0 dir h2c
+dma-ctl qdma03000 q start idx 1 dir c2h</p>
+<p><a href="#id83"><span class="problematic" id="id84">``</span></a><a href="#id85"><span class="problematic" id="id86">`</span></a></p>
+<blockquote>
+<div><ul class="simple">
+<li>Build host application:</li>
+</ul>
+</div></blockquote>
+<p><a href="#id87"><span class="problematic" id="id88">``</span></a>`
+cd pcie_app/</p>
+<p><a href="#id89"><span class="problematic" id="id90">``</span></a><a href="#id91"><span class="problematic" id="id92">`</span></a></p>
+<blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li>modify macros <cite>H2C_DEVICE</cite> , <cite>C2H_DEVICE</cite> , <cite>REG_DEVICE_NAME</cite> in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its <cite>Bus:Device:Function number</cite>.</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>Ex: Assuming PCIe BDF as <cite>03:00.0</cite> the above macros need to be set as:</dt>
+<dd><ul class="first simple">
+<li>If H2C queue index is 0 device node is <cite>/dev/qdma03000-MM-0</cite>  (Queue index for H2C is set in above &#8220;Add a queue&#8221; step)</li>
+<li>If C2H queue index is 1 device node is <cite>/dev/qdma03000-MM-1</cite>  (Queue index for C2H is set in above &#8220;Add a queue&#8221; step)</li>
+</ul>
+<p>REG_DEVICE_NAME is <cite>/sys/bus/pci/devices/0000:03:00.0/resource0</cite></p>
+<ul class="last simple">
+<li>Modify pcie_app/app1.pro line no 35 and 39 for opencv library path and opencv include path before compilation</li>
+<li>set <cite>QMAKE_PATH</cite> to installed QT qmake path</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">export</span> <span class="pre">QMAKE_PATH=/opt/Qt5.9/5.9/gcc_64/bin/qmake`</span>
+<span class="pre">`</span></code></p>
+<p>compile application:
+<a href="#id93"><span class="problematic" id="id94">``</span></a>`
+./do_compile.sh</p>
+<p><a href="#id95"><span class="problematic" id="id96">``</span></a><a href="#id97"><span class="problematic" id="id98">`</span></a></p>
+<blockquote>
+<div>Generate of Raw video Input file.</div></blockquote>
+<hr class="docutils" />
+<p>&gt; <strong>Note</strong>:: : Ensure that Gstreamer packages installed on the Linux PC. If using Ubuntu distribution, ensure that the version is atleast 16.04.</p>
+<ol class="arabic simple">
+<li>Download VP9 encoded sample file such as [Big_Buck_Bunny](<a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.vp9.webm">https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.vp9.webm</a>)</li>
+<li>Run following GST command to create 3840x2160 resolution raw file with YUY2 format with 30fps</li>
+</ol>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">gst-launch-1.0</span> <span class="pre">filesrc</span> <span class="pre">location=&lt;file_path&gt;/Big_Buck_Bunny_4K.webm.480p.vp9.webm</span> <span class="pre">!</span> <span class="pre">decodebin</span> <span class="pre">!</span> <span class="pre">queue</span> <span class="pre">!</span> <span class="pre">videoconvert</span> <span class="pre">!</span> <span class="pre">videoscale</span> <span class="pre">!</span> <span class="pre">videorate</span> <span class="pre">!</span> <span class="pre">video/x-raw,</span> <span class="pre">width=3840,</span> <span class="pre">height=2160,</span> <span class="pre">format=YUY2,</span> <span class="pre">framerate=30/1</span> <span class="pre">!</span> <span class="pre">filesink</span> <span class="pre">location=&lt;file_path&gt;/4k30.yuv</span>
+<span class="pre">`</span></code></p>
+<ul class="simple">
+<li>Run following GST command to create 1920x1080 resolution raw file with YUY2 format with 30fps</li>
+</ul>
+<p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">gst-launch-1.0</span> <span class="pre">filesrc</span> <span class="pre">location=&lt;file_path&gt;/Big_Buck_Bunny_4K.webm.480p.vp9.webm</span> <span class="pre">!</span> <span class="pre">decodebin</span> <span class="pre">!</span> <span class="pre">queue</span> <span class="pre">!</span> <span class="pre">videoconvert</span> <span class="pre">!</span> <span class="pre">videoscale</span> <span class="pre">!</span> <span class="pre">videorate</span> <span class="pre">!</span> <span class="pre">video/x-raw,</span> <span class="pre">width=1920,</span> <span class="pre">height=1080,</span> <span class="pre">format=YUY2,</span> <span class="pre">framerate=30/1</span> <span class="pre">!</span> <span class="pre">filesink</span> <span class="pre">location=&lt;file_path&gt;/1080p30.yuv</span>
+<span class="pre">`</span></code></p>
+</div>
+<div class="section" id="run-host-and-ep-applications">
+<h2>Run Host and EP applications<a class="headerlink" href="#run-host-and-ep-applications" title="Permalink to this headline">¶</a></h2>
+<p>&gt; <strong>Note:</strong>  Make sure, HOST application is launched before starting EP application.</p>
+<ul>
+<li><p class="first">Execute following command to run the Host application(pcie_host_app)</p>
+<blockquote>
+<div><blockquote>
+<div><p><code class="docutils literal"><span class="pre">`</span>
+<span class="pre">./pcie_host_app</span> <span class="pre">-i</span> <span class="pre">&lt;</span> <span class="pre">input_file_name</span> <span class="pre">&gt;</span> <span class="pre">-d</span> <span class="pre">&lt;</span> <span class="pre">input_resolution</span> <span class="pre">&gt;</span> <span class="pre">-t</span> <span class="pre">&lt;</span> <span class="pre">filter_type</span> <span class="pre">&gt;</span>
+<span class="pre">`</span></code></p>
+<p>For 1080p, 30fps:
+<a href="#id99"><span class="problematic" id="id100">``</span></a><a href="#id101"><span class="problematic" id="id102">`</span></a></p>
+</div></blockquote>
+<p>./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4</p>
+<blockquote>
+<div><p><a href="#id103"><span class="problematic" id="id104">``</span></a><a href="#id105"><span class="problematic" id="id106">`</span></a></p>
+<blockquote>
+<div><p>For 4K, 30fps:
+<a href="#id107"><span class="problematic" id="id108">``</span></a><a href="#id109"><span class="problematic" id="id110">`</span></a></p>
+</div></blockquote>
+</div></blockquote>
+<p>./pcie_host_app -i file.yuy2 -d 3840x2160 -t 4</p>
+<p><a href="#id111"><span class="problematic" id="id112">``</span></a><a href="#id113"><span class="problematic" id="id114">`</span></a></p>
+</div></blockquote>
+</li>
+</ul>
+<p>Following Table lists the supported filter configuration in the design.</p>
+<dl class="docutils">
+<dt><a href="#id129"><span class="problematic" id="id130">|Filter_type |Filter name|</span></a></dt>
+<dd><a href="#id131"><span class="problematic" id="id132">|&#8212;-|</span></a>&#8212;-|
+<a href="#id133"><span class="problematic" id="id134">|0 |No Filter-Pass through|</span></a>
+<a href="#id135"><span class="problematic" id="id136">|1 |Blur filter|</span></a>
+<a href="#id137"><span class="problematic" id="id138">|2 |Edge filter|</span></a>
+<a href="#id139"><span class="problematic" id="id140">|3 |Horizontal Edge filter|</span></a>
+<a href="#id141"><span class="problematic" id="id142">|4 |Vertical Edge filter|</span></a>
+<a href="#id143"><span class="problematic" id="id144">|5 |Emboss filter|</span></a>
+<a href="#id145"><span class="problematic" id="id146">|6 |HGRAD filter|</span></a>
+<a href="#id147"><span class="problematic" id="id148">|7 |VGRAD filter|</span></a>
+<a href="#id149"><span class="problematic" id="id150">|8 |Identity filter|</span></a>
+<a href="#id151"><span class="problematic" id="id152">|9 |Sharpe filter|</span></a>
+<a href="#id153"><span class="problematic" id="id154">|10 |Horizontal Sobel filter|</span></a>
+<a href="#id155"><span class="problematic" id="id156">|11 |Vertical Sobel filter|</span></a></dd>
+</dl>
+<ul class="simple">
+<li>Execute following command on Target(EP) to start application(pcie-testapp)</li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p class="first">login into UART Terminal with <cite>root</cite> user &amp; <cite>root</cite> as password</p>
+</li>
+<li><p class="first">set the following environment variable:
+<a href="#id115"><span class="problematic" id="id116">``</span></a><a href="#id117"><span class="problematic" id="id118">`</span></a></p>
+<blockquote>
+<div><p>export XILINX_XRT=/usr
+export XCL_BINDIR=/media/sd-mmcblk0p1/</p>
+</div></blockquote>
+<p><a href="#id119"><span class="problematic" id="id120">``</span></a><a href="#id121"><span class="problematic" id="id122">`</span></a></p>
+</li>
+<li><p class="first">execute following command to run EP Application</p>
+</li>
+</ul>
+<blockquote>
+<div><p><a href="#id123"><span class="problematic" id="id124">``</span></a>`
+pcie-testapp</p>
+<p><a href="#id125"><span class="problematic" id="id126">``</span></a><a href="#id127"><span class="problematic" id="id128">`</span></a></p>
+</div></blockquote>
+</div></blockquote>
+<p>A filter version of big buck bunny video will start playing on DP monitor.</p>
+<p><strong>Next Steps</strong>
+* Go back to the [VMK180 TRD design start page](../platform1_landing.md)</p>
 <p><strong>License</strong></p>
-<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
+<p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
-<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
-<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
-<p align="center">Copyright&copy; 2021 Xilinx</p></div>
+[<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<p>&lt;p align=&#8221;center&#8221;&gt;Copyright&amp;copy; 2021 Xilinx&lt;/p&gt;</p>
 </div>
 </div>
 
@@ -674,7 +955,7 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on April 17, 2021.
       </span>
 
     </p>

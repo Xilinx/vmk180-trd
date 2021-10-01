@@ -1,6 +1,6 @@
 <table class="sphinxhide">
  <tr>
-   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1>Versal Prime -VMK180 Evaluation Kit PCIe TRD Tutorial</h1>
+   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit TRD Tutorial</h1>
    </td>
  </tr>
  <tr>
@@ -11,22 +11,23 @@
 </table>
 
 Setting up the Board and Application Deployment
-=================================================
+===============================================
 
 Introduction
-----------------
-This document shows how to set up the board and run the Multimedia TRD application.
+------------
+
+This document shows how to set up the board and run the VMK180 TRD application.
 
 Setting up the Board
------------------------
+------------------------
 
 ### Flash the SD Card
- * Download  the `vmk180_pcie_trd_pre-built_2021.1.zip` package, unzip and save it on your computer. Alternatively, Go through tutorials section to build `petalinux-sdimage.wic` locally.
+  * Download  the `vmk180_trd_prebuilt_2021.2.zip` package, unzip and save it on your computer. Alternatively, Go through tutorials section to build `petalinux-sdimage.wic` locally.
   
   * To uncompress wic file use following command 
 
 	```
-	cd vmk180_pcie_trd_prebuilt_2021.1
+	cd vmk180_trd_prebuilt_2021.2
 	xz -d -v petalinux-sdimage.wic.xz
 	```
 
@@ -46,13 +47,17 @@ Setting up the Board
 
     If you are looking for other OS specific tools to write the image to the SD card refer to [Setting up the SD Card Image](https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/setting-up-the-sd-card-image.html)
 
-### Board Setup:
+### Hardware Setup:
 
-   ![GitHub Logo](../../media/vmk180-setup-pcie.png)
+Below diagram shows Board and hardware connections.
 
+  
+![GitHub Logo](../../media/vmk180-setup.png)
+
+   
   * **Board jumper and switch settings**
   
-   This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.
+	This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.
 
    * Make sure you remove J326 (7-8) jumper.
    * Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.
@@ -62,11 +67,26 @@ Setting up the Board
   
 	Make sure you have the SYSCTRL uSD card inserted in the slot (bottom) and card has the SYSCTRL image. For Latest version of SYSCTRL image, refer to [Beam Tool Wiki Page](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit )
 
-  * Monitor:
+  * **Monitor** : Before booting, connect a 1080P/4K monitor to the board via either HDMI port. 4K monitor is preferred to demonstrate at the maximum supported resolution.
+	
+	> **Note**: The design has been validated with Dell Flat panel(U2718Q) & Viewsonic (SS16024) monitors.
+	
+  * **FMC and Vadj settings**:
+    Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
+    Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:
 
-    Before booting, connect a 1080P/4K monitor to the board via either HDMI port.
+	* Download the BoardUI Utility from VMK180 Product Page: [BoardUI/ Board Interface Test](https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&xlnxdocumentid=XTP623 )
+	
+	* Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.
+	
+	* In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
+  
+   ![BoardUI](../../media/boardui.jpg)
 
-    4K monitor is preferred to demonstrate at the maximum supported resolution.
+   * Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.
+   * Close the BoardUI utility.
+  
+  > **Note**: For the IMX274 MIPI FMC v1.1, Vadj voltage rail is required to be set to 1.5V instead of 1.2V.
 
   * **Serial console settings**: VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART ports should be visible in Device Manager:
 
@@ -82,27 +102,26 @@ Setting up the Board
     * Stop: 1 bit
     * Flow Control: None
 
+  
   * **Network connection**:
 
     Connect the Ethernet cable to your local network with DHCP enabled to run Jupyter Notebooks
 
-### Host hardware setup:
-
-   * Insert the board into a PCIe slot present on the host's motherboard either directly or using a PCIe extender cable
-   * Connect a DP Monitor to the host via a DP port of a graphic card installed on host
-   * Install Qt 5.9
-   * Install OpenCV 3.4.11
-  
 ### Power on the board, and boot the Linux image.
    
-   Follow these steps to boot the board into Linux
-
-    * Ensure all steps under the section ‘Board jumper and switch settings’ are verified.
-    * Insert the prepared micro SD card into the Versal SD card slot (refer to the image VMK180 Board Setup)
-    * Make physical connections to PCIe, UART and power as shown in the image.
-    * Turn ON power switch SW13.
-    * On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”
-    * In about 60 seconds boot is complete. Observe the Linux prompt root@xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:
+   Follow these steps to boot the board into Linux:
+  * Ensure all steps under the section ‘Board jumper and switch settings’ are verified.
+	
+  * Insert the prepared micro SD card into the Versal SD card slot (refer to the image VMK180 Board Setup)
+	
+  * Make physical connections to ethernet, HDMI, UART, webcam and power as shown in the image.
+	
+  * Turn ON power switch SW13.
+	
+  * On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”
+	
+  * In about 60 seconds boot is complete. Observe the Linux prompt root@xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:
+	
 
  ```
  root@xilinx-vmk180-2021_1:~#
@@ -120,18 +139,18 @@ Setting up the Board
  Or copy and paste one of these URLs:
      http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
  ```
-Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.
+   Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.
 
  > **Note**:  This demo is tested with Chrome browser only.
 
-Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:
+  * Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:
 
 ```
 http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
 
 ```
 
-  > **Note**: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:
+  > **Note**: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix the IP address and restart the jupyter server as shown below:
 
 ```
 
@@ -145,8 +164,6 @@ To look up the jupyter server IP address and token on the target, run:
 jupyter notebook list
 
 ```
-In case of a private network, user may have to assign a static address within the subnet of the host laptop
-
 Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:
 
 ```
@@ -155,29 +172,37 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 
 ```
 
+In case of a private network, user may have to assign a static address within the subnet of the host laptop
+
+Run the Application
+----------------------
+
 ### Run the Jupyter Notebooks
 
  This TRD includes the following jupyter notebooks:
 
-1. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
-2. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
+1. **vmk180-trd-nb1.ipynb**: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.
+2. **vmk180-trd-nb3.ipynb**: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.
+3. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
+4. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
+5. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
   
 to run the notebooks, follow the below steps:
 
-1. On the left pane of the browser, 2 notebooks are available under the folder VMK180 TRD.
+1. On the left pane of the browser, 4 notebooks are available under the folder VMK180 TRD.
 2. Double click to open the notebook
 3. Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run's all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.
 
-![BoardUI](../../media/jnbh_pcie.png)
+ ![BoardUI](../../media/jnbh.png)
 
 4. Click the rectangular icon to interrupt the kernel and stop the video stream.
 
- ![Interrupt](../../media/platform2_interrupt.png)
+ ![Interrupt](../../media/platform1_interrupt.PNG)
 
 5. Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.
 
 > **NOTE** : Please follow ''step 3 to step 5'', without this you may observe incorrect behavior while moving to different notebook. 
- 
+
 Host Machine Software setup
 --------------------------------
  **Directory and file description**
@@ -203,7 +228,7 @@ Following are the list of directories in `pcie_host_package` directory.
 lspci -vd 10ee:
 ```
 
- On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint: 
+On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint: 
   
   ```
   03:00.0 RAM memory: Xilinx Corporation Device b03f
@@ -225,13 +250,14 @@ This struct defines the PCIe Device IDs that are recognized by the driver in the
 
 ```
 {PCI_DEVICE (0x10ee, 0xb03f),}, 
+
 ```
 
 Add, remove, or modify the PCIe Device IDs in this struct. The PCIe DMA driver will only recognize device IDs identified in this struct as PCIe QDMA devices. User can also remove PCIe Device IDs that are not be used in their solution.
 On every modification, the driver must be un-installed and recompiled, if compiled previously.
 
  For additional information refer https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html
- 
+
   * follow below steps to Install the QDMA driver
 > **NOTE** : Root permissions will be required to install qdma driver. 
 
@@ -240,7 +266,7 @@ cd pcie_host_package/qdma
 make 
  ```
  
-  * Install the QDMA driver
+* Install the QDMA driver
 ```
 make install-mods
 
@@ -259,17 +285,16 @@ Ex: (Assuming PCIe BDF - 03:00.0)
 ./scripts/qdma_generate_conf_file.sh 0x03 1 0 1 0
 
 ```
-	
-  * For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)
+ * For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)
 ```
 modprobe qdma-pf
 ```
-	
-  * Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
+ * Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
   Allocate the Queues to a function. QDMA IP supports maximum of 2048 queues. 
 	By default, all functions have 0 queues assigned.
 	qmax configuration parameter enables the user to update the number of queues for a PF. 
 	This configuration parameter indicates “Maximum number of queues associated for the current pf”.
+
 To set 1024 as qmax for PF0:
 
 ```
@@ -288,7 +313,7 @@ Ex: (Assuming PCIe BDF - 03:00.0)
 ```
 dma-ctl qdma03000 q add idx 0 mode mm dir h2c
 dma-ctl qdma03000 q add idx 1 mode mm dir c2h 
-       
+
  ```
 
   * To start a Queue:
@@ -312,12 +337,13 @@ cd pcie_app/
 
 ```
 	
-   * modify macros `H2C_DEVICE` , `C2H_DEVICE` , `REG_DEVICE_NAME` in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its `Bus:Device:Function number`.
+  * modify macros `H2C_DEVICE` , `C2H_DEVICE` , `REG_DEVICE_NAME` in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its `Bus:Device:Function number`.
 	
  Ex: Assuming PCIe BDF as `03:00.0` the above macros need to be set as:	
    * If H2C queue index is 0 device node is `/dev/qdma03000-MM-0`  (Queue index for H2C is set in above "Add a queue" step)
    * If C2H queue index is 1 device node is `/dev/qdma03000-MM-1`  (Queue index for C2H is set in above "Add a queue" step)
 		
+
    REG_DEVICE_NAME is `/sys/bus/pci/devices/0000:03:00.0/resource0`
 
    * Modify pcie_app/app1.pro line no 35 and 39 for opencv library path and opencv include path before compilation
@@ -359,6 +385,7 @@ Run Host and EP applications
 
 
 * Execute following command to run the Host application(pcie_host_app)
+
 
 	```
 	./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  
@@ -410,7 +437,7 @@ Following Table lists the supported filter configuration in the design.
 A filter version of big buck bunny video will start playing on DP monitor.
 
 **Next Steps**
-* Go back to the [VMK180 PCIe TRD design start page](../platform2_landing.md)
+* Go back to the [VMK180 TRD design start page](../platform1_landing.md)
 
 **License**
 

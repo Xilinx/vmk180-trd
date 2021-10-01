@@ -47,13 +47,13 @@
               COLLAPSE_INDEX:false,
               FILE_SUFFIX:'.html',
               HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
+              SOURCELINK_SUFFIX: ''
           };
       </script>
         <script type="text/javascript" src="../../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -65,10 +65,8 @@
   <link rel="stylesheet" href="../../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/pro.min.css" media="all" />
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Setting up the Board and Application Deployment" href="app_deployment.html" />
-    <link rel="prev" title="Multimedia TRD" href="../platform1_landing.html" /> 
+    <link rel="prev" title="VMK180 TRD" href="../platform1_landing.html" /> 
 	</head>
 	<body>
 		<div class="xilinx-bs3"/>
@@ -342,10 +340,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../platform1_landing.html">Multimedia TRD</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../platform1_landing.html">VMK180 TRD</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#features">Features</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../platform1_landing.html#quick-start">Quick Start</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Design Overview</a><ul>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Design Overview</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#design-components">Design Components</a></li>
 </ul>
@@ -360,7 +358,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../platform2/platform2_landing.html">PCIe TRD</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
@@ -372,7 +369,7 @@
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/introduction.md.txt"
+				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/introduction.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -418,7 +415,7 @@
     
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="../platform1_landing.html">Multimedia TRD</a> &raquo;</li>
+          <li><a href="../platform1_landing.html">VMK180 TRD</a> &raquo;</li>
         
       <li>Design Overview</li>
     
@@ -426,7 +423,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../../_sources/docs/platform1/docs/introduction.md.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/docs/platform1/docs/introduction.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -439,132 +436,178 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <table class="sphinxhide">
- <tr>
-   <td align="center"><img src="../../../../_images/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Multimedia TRD Tutorial</h1>
-   </td>
- </tr>
- <tr>
- <td align="center"><h1> Design Overview </h1> </td>
- </tr>
-</table><div class="section" id="design-overview">
+  <dl class="docutils">
+<dt>&lt;table class=&#8221;sphinxhide&#8221;&gt;</dt>
+<dd><dl class="first docutils">
+<dt>&lt;tr&gt;</dt>
+<dd>&lt;td align=&#8221;center&#8221;&gt;&lt;img src=&#8221;../../../../_images/xilinx-logo.png&#8221; width=&#8221;30%&#8221;/&gt;&lt;h1&gt; Versal Prime -VMK180 Evaluation Kit Multimedia TRD Tutorial&lt;/h1&gt;
+&lt;/td&gt;</dd>
+</dl>
+<p>&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#8221;center&#8221;&gt;&lt;h1&gt; Design Overview &lt;/h1&gt;</p>
+<p class="last">&lt;/td&gt;
+&lt;/tr&gt;</p>
+</dd>
+</dl>
+<p>&lt;/table&gt;</p>
+<div class="section" id="design-overview">
 <h1>Design Overview<a class="headerlink" href="#design-overview" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The Multimedia TRD application design built on VMK180 Evaluation Kit provides a framework for building and customizing video platforms that consist of three pipeline stages:</p>
-<ul class="simple">
-<li>Capture pipeline</li>
-<li>Accelerator/Processing pipeline</li>
-<li>Output pipeline</li>
-</ul>
-<p>The design has a platform and integrated accelerator functions. The platform consists of Capture pipeline &amp; Output pipeline. This approach makes the design leaner and provides maximum programmable logic (PL) for the accelerator development. The platform supports capture from MIPI single sensor device, a USB webcam and a file source. The output can be displayed on HDMI monitor or jupyter notebook interface.</p>
+<p>The VMK180 TRD application design is built on VMK180 Evaluation Kit and provides a framework for building and customizing video platforms . The design has a platform and integrated accelerator functions.Programmable logic (PL) is used for the accelerator development. The platform supports capture from MIPI single sensor device. The output can be displayed on HDMI monitor or jupyter notebook interface.</p>
 <p>The following example Processing functions can be run on this platform</p>
 <ul class="simple">
 <li>A user programmable 2D filter in PL</li>
 <li>VP9 decode and demux in application processing unit (APU)</li>
 </ul>
 <p>The following figure shows the various pipelines supported by the design.</p>
-<p><img alt="Pipelines Supported" src="../../../_images/pipelines.png" /></p>
-<p>The APU in the Processing Sytem (PS) consists of two Arm® Cortex®-A72 cores and is configured to run in symmetric multi-processing (SMP) Linux mode in the  design. The application running on Linux is responsible for configuring and controlling the video pipeline and accelerators using Jupyter notebooks.</p>
-<p>The APU application controls the following video data paths implemented in a combination of the PS and PL:</p>
+<p>![Pipelines Supported](../../media/pipelines.PNG)</p>
+<p>The APU in the Processing Sytem (PS) consists of two Arm&amp;reg; Cortex&amp;reg;-A72 cores and is configured to run in symmetric multi-processing (SMP) Linux mode in the  design. The application running on Linux is responsible for configuring and controlling the video pipeline and accelerators using Jupyter notebooks.</p>
+<p>The APU application controls the video data paths implemented in the PL:</p>
 <ul class="simple">
-<li>Capture pipeline capturing video frames into DDR memory from<ul>
-<li>A file on a storage device such as an SD card</li>
-<li>A USB webcam using the USB interface inside the PS</li>
-<li>An image sensor connected via MIPI CSI-2 RX through the PL</li>
+<li>Capture/Input pipeline capturing video frames into DDR memory from an image sensor connected via MIPI CSI-2 RX through the PL or receives video frames into the DDR memory from CPM-QDMA host to card (H2C) Channel.</li>
+<li>Processing/Accelerator/Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.</li>
+<li>An Display/Output pipeline reads video frames from memory and sends the frames to a sink. In this case the sink is a HDMI display/Jupyter notebook Application with display interface or to the host via QDMA&#8217;s card to host (C2H) channel.</li>
 </ul>
-</li>
-<li>Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.</li>
-<li>An output pipeline reads video frames from memory and sends the frames to a sink.</li>
-<li>In this case the sink is a display or Jupyter notebook Application with display interface .</li>
-</ul>
-<p>The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or jupyter notebook, as the video sink. The video format in the figure is the output format on each block. Details are described in the <a class="reference internal" href="hw_arch_platform.html"><span class="doc">Hardware Architecture document</span></a>.</p>
-<p><img alt="End to end example pipelines" src="../../../_images/end_to_end_pp.png" /></p>
+<p>The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or jupyter notebook . The video format in the figure is the output format on each block. Details are described in the [Hardware Architecture document](hw_arch_platform.md).</p>
+<p>![End to end example pipelines](../../media/end_to_end_pp.PNG)</p>
 </div>
 <div class="section" id="design-components">
 <h2>Design Components<a class="headerlink" href="#design-components" title="Permalink to this headline">¶</a></h2>
-<details>
- <summary><b>Hardware components</b></summary><ul class="simple">
+<dl class="docutils">
+<dt>&lt;details&gt;</dt>
+<dd><p class="first">&lt;summary&gt;&lt;b&gt;Hardware components&lt;/b&gt;&lt;/summary&gt;</p>
+<blockquote class="last">
+<div><ul class="simple">
 <li>VMK180 Evaluation Kit</li>
-<li><a class="reference external" href="https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc">Leopard IMX274 MIPI FMC Card</a></li>
-<li>USB webcam (optional)</li>
+<li>[Leopard IMX274 MIPI FMC Card](<a class="reference external" href="https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc">https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc</a>)</li>
 </ul>
-</details><details>
- <summary><b>Interfaces and IP</b></summary><ul class="simple">
-<li>Video inputs<ul>
-<li>File</li>
-<li>USB webcam</li>
-<li>MIPI CSI-2 Rx</li>
+</div></blockquote>
+</dd>
+</dl>
+<p>&lt;/details&gt;</p>
+<dl class="docutils">
+<dt>&lt;details&gt;</dt>
+<dd>&lt;summary&gt;&lt;b&gt;Interfaces and IP&lt;/b&gt;&lt;/summary&gt;</dd>
+</dl>
+<ul>
+<li><dl class="first docutils">
+<dt>Video inputs</dt>
+<dd><ul class="first last simple">
+<li>MIPI CSI-2 Rx/Host x86</li>
 </ul>
+</dd>
+</dl>
 </li>
-<li>Video outputs<ul>
+<li><dl class="first docutils">
+<dt>Video outputs</dt>
+<dd><ul class="first last simple">
 <li>HDMI</li>
-<li>File</li>
 <li>Ethernet - Jupyter notebook</li>
 </ul>
+</dd>
+</dl>
 </li>
-<li>Video processing<ul>
+<li><dl class="first docutils">
+<dt>Video processing</dt>
+<dd><ul class="first last simple">
 <li>VP9 decode</li>
 <li>PL based 2D filter Accelerator</li>
 </ul>
+</dd>
+</dl>
 </li>
-<li>Auxiliary Peripherals<ul>
+<li><dl class="first docutils">
+<dt>Auxiliary Peripherals</dt>
+<dd><ul class="first last simple">
 <li>SD</li>
 <li>I2C</li>
 <li>UART</li>
 <li>Ethernet</li>
 <li>General purpose I/O (GPIO)</li>
 </ul>
+</dd>
+</dl>
 </li>
 </ul>
-</details><details>
- <summary><b>Software components</b></summary><ul class="simple">
-<li>Operating system<ul>
+<p>&lt;/details&gt;</p>
+<dl class="docutils">
+<dt>&lt;details&gt;</dt>
+<dd>&lt;summary&gt;&lt;b&gt;Software components&lt;/b&gt;&lt;/summary&gt;</dd>
+</dl>
+<ul>
+<li><dl class="first docutils">
+<dt>Operating system</dt>
+<dd><ul class="first last simple">
 <li>APU: SMP Linux</li>
 </ul>
+</dd>
+</dl>
 </li>
-<li>Linux kernel subsystems<ul>
+<li><dl class="first docutils">
+<dt>Linux kernel subsystems</dt>
+<dd><ul class="first last simple">
 <li>Video source: Video4 Linux (V4L2)</li>
 <li>Display: Direct Rendering Manager (DRM)/Kernel Mode Setting (KMS)</li>
 </ul>
+</dd>
+</dl>
 </li>
-<li>Linux user space frameworks<ul>
+<li><dl class="first docutils">
+<dt>Linux user space frameworks</dt>
+<dd><ul class="first last simple">
 <li>Jupyter</li>
 <li>GStreamer</li>
 <li>Xilinx run-time (XRT)</li>
 </ul>
+</dd>
+</dl>
 </li>
 </ul>
- </details> <details>
- <summary><b>Resolution and Format Supported</b></summary><ul class="simple">
-<li>Resolutions<ul>
+<blockquote>
+<div><p>&lt;/details&gt;</p>
+<p>&lt;details&gt;
+&lt;summary&gt;&lt;b&gt;Resolution and Format Supported&lt;/b&gt;&lt;/summary&gt;</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>Resolutions</dt>
+<dd><ul class="first last simple">
 <li>MIPI: 1080p60,2160p60</li>
-<li>USB Camera:720p,1080P (Whatever best the camera supports)</li>
-<li>Lower resolution and lower frame rates for file I/O</li>
 </ul>
+</dd>
+</dl>
 </li>
-<li>Pixel format<ul>
+<li><dl class="first docutils">
+<dt>Pixel format</dt>
+<dd><ul class="first last simple">
 <li>YUVY8</li>
 </ul>
+</dd>
+</dl>
 </li>
 </ul>
- </details>
-&nbsp;<p><strong>Next Steps</strong></p>
+<blockquote>
+<div>&lt;/details&gt;</div></blockquote>
+<p>&amp;nbsp;</p>
+<p><strong>Next Steps</strong></p>
 <ul class="simple">
-<li><a class="reference internal" href="app_deployment.html"><span class="doc">Setting up the Board and Application Deployment</span></a></li>
-<li>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 TRD Multimedia TRD design start page</span></a></li>
+<li>[Setting up the Board and Application Deployment](app_deployment.md)</li>
+<li>Go back to the [VMK180 TRD design start page](../platform1_landing.md)</li>
 </ul>
 <p><strong>References</strong></p>
 <ul class="simple">
-<li>VMK180 Evaluation Board User Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf">UG1411</a>)</li>
-<li>Versal Architecture and Product Data Sheet: Overview(<a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf">DS950</a>)</li>
+<li>VMK180 Evaluation Board User Guide ([UG1411](<a class="reference external" href="https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf">https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf</a>))</li>
+<li>Versal Architecture and Product Data Sheet: Overview([DS950]( <a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf">https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf</a>))</li>
 </ul>
 <p><strong>License</strong></p>
-<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
+<p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
-<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
-<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
-<p align="center">Copyright&copy; 2021 Xilinx</p></div>
+[<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<p>&lt;p align=&#8221;center&#8221;&gt;Copyright&amp;copy; 2021 Xilinx&lt;/p&gt;</p>
+</div>
 </div>
 
 
@@ -586,7 +629,7 @@
         <a href="app_deployment.html" class="btn btn-neutral float-right" title="Setting up the Board and Application Deployment" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../platform1_landing.html" class="btn btn-neutral float-left" title="Multimedia TRD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../platform1_landing.html" class="btn btn-neutral float-left" title="VMK180 TRD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -596,7 +639,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on April 17, 2021.
       </span>
 
     </p>
