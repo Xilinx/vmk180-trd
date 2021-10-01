@@ -53,11 +53,11 @@
 			xlnx,s-axi-control-addr-width = <0x7>;
 			xlnx,s-axi-control-data-width = <0x20>;
 		};
-		pcie_reg_space_v1_0_0: pcie_reg_space_v1_0@a4000000 {
+		pcie_reg_space_v1_0_0: pcie_reg_space_v1_0@a40e0000 {
 			clock-names = "s00_axi_aclk", "s01_axi_aclk";
-			clocks = <&misc_clk_7>, <&misc_clk_7>;
+			clocks = <&misc_clk_0>, <&misc_clk_0>;
 			compatible = "xlnx,pcie-reg-space-v1-0-1.0";
-			reg = <0x0 0xa4000000 0x0 0x10000 0x00000201 0x40000000 0x0 0x10000>;
+			reg = <0x0 0xa40e0000 0x0 0x10000 0x00000201 0x40000000 0x0 0x10000>;
 			xlnx,s00-axi-addr-width = <0x7>;
 			xlnx,s00-axi-data-width = <0x20>;
 			xlnx,s01-axi-addr-width = <0x7>;
