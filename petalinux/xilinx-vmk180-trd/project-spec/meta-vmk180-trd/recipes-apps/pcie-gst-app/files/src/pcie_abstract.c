@@ -35,6 +35,7 @@
 #define GET_USE_CASE              0x1d
 #define MAP_DMA_BUFF              0x1e
 #define UNMAP_DMA_BUF             0x1f
+#define READ_STOP_MIPI_FEED       0x20
 
 #define SET_READ_TRANSFER_DONE_VAL   0xef
 #define CLR_READ_TRANSFER_DONE_VAL   0x00
@@ -117,6 +118,19 @@ gint pcie_get_filter_type(gint fpga_fd, guint *filter_type)
         ret = ioctl(fpga_fd, GET_FILTER_TYPE, filter_type);
         if (ret < 0)
             GST_ERROR ("Failed to run ioctl to get filter type");
+    }
+
+    return ret;
+}
+
+gint pcie_read_stop_mipi_feed(gint fpga_fd, guint *mipi_feed)
+{
+    gint ret = -EINVAL;
+
+    if (fpga_fd >= 0) {
+        ret = ioctl(fpga_fd, READ_STOP_MIPI_FEED, mipi_feed);
+        if (ret < 0)
+            GST_ERROR ("Failed to run ioctl to read stop mipi feed");
     }
 
     return ret;
