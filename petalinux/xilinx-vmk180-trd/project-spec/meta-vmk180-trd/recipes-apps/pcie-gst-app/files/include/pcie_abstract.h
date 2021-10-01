@@ -148,7 +148,7 @@ gint pcie_clr_write_transfer_done(gint fpga_fd);
  * @param[in] fpga_fd pcie ep device node file descriptor.
  * @param[out] input_res input resolution from host
  *
- * @return input resolution
+ * @return 0 on success
  */
 gint pcie_get_input_resolution(gint fpga_fd, struct resolution* input_res);
 
@@ -158,7 +158,7 @@ gint pcie_get_input_resolution(gint fpga_fd, struct resolution* input_res);
  * @param[in] fpga_fd pcie ep device node file descriptor.
  * @param[out] kernel_mode kernel mode from host
  *
- * @return kernel mode
+ * @return 0 on success
  */
 gint pcie_get_kernel_mode(gint fpga_fd, guint *kernel_mode);
 
@@ -168,7 +168,7 @@ gint pcie_get_kernel_mode(gint fpga_fd, guint *kernel_mode);
  * @param[in] fpga_fd pcie ep device node file descriptor.
  * @param[out] filter type from host
  *
- * @return filter type
+ * @return 0 on success
  */
 gint pcie_get_filter_type(gint fpga_fd, guint *filter_type);
 
@@ -178,9 +178,19 @@ gint pcie_get_filter_type(gint fpga_fd, guint *filter_type);
  * @param[in] fpga_fd pcie ep device node file descriptor.
  * @param[out] fps output fps
  *
- * @return fps
+ * @return 0 on success
  */
 gint pcie_get_fps(gint fpga_fd, guint *fps);
+
+/**
+ * @brief Read mipi feed stopped signal
+ *
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[out] mipi_feed set when host-app stopped mipi use-case
+ *
+ * @return 0 on success
+ */
+gint pcie_read_stop_mipi_feed(gint fpga_fd, guint *mipi_feed);
 
 /**
  * @brief Initialize bufferpool
