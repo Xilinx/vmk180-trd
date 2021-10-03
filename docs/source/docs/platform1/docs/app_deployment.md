@@ -404,7 +404,9 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	```	
 		# ./pcie_host_app
 	```
-		
+
+![Usecase](../../media/Capture.png)
+
 2. From the three usecases select any one of the usecase or 4 to quit application.
 	```
 	# ./pcie_host_app
@@ -414,6 +416,8 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	  Enter 4 to 	: Exit application
 	  Enter your choice : 1
 	```
+![Usecase](../../media/Run_usecase.png)
+
 3. Select desired resolution (Enter 1 or 2 ):
 	```	
 	# ./pcie_host_app
@@ -427,6 +431,9 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	  2. 1920x1080
 	  Enter your choice : 1
 	```
+
+![Usecase](../../media/Select_resolution.png)
+
 4. From below table select anyone filter-type   (Enter 0 - 10)  
 
 	```
@@ -442,14 +449,20 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	  Enter your choice : 2
 	  Enter filter type value 0-10:3
 	```
+![Usecase](../../media/Select_filter.png)
+
 5. When application prompts below prints start running jupyter notebook by modifying 'res' variable in the notebook to same resolution set in hostside. 
 
 	```
 	Please run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter from endpoint
 	To quit usecase, hit <q+enter> from host 
 	```
+![Usecase](../../media/Running_Usecase.png)
+
 > **Note:**  Only for `MIPI` usecase , hit <q+enter> from host to quit.
- 
+
+![Usecase](../../media/quiting_usecase.png)
+
 Additional steps for Usecase-2 and Usecase-3
 ---------------------------------------------
 6. Enter input filename with absolute path to play 
