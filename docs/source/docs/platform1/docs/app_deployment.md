@@ -383,7 +383,7 @@ Run Host and EP applications
 ----------------------------
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
-* As discussed in the previous sections host application provides control information to the Endpoint to run any usecase. 
+**As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
  
  Here are list of control information passed to endpoint.
  
@@ -402,6 +402,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 		./pcie_host_app  
 		```
 	2. Select any one of the usecase from the list following.
+	
 		```
 		./pcie_host_app 
 		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
@@ -409,13 +410,14 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 		Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
 		Enter 4 to 	: Exit application
 		Enter your choice : 1
-		
 		```
-	For 1080p, 30fps:
+
+For 1080p, 30fps:
+	
 	``` 
-   ./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4 
+   	./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4 
    
-    ```
+    	```
   
 	For 4K, 30fps: 
 	``` 
