@@ -394,39 +394,39 @@ Run Host and EP applications
 	-- FPS (Default 30fps).
 	-- Rawvideofile (with abosolute path of video file to play).
  ```
- > **This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
+ 
+This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
-	1. First run Host Machine Software setup steps,Then execute pcie_host_app application as following.
-		
+1. First run Host Machine Software setup steps,Then execute pcie_host_app application as following.
+	
 	```	
 		# ./pcie_host_app
 	```
 		
-	2. From the three usecases select any one of the usecase from the following list.
+2. From the three usecases select any one of the usecase from the following list.
+	# ./pcie_host_app
+	```
+	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+	  Enter 4 to 	: Exit application
+	  Enter your choice : 1
+	```
+3. Select desired resolution :
 		
-		# ./pcie_host_app
-		```
-		  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-		  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-		  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-		  Enter 4 to 	: Exit application
-		  Enter your choice : 1
-		```
-	3. Select desired resolution :
-		
-		# ./pcie_host_app
-		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-		Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-		Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-		Enter 4 to 	: Exit application
-		Enter your choice : 1
+	# ./pcie_host_app
+	Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+	Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+	Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+	Enter 4 to 	: Exit application
+	Enter your choice : 1
 		
 	```
 		1. 3840x2160
 		2. 1920x1080
 		Enter your choice : 1
 	```
-	4.
+4.
 
 	
 Following Table lists the supported filter configuration in the design.
