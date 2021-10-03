@@ -388,7 +388,7 @@ Run Host and EP applications
  
  Here are list of control information passed to endpoint :-
  ```
-  	-- Usecase to run.
+	-- Usecase to run.
 	-- Resolution.
 	-- Filter type.
 	-- FPS (Default 30fps).
@@ -397,12 +397,14 @@ Run Host and EP applications
  > **This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 	1. First run Host Machine Software setup steps,Then execute pcie_host_app application as following.
-	
-		# ./pcie_host_app  
+		
+		```	
+		# ./pcie_host_app
+		```
 		
 	2. From the three usecases select any one of the usecase from the following list.
-		
 		# ./pcie_host_app
+		
 		```
 		  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
 		  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
