@@ -382,6 +382,8 @@ gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm
 Run Host and EP applications
 ----------------------------
 
+**Steps to run Host application :
+
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
 > **As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
@@ -420,6 +422,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
 	  Enter 4 to 	: Exit application
 	  Enter your choice : 1
+	  select the resolution
 	  1. 3840x2160
 	  2. 1920x1080
 	  Enter your choice : 1
@@ -427,14 +430,42 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 4. From below table select anyone filter-type   (Enter 0 - 10)  
 
 	```
-	./pcie_host_app
-	....
-	....
-	Enter filter type value 0-10:3
+	# ./pcie_host_app
+	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+	  Enter 4 to 	: Exit application
+	  Enter your choice : 1
+	  select the resolution 
+	  1. 3840x2160
+	  2. 1920x1080
+	  Enter your choice : 2
+	  Enter filter type value 0-10:3
 	```
-5. 
+5. When application prompts below prints start running jupyter notebook by modifying 'res' variable in the notebook to same resolution set in hostside. 
 
-	
+	```
+	Please run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter from endpoint
+	To quit usecase, hit <q+enter> from host 
+	```
+> **Note:**  Only for `MIPI` usecase , hit <q+enter> from host to quit.
+ 
+Additional steps for Usecase-2 and Usecase-3
+---------------------------------------------
+6. Enter input filename with absolute path to play 
+	```
+	 # ./pcie_host_app 
+	   Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+           Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+           Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+           Enter 4 to 	: Exit application
+	   Enter your choice : 2
+	   select the resolution
+	   1. 3840x2160
+	   2. 1920x1080
+	   Enter your choice:2
+	   Enter input filename with path to transfer: 
+	```
 	
 Following Table lists the supported filter configuration in the design.
 
