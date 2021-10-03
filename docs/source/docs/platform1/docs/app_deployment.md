@@ -385,7 +385,8 @@ Run Host and EP applications
 
 * As discussed in the previous sections host application provides control information to the Endpoint to run any usecase. 
  
- Here are list of control information passed to endpoint 
+ Here are list of control information passed to endpoint.
+ 
  	-- Usecase to run.
 	-- Resolution.
 	-- Filter type.
