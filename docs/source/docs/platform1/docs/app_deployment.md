@@ -381,9 +381,10 @@ gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm
 		
 Run Host and EP applications
 ----------------------------
+
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
-> **As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
+**As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
  
  Here are list of control information passed to endpoint :-
   	-- Usecase to run.
@@ -406,19 +407,20 @@ Run Host and EP applications
 		Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
 		Enter 4 to 	: Exit application
 		Enter your choice : 1
+		
+	3. Select desired resolution :
+		# ./pcie_host_app 
+		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+		Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		Enter 4 to 	: Exit application
+		Enter your choice : 1
+		1. 3840x2160
+		2. 1920x1080
+		Enter your choice : 1
+	4.
+
 	
-For 1080p, 30fps:
-	
-	``` 
-   	./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4 
-   
-    	```
-  
-	For 4K, 30fps: 
-	``` 
-   ./pcie_host_app -i file.yuy2 -d 3840x2160 -t 4 
-   
-   ```
 Following Table lists the supported filter configuration in the design.
 
 |Filter_type |Filter name|
