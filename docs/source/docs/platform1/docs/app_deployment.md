@@ -387,12 +387,13 @@ Run Host and EP applications
 > **As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
  
  Here are list of control information passed to endpoint :-
+ ```
   	-- Usecase to run.
 	-- Resolution.
 	-- Filter type.
 	-- FPS (Default 30fps).
 	-- Rawvideofile (with abosolute path of video file to play).
-
+ ```
  > **This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 	1. First run Host Machine Software setup steps,Then execute pcie_host_app application as following.
