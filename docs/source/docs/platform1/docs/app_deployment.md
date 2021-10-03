@@ -384,7 +384,7 @@ Run Host and EP applications
 
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
-**As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
+> **As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
  
  Here are list of control information passed to endpoint :-
   	-- Usecase to run.
@@ -401,13 +401,14 @@ Run Host and EP applications
 		
 	2. From the three usecases select any one of the usecase from the following list.
 		
-		# ./pcie_host_app 
-		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-		Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-		Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-		Enter 4 to 	: Exit application
-		Enter your choice : 1
-		
+		# ./pcie_host_app
+		```
+		  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+		  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		  Enter 4 to 	: Exit application
+		  Enter your choice : 1
+		```
 	3. Select desired resolution :
 		# ./pcie_host_app 
 		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
