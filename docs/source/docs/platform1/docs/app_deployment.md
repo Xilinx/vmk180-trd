@@ -393,11 +393,24 @@ Run Host and EP applications
 	-- FPS (Default 30fps).
 	-- Rawvideofile (with abosolute path of video file to play).
 
-This example demonstrates 
-```
-./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  
-```
+This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
+
 	
+	1. First run Host Machine Software setup steps, Then execute pcie_host_app application as following.
+	
+		```
+		./pcie_host_app  
+		```
+	2. Select any one of the usecase from the list following.
+		```
+		./pcie_host_app 
+		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+		Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		Enter 4 to 	: Exit application
+		Enter your choice : 1
+		
+		```
 	For 1080p, 30fps:
 	``` 
    ./pcie_host_app -i file.yuy2 -d 1920x1080 -t 4 
