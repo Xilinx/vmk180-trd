@@ -405,7 +405,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 		# ./pcie_host_app
 	```
 
-![Usecase](../../media/Capture.png)
+![Usecase](../../media/Capture.PNG)
 
 2. From the three usecases select any one of the usecase or 4 to quit application.
 	```
