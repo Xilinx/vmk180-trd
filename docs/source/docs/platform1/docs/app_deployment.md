@@ -464,7 +464,7 @@ Additional steps for Usecase-2 and Usecase-3
 	   1. 3840x2160
 	   2. 1920x1080
 	   Enter your choice:2
-	   Enter input filename with path to transfer: 
+	   Enter input filename with path to transfer: ~/4k30.yuv
 	```
 	
 Following Table lists the supported filter configuration in the design.
