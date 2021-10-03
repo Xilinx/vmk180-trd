@@ -181,8 +181,8 @@ Run the Application
 
  This TRD includes the following jupyter notebooks:
 
-1. **vmk180-trd-nb1.ipynb**: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.
-2. **vmk180-trd-nb3.ipynb**: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.
+1. **vmk180-trd-mipi-pcie-nb1.ipynb**: Demonstrates mipi captured frame or videoplayback of a file source using dma-buf sharing through pcie in 0-copy fashion.
+2. **vmk180-trd-nb3.ipynb**: Demonstrates how to capture video from a MIPI device, processes it through filter(optional) and display the output on a monitor using a DRM/KMS display device.
 3. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
 4. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
 5. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
@@ -383,13 +383,19 @@ Run Host and EP applications
 ----------------------------
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
+* As discussed in the previous sections host application provides control information to the Endpoint to run any usecase. 
+ 
+ Here are list of control information passed to endpoint 
+ 	-- Usecase to run.
+	-- Resolution.
+	-- Filter type.
+	-- FPS (Default 30fps).
+	-- Rawvideofile (with abosolute path of video file to play).
 
-* Execute following command to run the Host application(pcie_host_app)
-
-
-	```
-	./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  
-	```
+This example demonstrates 
+```
+./pcie_host_app -i < input_file_name > -d < input_resolution > -t < filter_type >  
+```
 	
 	For 1080p, 30fps:
 	``` 
