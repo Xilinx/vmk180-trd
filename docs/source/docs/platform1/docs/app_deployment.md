@@ -403,46 +403,54 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 		# ./pcie_host_app
 	```
 		
-2. From the three usecases select any one of the usecase from the following list.
+2. From the three usecases select any one of the usecase or 4 to quit application.
 	```
 	# ./pcie_host_app
-	  >**Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-	  >**Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-	  >**Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-	  >**Enter 4 to 	: Exit application
-	  >**Enter your choice : 1
+	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost **
+	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+	  Enter 4 to 	: Exit application
+	  Enter your choice : 1
 	```
-3. Select desired resolution :
+3. Select desired resolution (Enter 1 or 2 ):
 	```	
 	# ./pcie_host_app
-	Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-	Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-	Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-	Enter 4 to 	: Exit application
-	Enter your choice : 1
-	>**1. 3840x2160
-	>**2. 1920x1080
-	>**Enter your choice : 1
+	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+	  Enter 4 to 	: Exit application
+	  Enter your choice : 1
+	  1. 3840x2160
+	  2. 1920x1080
+	  Enter your choice : 1
 	```
-4.
+4. From below table select anyone filter-type   (Enter 0 - 10)  
 
+	```
+	./pcie_host_app
+	....
+	....
+	Enter filter type value 0-10:3
+	```
+5. 
+
+	
 	
 Following Table lists the supported filter configuration in the design.
 
 |Filter_type |Filter name|
    |----|----|
-   |0 |No Filter-Pass through|
-   |1 |Blur filter|
-   |2 |Edge filter|
-   |3 |Horizontal Edge filter| 
-   |4 |Vertical Edge filter|      
-   |5 |Emboss filter| 
-   |6 |HGRAD filter|      
-   |7 |VGRAD filter| 
-   |8 |Identity filter|      
-   |9 |Sharpe filter| 
-   |10 |Horizontal Sobel filter| 
-   |11 |Vertical Sobel filter|
+   |0 |Blur filter|
+   |1 |Edge filter|
+   |2 |Horizontal Edge filter| 
+   |3 |Vertical Edge filter|      
+   |4 |Emboss filter| 
+   |5 |HGRAD filter|      
+   |6 |VGRAD filter| 
+   |7 |Identity filter|      
+   |8 |Sharpe filter| 
+   |9 |Horizontal Sobel filter| 
+   |10 |Vertical Sobel filter|
    
 
 * Execute following command on Target(EP) to start application(pcie-testapp)
