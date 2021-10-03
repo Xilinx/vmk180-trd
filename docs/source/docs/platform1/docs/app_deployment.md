@@ -413,7 +413,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	  Enter your choice : 1
 	```
 3. Select desired resolution :
-	``	
+	```	
 	# ./pcie_host_app
 	Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
 	Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
