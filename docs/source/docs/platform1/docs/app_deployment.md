@@ -453,7 +453,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 5. When application prompts below prints launch (vmk180-trd-mipi-pcie-nb1.ipynb) jupyter notebook. 
 
-> Note : Set 'res' to appropriate value to ensure resolution is same at host and end point.
+> Note : Set 'res' variable in vmk180-trd-mipi-pcie-nb1.ipynb to appropriate value to ensure resolution is same at host and end point.
 
 	```
 	Please run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter from endpoint
