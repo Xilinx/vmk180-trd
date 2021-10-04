@@ -25,7 +25,7 @@ VIV_XSA = $(VIV_DIR)/project/$(PLATFORM).xsa
 help:
 	@echo 'Usage:'
 	@echo ''
-	@echo '  make platform PLATFORM=vmk180_TRD JOBS=8'
+	@echo '  make platform PLATFORM=vmk180_trd JOBS=8'
 	@echo '    Generate Vitis platform'
 	@echo ''
 
