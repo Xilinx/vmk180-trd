@@ -379,10 +379,10 @@ gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm
 gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=1920, height=1080, format=YUY2, framerate=30/1 ! filesink location=<file_path>/1080p30.yuv
 ```
 		
-Run Host and EP applications
-----------------------------
+## Run Host and EP applications
 
-# Steps to run Host application :
+Steps to run Host application :
+-------------------------------
 
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
