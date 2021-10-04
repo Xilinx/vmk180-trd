@@ -382,11 +382,11 @@ gst-launch-1.0 filesrc location=<file_path>/Big_Buck_Bunny_4K.webm.480p.vp9.webm
 Run Host and EP applications
 ----------------------------
 
-**Steps to run Host application :
+# Steps to run Host application :
 
 > **Note:**  Make sure, HOST application is launched before starting EP application.
 
-> **As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
+> As described in the previous sections host application provides control information to the Endpoint to run any usecase. 
  
  Here are list of control information passed to endpoint :-
  ```
@@ -463,9 +463,9 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 ![Usecase](../../media/quiting_usecase.png)
 
-Additional steps for Usecase-2 and Usecase-3
----------------------------------------------
-6. Enter input filename with absolute path to play 
+Similarly for Usecase-2 and Usecase-3, additional/extra step which provide RawVideoFile.
+-----------------------------------------------------------------------------------------
+6. Enter input filename with absolute path to play and depending on rawvideo file size usecases stops  
 	```
 	 # ./pcie_host_app 
 	   Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
@@ -479,6 +479,7 @@ Additional steps for Usecase-2 and Usecase-3
 	   Enter your choice:2
 	   Enter input filename with path to transfer: ~/4k30.yuv
 	```
+![Usecase](../../media/usecase_2_3.png)
 	
 Following Table lists the supported filter configuration in the design.
 
