@@ -8,8 +8,8 @@ XSCT = $(XILINX_VITIS)/bin/xsct
 JOBS ?= 8
 REV ?= pp
 
-PLATFORM ?= vmk180_multimedia_platform
-VERSION ?= 202110_1
+PLATFORM ?= vmk180_trd
+VERSION ?= 2021_2
 
 PFM_DIR = xilinx_$(PLATFORM)_$(VERSION)
 PFM_PRJ_DIR = ws/$(PLATFORM)/export/$(PLATFORM)
@@ -25,7 +25,7 @@ VIV_XSA = $(VIV_DIR)/project/$(PLATFORM).xsa
 help:
 	@echo 'Usage:'
 	@echo ''
-	@echo '  make platform PLATFORM=vmk180_multimedia_platform JOBS=8'
+	@echo '  make platform PLATFORM=vmk180_TRD JOBS=8'
 	@echo '    Generate Vitis platform'
 	@echo ''
 

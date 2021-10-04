@@ -1,23 +1,23 @@
 # (C) Copyright 2020 - 2021 Xilinx, Inc.
 # SPDX-License-Identifier: Apache-2.0
- 
+			  
 
 xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
 xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vmk180:*] -quiet
 
-set proj_name vmk180_multimedia_platform
+set proj_name vmk180_trd 
 set proj_dir project
 set bd_tcl_dir ./scripts
 set xdc_list {./xdc}
-set ip_repo_path  {../iprepo}
+set ip_repo_path  {./iprepo}
 set part xcvm1802-vsva2197-2MP-e-S
 
 create_project -name $proj_name -force -dir $proj_dir -part $part
 
 set board_lat [ get_board_parts -latest_file_version  {*vmk180:*} ]
 set_property board_part $board_lat [current_project]
-   
-    
+
+
 import_files -fileset constrs_1 $xdc_list
         
 set_property ip_repo_paths $ip_repo_path [current_project] 
@@ -60,6 +60,6 @@ set_property platform.design_intent.server_managed false [current_project]
 set_property platform.design_intent.external_host false [current_project]
 set_property platform.design_intent.datacenter false [current_project]
 set_property platform.design_intent.embedded true [current_project]
-set_property platform.platform_state "pre_synth" [current_project]
- 
-source ../runs.tcl       
+set_property platform.platform_state "pre_synth" [current_project]  
+
+source ../runs.tcl
