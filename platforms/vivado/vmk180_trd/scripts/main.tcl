@@ -9,7 +9,7 @@ set proj_name vmk180_trd
 set proj_dir project
 set bd_tcl_dir ./scripts
 set xdc_list {./xdc}
-set ip_repo_path  {./iprepo}
+set ip_repo_path  {../iprepo}
 set part xcvm1802-vsva2197-2MP-e-S
 
 create_project -name $proj_name -force -dir $proj_dir -part $part
