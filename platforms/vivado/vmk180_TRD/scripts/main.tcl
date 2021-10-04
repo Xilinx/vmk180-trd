@@ -5,11 +5,11 @@
 xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
 xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vmk180:*] -quiet
 
-set proj_name vmk180_TRD
+set proj_name vmk180_trd 
 set proj_dir project
 set bd_tcl_dir ./scripts
 set xdc_list {./xdc}
-set ip_repo_path  {../iprepo}
+set ip_repo_path  {./iprepo}
 set part xcvm1802-vsva2197-2MP-e-S
 
 create_project -name $proj_name -force -dir $proj_dir -part $part
@@ -42,9 +42,6 @@ make_wrapper -files [get_files ${proj_dir}/${proj_name}.srcs/sources_1/bd/$proj_
 import_files -force -norecurse ${proj_dir}/${proj_name}.srcs/sources_1/bd/$proj_name/hdl/${proj_name}_wrapper.v
 update_compile_order
 set_property top ${proj_name}_wrapper [current_fileset]
-set_msg_config -id "Vivado 12-4739" -suppress
-set_msg_config -id "Common 17-69" -suppress 
-set_msg_config -suppress -id {Ipconfig 75-169}
 update_compile_order -fileset sources_1
         
 
