@@ -121,7 +121,7 @@ gboolean feed_data (GstElement *pciesrc, guint size, App *app)
         app->dma_map_idx++;
 
     gst_buffer_unref (buffer);
-    gst_object_unref(allocator);
+    gst_object_unref (allocator);
 
     return TRUE;
 }

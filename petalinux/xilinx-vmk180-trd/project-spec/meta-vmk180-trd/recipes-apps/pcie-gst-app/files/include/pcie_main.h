@@ -32,32 +32,34 @@
 #include <glib.h>
 
 #define YUY2_MULTIPLIER                 2
-#define INPUT_SRC                       "/dev/video4"
+#define INPUT_SRC                       "/dev/video0"
 #define VGST_V4L2_IO_MODE_DMABUF_EXPORT 4
 #define MAX_FRAME_RATE_DENOM            1
 #define VIDEOPARSE_FORMAT_YUY2          "YUY2"
 #define PCIE_GST_APP_FAIL               -1
 #define VGST_FILTER_KERNEL_NAME         "filter2d_pl_accel"
+#define HOST_APP_REG_READ_TIMEOUT       1 /* in seconds */
+#define RW_DONE_SET_AND_CLEAR_DELAY     1 /* in seconds */
 
 typedef struct {
     guint64 length;
     guint input_format, fps, kernel_name;
     guint filter_preset, kernel_mode, usecase;
+    resolution input_res;
 } host_params;
 
 typedef struct {
     gint fd;
     guint sourceid, dma_map_idx;
     GMainLoop *loop;
-    gboolean eos_flag;
+    gboolean eos_flag, exit_thread;
     host_params h_param;
-    resolution input_res;
     dma_buf_imp dma_import;
     dma_buf_export dma_export, dma_map[MAX_BUFFER_POOL_SIZE];
-    GstElement *inputsrc, *videosink, *sdxfilter2d, *perf;
+    GstElement *inputsrc, *sdxfilter2d, *perf;
     GstElement *pipeline, *pciesrc, *capsfilter, *pciesink;
     guint64 appsrc_framecnt, appsink_framecnt;
-    guint64 read_offset, total_len, yuv_frame_size, export_fd_size;
+    guint64 read_offset, yuv_frame_size, export_fd_size;
 } App;
 
 typedef enum {

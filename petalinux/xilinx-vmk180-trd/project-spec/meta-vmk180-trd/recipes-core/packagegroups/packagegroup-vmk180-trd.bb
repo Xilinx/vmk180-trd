@@ -27,7 +27,6 @@ VMK180_TRD_PACKAGES = " \
         python3-dev \
         python3-periphery \
 	${XRT_PACKAGES} \
-	xrt-ini \
 	packagegroup-petalinux-gstreamer \
 	gst-plugins-xlnx \
         gst-sdx \
@@ -46,6 +45,8 @@ VMK180_TRD_PACKAGES = " \
 	trd-files \
 	ttf-bitstream-vera \
 	tzdata \
+	pcie-gst-app \
+	xmediactl \
 	"
 
 RDEPENDS_${PN} = "${VMK180_TRD_PACKAGES}"
