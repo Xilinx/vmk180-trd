@@ -461,6 +461,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	```
 ![Usecase](../../media/Running_Usecase.png)
 
+
 > **Note:**  Only for `MIPI` usecase , hit <q+enter> from host to quit.
 
 ![Usecase](../../media/quiting_usecase.png)
