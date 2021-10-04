@@ -466,8 +466,8 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 ![Usecase](../../media/quiting_usecase.png)
 
-Similarly for Usecase-2 and Usecase-3, additional/extra step which provide RawVideoFile.
------------------------------------------------------------------------------------------
+Similarly for Usecase-2 and Usecase-3, User is expected to pass rawvideo file as an additional parameter.
+---------------------------------------------------------------------------------------------------------
 6. Enter input filename with absolute path to play and depending on rawvideo file size usecases stops  
 	```
 	 # ./pcie_host_app 
