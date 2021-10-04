@@ -25,11 +25,11 @@
 &amba_pl {
 	display_pipe_v_mix_0: v_mix@a4040000 {
 		clock-names = "ap_clk";
-		clocks = <&misc_clk_0>;
+		clocks = <&misc_clk_1>;
 		compatible = "xlnx,mixer-5.0";
 		interrupt-names = "interrupt";
 		interrupt-parent = <&gic>;
-		interrupts = <0 95 4>;
+		interrupts = <0 87 4>;
 		reg = <0x0 0xa4040000 0x0 0x10000>;
 		reset-gpios = <&gpio0 26 1>;
 		xlnx,bpc = <8>;
@@ -118,12 +118,12 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 		clock-names = "s_axi_aclk";
-		clocks = <&versal_clk 65>;
+		clocks = <&misc_clk_0>;
 		compatible = "xlnx,axi-iic-2.0", "xlnx,xps-iic-2.00.a";
 		reg = <0x0 0xa4010000 0x0 0x10000>;
 		interrupt-names = "iic2intc_irpt";
 		interrupt-parent = <&gic>;
-		interrupts = <0 92 4>;
+		interrupts = <0 84 4>;
 
 		idt8t49n24x: clock-generator@6c {
 			status = "okay";
@@ -173,14 +173,14 @@
 		};
 	};
 
-	hdmi_tx_pipe_hdmi_gt_controller_1: hdmi_gt_controller@a40e0000 {
+	hdmi_tx_pipe_hdmi_gt_controller_1: hdmi_gt_controller@a4000000 {
 		clock-names = "gt_refclk1_odiv2", "sb_aclk", "axi4lite_aclk", "apb_clk", "dru-clk";
-		clocks = <&misc_clk_1>, <&versal_clk 65>, <&versal_clk 65>, <&versal_clk 65>, <&si570_2>;
+		clocks = <&misc_clk_3>, <&misc_clk_0>, <&misc_clk_0>, <&misc_clk_0>, <&si570_2>;
 		compatible = "xlnx,hdmi-gt-controller-1.0";
 		interrupt-names = "irq";
 		interrupt-parent = <&gic>;
-		interrupts = <0 93 4>;
-		reg = <0x0 0xa40e0000 0x0 0x10000>;
+		interrupts = <0 85 4>;
+		reg = <0x0 0xa4000000 0x0 0x10000>;
 		xlnx,axi4lite-enable = "true";
 		xlnx,component-name = "exdes_hdmi_gt_controller_1_0";
 		xlnx,device = "xcvc1902";
@@ -266,11 +266,11 @@
 
 	hdmi_tx_pipe_v_hdmi_tx_ss_0: v_hdmi_tx_ss@a4020000 {
 		clock-names = "s_axi_cpu_aclk", "s_axis_audio_aclk", "video_clk", "s_axis_video_aclk", "txref-clk", "retimer-clk";
-		clocks = <&versal_clk 65>, <&misc_clk_0>, <&misc_clk_3>, <&misc_clk_0>, <&idt8t49n24x 2>, <&dp159>;
+		clocks = <&misc_clk_0>, <&misc_clk_1>, <&misc_clk_4>, <&misc_clk_1>, <&idt8t49n24x 2>, <&dp159>;
 		compatible = "xlnx,v-hdmi-tx-ss-3.1", "xlnx,v-hdmi-tx-ss-3.1";
 		interrupt-names = "irq";
 		interrupt-parent = <&gic>;
-		interrupts = <0 94 4>;
+		interrupts = <0 86 4>;
 		phy-names = "hdmi-phy0", "hdmi-phy1", "hdmi-phy2", "hdmi-phy3";
 		phys = <&vphy_lane0 0 1 1 1>, <&vphy_lane1 0 1 1 1>, <&vphy_lane2 0 1 1 1>, <&vphy_lane3 0 1 1 1>;
 		reg = <0x0 0xa4020000 0x0 0x20000>;

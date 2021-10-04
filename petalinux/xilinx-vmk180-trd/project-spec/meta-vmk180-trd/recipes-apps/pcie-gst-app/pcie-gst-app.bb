@@ -7,8 +7,6 @@ DESCRIPTION = "PCIe GStreamer application driven by a PCIe host application to r
 LICENSE = "LGPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=b60ab04828851b8b8d8ad651889ac94d"
 
-SRC_URI = "${REPO};${BRANCHARG}"
-
 SRC_URI = " file://Makefile.am \
             file://configure.ac \
             file://autogen.sh \
@@ -25,7 +23,7 @@ SRC_URI = " file://Makefile.am \
 
 #FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-S = "${WORKDIR}/"
+S = "${WORKDIR}"
 
 CFLAGS_prepend = "-I${S}/include/"
 

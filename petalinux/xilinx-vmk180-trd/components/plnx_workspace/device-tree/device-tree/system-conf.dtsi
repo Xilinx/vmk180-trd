@@ -11,29 +11,3 @@
 	};
 };
 
-&qspi {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	flash0: flash@0 {
-		spi-tx-bus-width=<1>;
-		spi-rx-bus-width=<4>;
-		/delete-node/ partition@0;
-		/delete-node/ partition@100000;
-		/delete-node/ partition@600000;
-		/delete-node/ partition@620000;
-		partition@0 {
-                        label = "boot";
-                        reg = <0x00000000 0x00400000>;
-                };
-                partition@1 {
-                        label = "kernel";
-                        reg = <0x00400000 0x01400000>;
-                };
-                partition@2 {
-                        label = "bootenv";
-                        reg = <0x01800000 0x00400000>;
-                };
-
-	};
-};
-
