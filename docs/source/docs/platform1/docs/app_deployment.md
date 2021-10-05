@@ -455,7 +455,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 > Note : Set 'res' variable in vmk180-trd-mipi-pcie-nb1.ipynb to appropriate value to ensure resolution is same at host and end point.
 
 	```
-	Please run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter from endpoint
+	Please run 'vmk180-trd-nb1.ipynb' jupyter from endpoint
 	To quit usecase, hit <q+enter> from host 
 	```
 ![Usecase](../../media/Running_Usecase.png)
@@ -483,6 +483,10 @@ Similarly for Usecase-2 and Usecase-3, User is expected to pass rawvideo file as
 	```
 ![Usecase](../../media/usecase_2_3.PNG)
 	
+To execute end-point application: 
+---------------------------------
+1. Launch vmk180-trd-nb1.ipynb jupyter notebook. (For MIPI use case modify 'res' variable same as one selected at host application). 
+
 Following Table lists the supported filter configuration in the design.
 
 |Filter_type |Filter name|
@@ -499,21 +503,6 @@ Following Table lists the supported filter configuration in the design.
    |9 |Horizontal Sobel filter| 
    |10 |Vertical Sobel filter|
    
-
-* Execute following command on Target(EP) to start application(pcie-testapp)
-
- * login into UART Terminal with `root` user & `root` as password
- * set the following environment variable:
-   ```
-	export XILINX_XRT=/usr
-	export XCL_BINDIR=/media/sd-mmcblk0p1/ 
-   ```
-   
- * execute following command to run EP Application
-  ```	
-  pcie-testapp 
-  
-  ```
 A filter version of big buck bunny video will start playing on DP monitor.
 
 **Next Steps**
