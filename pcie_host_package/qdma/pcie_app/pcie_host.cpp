@@ -357,7 +357,7 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 	filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
 	*filter_params = fil_type;
 	
-	printf(KGREEN"\nPlease run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter from endpoint\n"RESET); 
+	printf(KGREEN"\nPlease run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n"RESET); 
 	printf(KRED"To quit usecase, hit <q+enter> from host \n\n"RESET);
 	
 	io_stdin = g_io_channel_unix_new (fileno (stdin));
