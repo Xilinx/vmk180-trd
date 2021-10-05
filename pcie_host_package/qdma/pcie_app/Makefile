@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -isystem /usr/local/include/opencv4 -I/opt/Qt5.9.0/5.9/gcc_64/include -I/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets -I/opt/Qt5.9.0/5.9/gcc_64/include/QtGui -I/opt/Qt5.9.0/5.9/gcc_64/include/QtConcurrent -I/opt/Qt5.9.0/5.9/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I/opt/Qt5.9.0/5.9/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -isystem /usr/local/include/opencv4 -isystem /usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/opt/Qt5.9.0/5.9/gcc_64/include -I/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets -I/opt/Qt5.9.0/5.9/gcc_64/include/QtGui -I/opt/Qt5.9.0/5.9/gcc_64/include/QtConcurrent -I/opt/Qt5.9.0/5.9/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I. -I/opt/Qt5.9.0/5.9/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt5.9.0/5.9/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,10 +36,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = app11.0.0
-DISTDIR = /root/2021.2/pcie_app_02/.tmp/app11.0.0
+DISTDIR = /root/pcie_app/.tmp/app11.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/opt/Qt5.9.0/5.9/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/usr/lib -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_imgcodecs -lrt -L/opt/Qt5.9.0/5.9/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Concurrent -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/lib -L/usr/lib/x86_64-linux-gnu/glib-2.0 -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_ml -lopencv_video -lopencv_features2d -lopencv_calib3d -lopencv_objdetect -lopencv_imgcodecs -lrt -lglib-2.0 -L/opt/Qt5.9.0/5.9/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Concurrent -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -791,7 +791,7 @@ moc_mainwindow.cpp: /opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets/QMainWindow \
 		mainwindow.h \
 		moc_predefs.h \
 		/opt/Qt5.9.0/5.9/gcc_64/bin/moc
-	/opt/Qt5.9.0/5.9/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/Qt5.9.0/5.9/gcc_64/mkspecs/linux-g++ -I/root/2021.2/pcie_app_02 -I/usr/local/include/opencv4 -I/opt/Qt5.9.0/5.9/gcc_64/include -I/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets -I/opt/Qt5.9.0/5.9/gcc_64/include/QtGui -I/opt/Qt5.9.0/5.9/gcc_64/include/QtConcurrent -I/opt/Qt5.9.0/5.9/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/opt/Qt5.9.0/5.9/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/Qt5.9.0/5.9/gcc_64/mkspecs/linux-g++ -I/root/pcie_app -I/usr/local/include/opencv4 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/opt/Qt5.9.0/5.9/gcc_64/include -I/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets -I/opt/Qt5.9.0/5.9/gcc_64/include/QtGui -I/opt/Qt5.9.0/5.9/gcc_64/include/QtConcurrent -I/opt/Qt5.9.0/5.9/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 moc_videofrm.cpp: /opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets/QWidget \
 		/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets/qwidget.h \
@@ -899,7 +899,7 @@ moc_videofrm.cpp: /opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets/QWidget \
 		videofrm.h \
 		moc_predefs.h \
 		/opt/Qt5.9.0/5.9/gcc_64/bin/moc
-	/opt/Qt5.9.0/5.9/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/Qt5.9.0/5.9/gcc_64/mkspecs/linux-g++ -I/root/2021.2/pcie_app_02 -I/usr/local/include/opencv4 -I/opt/Qt5.9.0/5.9/gcc_64/include -I/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets -I/opt/Qt5.9.0/5.9/gcc_64/include/QtGui -I/opt/Qt5.9.0/5.9/gcc_64/include/QtConcurrent -I/opt/Qt5.9.0/5.9/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include videofrm.h -o moc_videofrm.cpp
+	/opt/Qt5.9.0/5.9/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/Qt5.9.0/5.9/gcc_64/mkspecs/linux-g++ -I/root/pcie_app -I/usr/local/include/opencv4 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/opt/Qt5.9.0/5.9/gcc_64/include -I/opt/Qt5.9.0/5.9/gcc_64/include/QtWidgets -I/opt/Qt5.9.0/5.9/gcc_64/include/QtGui -I/opt/Qt5.9.0/5.9/gcc_64/include/QtConcurrent -I/opt/Qt5.9.0/5.9/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include videofrm.h -o moc_videofrm.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:

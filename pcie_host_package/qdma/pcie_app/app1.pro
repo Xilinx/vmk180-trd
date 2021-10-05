@@ -57,11 +57,12 @@ FORMS += \
     mainwindow.ui
 
 INCLUDEPATH +=/usr/local/include/opencv4/
-#INCLUDEPATH +=/home/for_test/opencv/opencv-3.4/opencv2
+INCLUDEPATH +=/usr/include/glib-2.0
+INCLUDEPATH +=/usr/lib/x86_64-linux-gnu/glib-2.0/include
 
 
 LIBS += -L/usr/lib
-#LIBS += -L"/home/for_test/opencv/opencv-3.4/build/lib/" 
+LIBS += -L/usr/lib/x86_64-linux-gnu/glib-2.0
 
 LIBS += -lopencv_core
 LIBS += -lopencv_imgproc
@@ -74,6 +75,7 @@ LIBS += -lopencv_objdetect
 LIBS += -lopencv_imgcodecs
 LIBS += -lpthread
 LIBS += -lrt
+LIBS += -lglib-2.0
 
 QMAKE_CXXFLAGS_RELEASE -= -O2
 QMAKE_CFLAGS_RELEASE -= -O2

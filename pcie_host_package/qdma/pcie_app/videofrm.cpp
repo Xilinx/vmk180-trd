@@ -38,70 +38,77 @@
 using namespace cv;
 videofrm::videofrm(QWidget *parent) : QWidget(parent)
 {
-    counter = 0;
-    t = new QTimer();
-    QObject::connect(this,SIGNAL(updateFPS(int)),this,SLOT(updateFPSslot(int)));
-    QObject::connect(this,SIGNAL(stopTimersig()),this,SLOT(stopTimer()));
-    QObject::connect(t,SIGNAL(timeout()),this,SLOT(updateframe()));
-    t->setInterval(1000.0/(30)); // TODO NEED to modify.
-    t->start();
+	counter = 0;
+	t = new QTimer();
+	QObject::connect(this,SIGNAL(updateFPS(int)),this,SLOT(updateFPSslot(int)));
+	QObject::connect(this,SIGNAL(stopTimersig()),this,SLOT(stopTimer()));
+	QObject::connect(t,SIGNAL(timeout()),this,SLOT(updateframe()));
+	QObject::connect(this,SIGNAL(ctrlc()),this,SLOT(exitApp()));
+	t->setInterval(1000.0/(30)); // TODO NEED to modify.
+	t->start();
+}
+void videofrm :: exitApp(){
+	exit(1);
 }
 void videofrm :: updateFPSslot(int fps){
-    t->setInterval(1000.0/(fps));
-    t->start();
+	t->setInterval(1000.0/(fps));
+	t->start();
 }
 void videofrm :: stopTimer(){
-    t->stop();
+	t->stop();
 }
 void videofrm :: setResolution(int wi, int he, int fp){
-    WID = wi;
-    HEI = he;
-    FPS = fp;
-//    t->setInterval(1000.0/(fp));
+	WID = wi;
+	HEI = he;
+	FPS = fp;
+	//    t->setInterval(1000.0/(fp));
 }
 
 void videofrm :: config_frame(){
-    sizeval = WID * HEI;
-    dfrm = (uchar*)malloc(WID * HEI * 5 * sizeof(char));
-    yuvfrm = (char*)malloc(WID * HEI *5 * sizeof(char));
-    emit updateFPS(FPS);
-    namedWindow("Video",1);
+	sizeval = WID * HEI;
+	dfrm = (uchar*)malloc(WID * HEI * 5 * sizeof(char));
+	yuvfrm = (char*)malloc(WID * HEI *5 * sizeof(char));
+	emit updateFPS(FPS);
+	namedWindow("Video",1);
 }
 void videofrm:: updateframe(){
-        if(waitBuf || queue_frame.index >= 30)  {
-        hasWindow = true;
-        waitBuf = true;
-        int val = sizeval*yuvfrac;
-        int rc = cb_deque(&queue_frame, yuvfrm);
-        if (rc != 0 ) return;
-        counter += val;
-	if(counter == sizeval*yuvfrac){
+	if(waitBuf || queue_frame.index >= 30 || app_running == false)  {
+		hasWindow = true;
+		waitBuf = true;
+		int val = sizeval*yuvfrac;
+		int rc = cb_deque(&queue_frame, yuvfrm);
+		if (rc != 0 && app_running == true) {
+			return;
+		}
+		counter += val;
+		if(counter == sizeval*yuvfrac){
 
-        convert_yuv_to_rgb_buffer((unsigned char*)(yuvfrm),dfrm,WID,HEI);
-	counter = 0;
+			convert_yuv_to_rgb_buffer((unsigned char*)(yuvfrm),dfrm,WID,HEI);
+			counter = 0;
+		}
+		if(queue_frame.index == 0){
+			waitBuf = false;
+		}
 	}
-        if(queue_frame.index == 0){
-            waitBuf = false;
-        }
-	}
+
 	if(app_running == false && queue_frame.index == 0 ){
-	    //destroyWindow("Video");
-            emit stopTimersig();
-            waitBuf = false;
-            hasWindow = false;
-	    destroyAllWindows();
-            free(dfrm);
-            free(yuvfrm);
-	    //exit(0);
+		//destroyWindow("Video");
+		emit stopTimersig();
+		waitBuf = false;
+		hasWindow = false;
+		destroyAllWindows();
+		free(dfrm);
+		free(yuvfrm);
+		//exit(0);
 	}
 }
 
 int videofrm::convert_yuv_to_rgb_buffer(unsigned char *yuv, unsigned char *rgb, unsigned int width, unsigned int height)
 {
-    cv::Mat mat_src = cv::Mat(height, width, CV_8UC2,yuv );
-    cv::Mat mat_dst = cv::Mat(height, width, CV_8UC3,rgb);
-    cv::cvtColor(mat_src, mat_dst, cv::COLOR_YUV2BGR_YUYV);
-    imshow("Video", mat_dst);
-    return 0;
+	cv::Mat mat_src = cv::Mat(height, width, CV_8UC2,yuv );
+	cv::Mat mat_dst = cv::Mat(height, width, CV_8UC3,rgb);
+	cv::cvtColor(mat_src, mat_dst, cv::COLOR_YUV2BGR_YUYV);
+	imshow("Video", mat_dst);
+	return 0;
 }
 

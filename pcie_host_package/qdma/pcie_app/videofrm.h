@@ -59,9 +59,11 @@ public slots:
     void updateframe();
     void updateFPSslot(int val);
     void stopTimer();
+    void exitApp();
 signals:
     void updateFPS(int);
     void stopTimersig();
+    void ctrlc();
 };
 
 

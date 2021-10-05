@@ -46,6 +46,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include "dma_xfer_utils.c"
+#include <glib-2.0/glib.h>
+
 #define MAP_SIZE (32*1024UL)
 #define MAP_MASK (MAP_SIZE - 1)
 #include<signal.h>
@@ -61,7 +63,12 @@
 #define PCIRC_FILTER_PARAMS        		0x14
 #define PCIRC_RAW_RESOLUTION      		0x18
 
-#define DEBUG
+#define KGREEN  "\x1B[32m"
+#define KRED "\x1B[31m"
+#define RESET "\x1B[0m"
+
+//#define T_DEBUG
+#define FAILURE -1
 #define PCIEP_READ_BUFFER_READY   		0x3c
 #define PCIEP_READ_BUFFER_ADDR   		0x40
 #define PCIEP_READ_BUFFER_OFFSET 		0x44
@@ -72,6 +79,7 @@
 #define PCIEP_WRITE_BUFFER_SIZE   		0x58
 #define PCIEP_READ_TRANSFER_COMPLETE   		0x5c
 #define PCIEP_WRITE_TRANSFER_COMPLETE  		0x60
+#define PCIEP_SET_SIG                           0x38
 
 #define H2C_DEVICE "/dev/qdma03000-MM-0"
 #define C2H_DEVICE "/dev/qdma03000-MM-1"
@@ -93,7 +101,6 @@
 #define INPUT_HEIGHT_DEFAULT       (1080)
 typedef enum
 {
-	FILTER_NONE,
 	FILTER_BLUR,
 	FILTER_EDGE,
 	FILTER_HEDGE,
@@ -113,15 +120,6 @@ typedef enum
 	HW,
 
 }kernel_mode;
-typedef enum
-{
-	YUYV,
-	YUY2,
-	RGB,
-	ARGG,
-	AR24,
-
-}format_types;
 
 struct pcie_transfer {
 	int infile_fd;
@@ -137,48 +135,43 @@ struct pcie_transfer {
 #define BILLION  1000000000.0
 
 volatile unsigned int *host_done;
-int filter_type_val = FILTER_TYPE_DEFAULT;
-int filter_mode = FILTER_MODE_DEFAULT; 
+unsigned int filter_type_val = FILTER_TYPE_DEFAULT;
+unsigned int filter_mode = FILTER_MODE_DEFAULT; 
 unsigned int in_width = INPUT_WIDTH_DEFAULT;
 unsigned int in_height = INPUT_HEIGHT_DEFAULT;
 unsigned int fps = FPS_DEFAULT;
-unsigned int fmt = FMT_DEFAULT;
-unsigned int pid = PID_DEFAULT;
 unsigned int u_case = UCASE_DEFAULT;
+volatile unsigned int *set_sig;
 
 circular_buffer queue_frame;
 circular_buffer queue_file_frame;
 bool app_running = true;
 
-static struct option const long_opts[] = {
-	{"input file name (Raw file yuy2 or yuv)", required_argument, NULL, 'i'},
-	{"fps 10 - 60", required_argument, NULL, 'f'},
-	{"input resolution. Range of this value is [1920x1080 or 3840x2160]: 1920x1080 represents width x height of input video.\n \
-Default:1920x1080", required_argument, NULL, 'd'},
-	{"input Format. Range of this value is [0 to 10]: this parameter is used for setting type of filter.\n \
-Default:0", required_argument, NULL, 't'},
-	{"filter mode :  value is [0/1]: this value is used for setting '0 for SW' / '1 for HW' \n \
-Default:0",required_argument,NULL,'m'}, 
-	{"video format ", no_argument, NULL, 'q'},
-	{"hdmi plane-id ", no_argument, NULL, 'p'},
-	{"use-case  ", no_argument, NULL, 'u'},
-	{"help", no_argument, NULL, 'h'},
-	{0, 0, 0, 0}
-};
+GIOChannel* io_stdin = NULL;
+guint  add_watch;
 
-static void usage(const char *name)
+int flag = 0;
+
+	static gboolean
+handle_keyboard (GIOChannel *source, GIOCondition cond, gpointer *data)
 {
-	int i = 0;
+	gchar    *str   = NULL;
+	gboolean ret    = TRUE;
 
-	fprintf(stdout, "%s\n\n", name);
-	fprintf(stdout, "usage: %s [OPTIONS]\n\n", name);
+	if (g_io_channel_read_line (source, &str, NULL, NULL, NULL) != G_IO_STATUS_NORMAL) {
+		return FALSE;
+	}
+	if (g_ascii_tolower (str[0]) == 'q') {
+		printf("Quitting the MIPI Usecase \n");
+		set_sig = ((uint32_t *)(trans.map_base + PCIEP_SET_SIG));
+		*set_sig = 0x1;
+		g_source_remove(add_watch);
+		g_io_channel_unref (io_stdin);
+		flag = 0;
+	}	
+	g_free (str);
 
-	for (i=0 ; i<(sizeof(long_opts)/sizeof(long_opts[0])) - 2; i++)
-		fprintf(stdout, "  -%c represents %s.\n",
-				long_opts[i].val, long_opts[i].name);
-	fprintf(stdout, "  -%c (%s) print usage help and exit\n",
-			long_opts[i].val, long_opts[i].name);
-	i++;
+	return ret;
 }
 
 int cb_init(circular_buffer *cb, size_t capacity, size_t sz)
@@ -224,15 +217,6 @@ int cb_deque(circular_buffer *cb, char *data)
 	cb->index--;
 	return 0;
 }
-void sig_handler(int signum){
-	//Return type of the handler function should be void
-	printf("\nInside handler function\n");
-	host_done = ((uint32_t *)(trans.map_base + PCIRC_HOST_DONE));
-	*host_done = 0x1;
-
-	free(queue_file_frame.buffer);
-	printf("###### Done ###### \n ");
-}
 
 int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 {
@@ -242,51 +226,60 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 	char *infname;
 	char cross_sign = 0;
 	int choice; int ret;
-	while(1){
-		printf("1. MIPI        --> filter2d --> pciesink --> displayonhost\n");
-		printf("2. hostfilesrc --> pciesrc  --> filter2d --> pciesink --> displayonhost\n");
-		printf("3. hostfilesrc --> pciesrc  --> pciesink --> displayonhost\n");
-		printf("Enter your choice : ");
-		scanf("%d",&choice);
 
+	while(1) {
+		printf("Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost\n");
+		printf("Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost\n");
+		printf("Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost\n");
+		printf("Enter 4 to 	: Exit application\n");
+	
+		printf("Enter your choice:");
+		scanf("%d",&choice);
+	
 		switch(choice)
 		{
 			case 1: ret = mipi_displayonhost(frm,c2h_device);
-				if(ret < 0){
-					printf("please run pipeline correctly");	
-					return -1;
+				if (ret < 0) {
+					printf("please run pipeline correctly \n");
+					frm->getVidFrame0()->ctrlc(); 
+					return 0;	
 				}	
 				break; 	
 			case 2: 
-				ret = host2host( frm, h2c_device,c2h_device);
-				if(ret < 0){
-					printf("please run pipeline correctly");	
-					return -1;
+				ret = host2host(frm,h2c_device,c2h_device);
+				if (ret < 0) {
+					printf("please run pipeline correctly \n");	
+					frm->getVidFrame0()->ctrlc(); 
+					return 0;	
 				} 
 				break; 	
 			case 3: 
-				ret = host2host_without_filter( frm, h2c_device,c2h_device);
-				if(ret < 0){
-					printf("please run pipeline correctly");	
-					return -1;
+				ret = host2host_without_filter(frm,h2c_device,c2h_device);
+				if (ret < 0) {
+					printf("please run pipeline correctly \n");	
+					frm->getVidFrame0()->ctrlc(); 
+					return 0;	
 				}
-				break; 
+				break;
+			case 4 :	
+				frm->getVidFrame0()->ctrlc(); 
+				return 0;	
 			default :
-				printf("Enter choice 1-3  \n ");
+				printf("Enter choice 1-4\n");
 				break; 	
 		}	 
 
 
 	}
 }
-int mipi_displayonhost(struct MainWindow *frm, char *c2h_device )
+
+int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 {
-	ssize_t rc;
+	int rc;
 	volatile unsigned int *infile_len;
 	unsigned long int file_len;
 	filter_type fil_type;
 	kernel_mode ker_mode;
-	format_types fmt_type;
 	volatile unsigned int *input_res = NULL;
 	volatile unsigned int *filter_params;
 	volatile unsigned int *kernel_mode_params;
@@ -295,66 +288,66 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device )
 	int choice;
 	pthread_t  thread3;	
 
-	printf("slect the resolution to play \n ");
+	printf("select the resolution \n");
 	printf("1. 3840x2160\n");
 	printf("2. 1920x1080\n");
-	printf("Enter Your Choice:");
+
+	printf("Enter your choice:");
 	scanf("%d",&choice);
-	if(choice ==1 ){
+	if (choice == 1) {
 		in_width  = 3840;
 		in_height = 2160;
 	}
-	else{
+	else {
 		in_height = 1080;
 		in_width  = 1920;
 	}
 	app_running = true;
-	frm->getVidFrame0()->setResolution(in_width,in_height,60);
+	rc = 0;
+
+	frm->getVidFrame0()->setResolution(in_width,in_height,30);
 	frm->getVidFrame0()->config_frame();
 
 	trans.c2h_fd = open(c2h_device, O_RDWR);
 	if (trans.c2h_fd < 0) {
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				c2h_device, trans.c2h_fd);
-		perror("open device");
-		goto h2c_out;
+		rc = -EINVAL;
+		goto out;
 	}
-
 	trans.reg_fd = open(REG_DEVICE_NAME, O_RDWR);
 	if (trans.reg_fd < 0) {
-
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				REG_DEVICE_NAME, trans.reg_fd);
 		perror("open reg device failed");
+		rc = -EINVAL;
 		goto c2h_out;
 	}
+	
 	trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
 	if (trans.map_base == (void *)-1) {
-		printf("error unmap\n");
 		printf("Memory mapped at address %p.\n", trans.map_base);
 		fflush(stdout);
-		goto reg_out;
+		rc = -ENOMEM;
+		goto reg_fd;
 
 	}
-	printf("Enter Filter type value 0-10: ");
+
+	printf("Enter filter type value 0-10:");
 	scanf("%d",&filter_type_val);
-	
+
 	u_case = 1;
 	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
 	*ucase_params = u_case & 0xFFFFFFFF;
 
-	/* setting kernel mode */
-	printf("Setting filter type to Hw \n");
 	filter_mode = 1;
-        ker_mode = (kernel_mode)filter_mode;
-        kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
-        *kernel_mode_params = ker_mode;
-	
-	
-	printf("Setting fps to 30 \n");
+	ker_mode = (kernel_mode)filter_mode;
+	kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
+	*kernel_mode_params = ker_mode;
+
 	fps = 30;
 	fps_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FPS_SET));
-        *fps_mode_params = fps & 0xFFFFFFFF;
+	*fps_mode_params = fps & 0xFFFFFFFF;
 
 
 	input_res = ((uint32_t *)(trans.map_base + PCIRC_RAW_RESOLUTION));
@@ -363,12 +356,17 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device )
 	fil_type = (filter_type)filter_type_val;
 	filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
 	*filter_params = fil_type;
-
-	/* setting kernel mode */
+	
+	printf(KGREEN"\nPlease run 'vmk180-trd-mipi-pcie-nb1.ipynb' jupyter from endpoint\n"RESET); 
+	printf(KRED"To quit usecase, hit <q+enter> from host \n\n"RESET);
+	
+	io_stdin = g_io_channel_unix_new (fileno (stdin));
+	add_watch = g_io_add_watch (io_stdin, G_IO_IN, (GIOFunc)handle_keyboard, NULL);
+	flag = 1;
 
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
 	if (rc < 0)
-		goto reg_out;
+		goto reg_unmap;
 
 	rc = cb_init(&queue_file_frame, 120, in_width * in_height * 2);
 	if (rc < 0)
@@ -378,21 +376,29 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device )
 
 	pthread_join( thread3, NULL);
 
+	app_running = false;
+	while(queue_frame.index);
+	host_done = ((uint32_t *)(trans.map_base + PCIRC_HOST_DONE));
+	*host_done = 0x1;
+
+	if (flag == 1) {	
+		g_source_remove(add_watch);
+		g_io_channel_unref (io_stdin);
+	}
+
 free_qframe:
 	free(queue_frame.buffer);
-reg_out:
+reg_unmap:
 	if (munmap(trans.map_base, MAP_SIZE) == -1)
 		printf("error unmap\n");
-	close(trans.reg_fd);
-infile_out:
-	if (trans.infile_fd >= 0)
-		close(trans.infile_fd);
+reg_fd :	
+	if (trans.reg_fd >= 0)
+		close(trans.reg_fd);
 c2h_out:
 	close(trans.c2h_fd);
-h2c_out:
+out:
 	app_running = false;
-	return 0;
-
+	return rc;
 }
 
 int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
@@ -403,29 +409,34 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	unsigned long int file_len;
 	filter_type fil_type;
 	kernel_mode ker_mode;
-	format_types fmt_type;
 	volatile unsigned int *input_res = NULL;
 	volatile unsigned int *filter_params;
 	volatile unsigned int *kernel_mode_params;
 	volatile unsigned int *fps_mode_params;
 	char infilename[100];
 	int choice;
+	volatile unsigned int *ucase_params;
+
 	pthread_t thread1, thread2, thread3;
 
-	printf("slect the resolution to play \n ");
+	printf("select the resolution \n");
 	printf("1. 3840x2160\n");
 	printf("2. 1920x1080\n");
-	printf("Enter Your Choice:");
+
+	printf("Enter your choice:");
 	scanf("%d",&choice);
-	if(choice ==1 ){
+
+	if (choice == 1) {
 		in_width  = 3840;
 		in_height = 2160;
 	}
-	else{
+	else {
 		in_height = 1080;
 		in_width  = 1920;
 	}
+
 	app_running = true;
+
 	frm->getVidFrame0()->setResolution(in_width,in_height,30);
 	frm->getVidFrame0()->config_frame();
 
@@ -433,7 +444,6 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	if (trans.h2c_fd < 0) {
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				h2c_device, trans.h2c_fd);
-		perror("open device");
 		app_running = false;
 		return -EINVAL;
 	}
@@ -442,30 +452,28 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	if (trans.c2h_fd < 0) {
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				c2h_device, trans.c2h_fd);
-		perror("open device");
+		rc = -EINVAL;
 		goto h2c_out;
 	}
 
 	trans.reg_fd = open(REG_DEVICE_NAME, O_RDWR);
 	if (trans.reg_fd < 0) {
-
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				REG_DEVICE_NAME, trans.reg_fd);
-		perror("open reg device failed");
+		rc = -EINVAL;
 		goto c2h_out;
 	}
-
 
 	/* map one page */
 	trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
 	if (trans.map_base == (void *)-1) {
-		printf("error unmap\n");
 		printf("Memory mapped at address %p.\n", trans.map_base);
 		fflush(stdout);
-		goto reg_out;
+		rc = -EINVAL;
+		goto reg_fd;
 
 	}
-	printf("Enter input filename with path to transefer: ");
+	printf("Enter input filename with path to transfer:");
 	scanf("%s",infilename);
 
 	trans.infname = infilename;
@@ -474,27 +482,21 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 		fprintf(stderr, "unable to open input file %s, %d.\n",
 				infilename, trans.infile_fd);
 		rc = -EINVAL;
-		goto reg_out;
+		goto reg_unmap;
 	}
-	printf("Enter Filter type value 0-10: ");
+	printf("Enter Filter type value 0-10:");
 	scanf("%d",&filter_type_val);
-	volatile unsigned int *ucase_params;
-	u_case = 2;
-	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
-	*ucase_params = u_case & 0xFFFFFFFF;
 
-        /* setting kernel mode */
-        printf("Setting filter type to Hw \n");
-        filter_mode = 1;
-        ker_mode = (kernel_mode)filter_mode;
-        kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
-        *kernel_mode_params = ker_mode;
 
-        printf("Setting fps to 30 \n");
-        fps = 30;
-        fps_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FPS_SET));
-        *fps_mode_params = fps & 0xFFFFFFFF;
+	/* setting kernel mode */
+	filter_mode = 1;
+	ker_mode = (kernel_mode)filter_mode;
+	kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
+	*kernel_mode_params = ker_mode;
 
+	fps = 30;
+	fps_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FPS_SET));
+	*fps_mode_params = fps & 0xFFFFFFFF;
 
 	/* Get the input file length  */
 	if (trans.infile_fd > 0) {
@@ -502,7 +504,8 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 		if (file_len == (off_t)-1)
 		{
 			printf("failed to lseek %s numbytes %lu\n", trans.infname, file_len);
-			exit(EXIT_FAILURE);
+			rc = -EINVAL;
+			goto infile_out;
 		}
 		/* reset the file position indicator to
 		   the beginning of the file */
@@ -520,11 +523,14 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
 	*filter_params = fil_type;
 
-	/* setting kernel mode */
+	u_case = 2;
+	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
+	*ucase_params = u_case & 0xFFFFFFFF;
 
+	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
 	if (rc < 0)
-		goto reg_out;
+		goto infile_out;
 
 	rc = cb_init(&queue_file_frame, 120, in_width * in_height * 2);
 	if (rc < 0)
@@ -547,17 +553,21 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	free(queue_file_frame.buffer);
 free_qframe:
 	free(queue_frame.buffer);
-reg_out:
-	if (munmap(trans.map_base, MAP_SIZE) == -1)
-		printf("error unmap\n");
-	close(trans.reg_fd);
 infile_out:
 	if (trans.infile_fd >= 0)
 		close(trans.infile_fd);
+reg_unmap:
+	if (munmap(trans.map_base, MAP_SIZE) == -1)
+		printf("error unmap\n");
+reg_fd:
+	if (trans.reg_fd >= 0)
+		close(trans.reg_fd);
 c2h_out:
-	close(trans.c2h_fd);
+	if (trans.c2h_fd >= 0)
+		close(trans.c2h_fd);
 h2c_out:
-	close(trans.h2c_fd);
+	if (trans.h2c_fd >= 0)
+		close(trans.h2c_fd);
 	app_running = false;
 	return rc;
 }
@@ -568,38 +578,38 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	volatile unsigned int *host_done;
 	volatile unsigned int *infile_len;
 	unsigned long int file_len;
-	filter_type fil_type;
 	kernel_mode ker_mode;
-	format_types fmt_type;
 	volatile unsigned int *input_res = NULL;
 	volatile unsigned int *filter_params;
 	volatile unsigned int *kernel_mode_params;
 	volatile unsigned int *fps_mode_params;
 	char infilename[100];
 	int choice;
+	volatile unsigned int *ucase_params;
 	pthread_t thread1, thread2, thread3;
 
-	printf("slect the resolution to play \n ");
+	printf("select the resolution \n");
 	printf("1. 3840x2160\n");
 	printf("2. 1920x1080\n");
 	printf("Enter Your Choice:");
 	scanf("%d",&choice);
-	if(choice ==1 ){
+	if( choice == 1){
 		in_width  = 3840;
 		in_height = 2160;
 	}
-	else{
+	else {
 		in_height = 1080;
 		in_width  = 1920;
 	}
+
 	app_running = true;
 	frm->getVidFrame0()->setResolution(in_width,in_height,30);
 	frm->getVidFrame0()->config_frame();
+
 	trans.h2c_fd = open(h2c_device, O_RDWR);
 	if (trans.h2c_fd < 0) {
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				h2c_device, trans.h2c_fd);
-		perror("open device");
 		app_running = false;
 		return -EINVAL;
 	}
@@ -608,7 +618,7 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	if (trans.c2h_fd < 0) {
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				c2h_device, trans.c2h_fd);
-		perror("open device");
+		rc = -EINVAL;
 		goto h2c_out;
 	}
 
@@ -618,20 +628,21 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 		fprintf(stderr, "unable to open device %s, %d.\n",
 				REG_DEVICE_NAME, trans.reg_fd);
 		perror("open reg device failed");
+		rc = -EINVAL;
 		goto c2h_out;
 	}
-
 
 	/* map one page */
 	trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
 	if (trans.map_base == (void *)-1) {
-		printf("error unmap\n");
 		printf("Memory mapped at address %p.\n", trans.map_base);
 		fflush(stdout);
-		goto reg_out;
+		rc = -ENOMEM;
+		goto reg_fd;
 
 	}
-	printf("Enter input filename with path to transefer: ");
+
+	printf("Enter input filename with path to transfer:");
 	scanf("%s",infilename);
 	trans.infname = infilename;
 	trans.infile_fd = open(infilename, O_RDONLY);
@@ -639,25 +650,17 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 		fprintf(stderr, "unable to open input file %s, %d.\n",
 				infilename, trans.infile_fd);
 		rc = -EINVAL;
-		goto reg_out;
+		goto reg_unmap;
 	}
-	volatile unsigned int *ucase_params;
-	u_case = 3;
-	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
-	*ucase_params = u_case & 0xFFFFFFFF;
 
-        /* setting kernel mode */
-        printf("Setting filter type to Hw \n");
-        filter_mode = 1;
-        ker_mode = (kernel_mode)filter_mode;
-        kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
-        *kernel_mode_params = ker_mode;
+	filter_mode = 1;
+	ker_mode = (kernel_mode)filter_mode;
+	kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
+	*kernel_mode_params = ker_mode;
 
-
-        printf("Setting fps to 30 \n");
-        fps = 30;
-        fps_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FPS_SET));
-        *fps_mode_params = fps & 0xFFFFFFFF;
+	fps = 30;
+	fps_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FPS_SET));
+	*fps_mode_params = fps & 0xFFFFFFFF;
 
 
 	/* Get the input file length  */
@@ -676,16 +679,22 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 		infile_len = ((uint32_t *)(trans.map_base + PCIRC_GET_FILE_LENGTH - 4));
 		*infile_len = (unsigned int)(file_len >> 32 & 0xFFFFFFFF);
 	}
+
 	/* setting input resolution */
 	input_res = ((uint32_t *)(trans.map_base + PCIRC_RAW_RESOLUTION));
 	*input_res = (in_height << 16) | in_width;
 
+	/* setting Usecase type */
+	u_case = 3;
+	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
+	*ucase_params = u_case & 0xFFFFFFFF;
 
-	/* setting kernel mode */
-
+	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+	
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
+
 	if (rc < 0)
-		goto reg_out;
+		goto reg_unmap;
 
 	rc = cb_init(&queue_file_frame, 120, in_width * in_height * 2);
 	if (rc < 0)
@@ -703,25 +712,29 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	host_done = ((uint32_t *)(trans.map_base + PCIRC_HOST_DONE));
 	*host_done = 0x1;
 
-
 	*infile_len = 0x0;
 	free(queue_file_frame.buffer);
-	printf("###### Done ###### \n ");
+
 free_qframe:
 	free(queue_frame.buffer);
-reg_out:
-	if (munmap(trans.map_base, MAP_SIZE) == -1)
-		printf("error unmap\n");
-	close(trans.reg_fd);
 infile_out:
 	if (trans.infile_fd >= 0)
 		close(trans.infile_fd);
+reg_unmap:
+	if (munmap(trans.map_base, MAP_SIZE) == -1)
+		printf("error unmap\n");
+reg_fd:
+	if (trans.reg_fd >= 0)
+		close(trans.reg_fd);
 c2h_out:
-	close(trans.c2h_fd);
+	if (trans.c2h_fd >= 0)
+		close(trans.c2h_fd);
 h2c_out:
-	close(trans.h2c_fd);
+	if (trans.h2c_fd >= 0)
+		close(trans.h2c_fd);
 	app_running = false;
 	return rc;
+
 }
 
 void *file_read (void *vargp)
@@ -756,7 +769,7 @@ void *file_read (void *vargp)
 
 	iter = (file_size / size);
 	for(i = 0; i< iter; i++)   {
-#ifdef DEBUG
+#ifdef T_DEBUG
 		if(k==1)
 			clock_gettime(CLOCK_MONOTONIC, &ts_start);
 #endif
@@ -773,12 +786,12 @@ void *file_read (void *vargp)
 			}while(queue_file_frame.index == queue_file_frame.capacity);
 			cb_enque(&queue_file_frame, read_allocated);
 		}
-#ifdef DEBUG
+#ifdef T_DEBUG
 		if(k==30){
 			clock_gettime(CLOCK_MONOTONIC, &ts_end);
 			double time_spent = (ts_end.tv_sec - ts_start.tv_sec) +
 				(ts_end.tv_nsec - ts_start.tv_nsec) / BILLION;
-			//printf("###%s: Time %f\n", __func__, time_spent);
+			printf("###%s: Time %f\n", __func__, time_spent);
 			k = 0;
 		}
 		k++;
@@ -824,7 +837,7 @@ void *pcie_dma_read(void *vargp)
 		transfer_done = ((uint32_t *)(trans.map_base + PCIRC_READ_BUFFER_TRANSFER_DONE));
 		buffer_ready = *((uint32_t *)(trans.map_base + PCIEP_READ_BUFFER_READY));
 		read_complete = *((uint32_t *)(trans.map_base + PCIEP_READ_TRANSFER_COMPLETE));
-#ifdef DEBUG
+#ifdef T_DEBUG
 		if(k==1)
 			clock_gettime(CLOCK_MONOTONIC, &ts_start);
 #endif
@@ -857,7 +870,7 @@ void *pcie_dma_read(void *vargp)
 			printf("write from buffer failed size %d rc %d", size, rc);
 			goto out;
 		}
-#ifdef DEBUG
+#ifdef T_DEBUG
 		if(k==30){
 			clock_gettime(CLOCK_MONOTONIC, &ts_end);
 			double time_spent = (ts_end.tv_sec - ts_start.tv_sec) +
@@ -891,6 +904,7 @@ void  *pcie_dma_write(void * argp)
 	int rc;
 	volatile unsigned int addr, size, offset, write_buffer_ready, write_complete;
 	volatile unsigned int *transfer_done;
+	volatile unsigned int *ucase_params;
 	char *write_allocated = NULL;
 	int num_cpu;
 	cpu_set_t cpuset;
@@ -920,7 +934,7 @@ void  *pcie_dma_write(void * argp)
 		write_buffer_ready = *((uint32_t *)(trans.map_base + PCIEP_WRITE_BUFFER_READY));
 		write_complete = *((uint32_t *)(trans.map_base + PCIEP_WRITE_TRANSFER_COMPLETE));
 		*transfer_done = 0x0;
-#ifdef DEBUG
+#ifdef T_DEBUG
 		if(k==1)
 			clock_gettime(CLOCK_MONOTONIC, &ts_start);
 #endif
@@ -933,7 +947,6 @@ void  *pcie_dma_write(void * argp)
 				break;
 			}
 		}
-
 		if (write_complete == 0xef) {
 			break;
 		}
@@ -954,7 +967,7 @@ void  *pcie_dma_write(void * argp)
 
 			cb_enque(&queue_frame, trans.write_buffer);
 		}
-#ifdef DEBUG
+#ifdef T_DEBUG
 		if(k==30){
 			clock_gettime(CLOCK_MONOTONIC, &ts_end);
 			double time_spent = (ts_end.tv_sec - ts_start.tv_sec) +
@@ -964,7 +977,6 @@ void  *pcie_dma_write(void * argp)
 		}
 		k++;
 #endif
-
 
 		*transfer_done = 0x1;
 		while(write_buffer_ready) {
@@ -977,6 +989,9 @@ out:
 		free(write_allocated);
 		write_allocated = NULL;
 	}
-
+	/* Setting Use case to zero */
+	u_case = 0;
+	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
+	*ucase_params = u_case & 0xFFFFFFFF;
 	return NULL;
 }
