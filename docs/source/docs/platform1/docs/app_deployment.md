@@ -181,8 +181,8 @@ Run the Application
 
  This TRD includes the following jupyter notebooks:
 
-1. **vmk180-trd-mipi-pcie-nb1.ipynb**: Demonstrates mipi captured frame or videoplayback of a file source using dma-buf sharing through pcie in 0-copy fashion.
-2. **vmk180-trd-nb3.ipynb**: Demonstrates how to capture video from a MIPI device, processes it through filter(optional) and display the output on a monitor using a DRM/KMS display device.
+1. **vmk180-trd-nb1.ipynb**:Demonstrates how to configure a V4L2 device, launches endpoint application which processes media content through filter(optional) and transfers processed content to host via PCIe.
+2. **vmk180-trd-nb2.ipynb**: Demonstrates how to capture video from a V4L2 device, processes it through filter(optional) and display the output on a monitor using a DRM/KMS display device.
 3. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
 4. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
 5. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
