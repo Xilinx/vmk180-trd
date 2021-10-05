@@ -397,23 +397,17 @@ Steps to run Host application :
 	-- Rawvideofile (with abosolute path of video file to play).
  ```
  
-This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
-
-<<<<<<< HEAD
+This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 1. First run Host Machine Software setup steps,Then execute pcie_host_app application as following.
 	
 	```	
 		# ./pcie_host_app
 	```
-=======
-* Execute following command to run the Host application(pcie_host_app) which will prompt for user inputs.
->>>>>>> origin/2021.2
 
 ![Usecase](../../media/Capture.PNG)
 
 2. From the three usecases select any one of the usecase or 4 to quit application.
 	```
-<<<<<<< HEAD
 	# ./pcie_host_app
 	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost **
 	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
@@ -436,7 +430,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 	  2. 1920x1080
 	  Enter your choice : 1
 	```
-
+	
 ![Usecase](../../media/Select_resolution.png)
 
 4. From below table select anyone filter-type   (Enter 0 - 10)  
@@ -487,15 +481,8 @@ Similarly for Usecase-2 and Usecase-3, User is expected to pass rawvideo file as
 	   Enter your choice:2
 	   Enter input filename with path to transfer: ~/4k30.yuv
 	```
-![Usecase](../../media/usecase_2_3.png)
+![Usecase](../../media/usecase_2_3.PNG)
 	
-=======
-	./pcie_host_app 
-	
-	```
-Depending on the pipeline/Use case host applcation will prompt for user inputs linke resolution,filter typs,file input etc. 
-
->>>>>>> origin/2021.2
 Following Table lists the supported filter configuration in the design.
 
 |Filter_type |Filter name|
