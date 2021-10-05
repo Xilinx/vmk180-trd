@@ -8,7 +8,7 @@ XSCT = $(XILINX_VITIS)/bin/xsct
 JOBS ?= 8
 REV ?= pp
 
-PLATFORM ?= vmk180_TRD
+PLATFORM ?= vmk180_trd
 VERSION ?= 2021_2
 
 PFM_DIR = xilinx_$(PLATFORM)_$(VERSION)

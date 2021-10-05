@@ -5,7 +5,7 @@ RM = rm -rf
 VIVADO = $(XILINX_VIVADO)/bin/vivado
 JOBS ?= 8
 
-VIV_DESIGN = vmk180_TRD
+VIV_DESIGN = vmk180_trd
 
 VIV_PRJ_DIR = project
 VIV_SCRIPTS_DIR = scripts
