@@ -28,16 +28,16 @@
 #include "main.h"
 #include "pcie_host.h"
 #include <QDebug>
- #include <QtConcurrent> 
+#include <QtConcurrent> 
 #include <getopt.h>
 #include <stdint.h>
 
 int main(int argc, char *argv[])
 {
-    int cmd_opt1;
+	int cmd_opt1;
 
-    QApplication a(argc, argv);
-     w = new MainWindow;
-    QtConcurrent::run(cmaincall,w, argc,argv);
-    return a.exec();
+	QApplication a(argc, argv);
+	w = new MainWindow;
+	QtConcurrent::run(cmaincall,w, argc,argv);
+	return a.exec();
 }
