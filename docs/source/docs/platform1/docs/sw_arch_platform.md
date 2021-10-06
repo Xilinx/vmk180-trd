@@ -13,12 +13,14 @@
 Software Architecture of the Platform
 ======================================
 
-Introduction
-------------
+# Introduction
 
-In this document it describes the application processing unit (APU),Linux software stack, PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers . 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
+In this document it describes the Linux software stack,PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
 
-The  software stack and details on how the control information & data is interpreted between the x86 host and the target is shown in the following figures.
+
+# Software Stack
+
+The  software stack of VMK180 endpoint device and x86 host is shown in the following figures.
 
 Endpoint software stack
 -----------------------
@@ -193,7 +195,11 @@ Please refer to below link for more details on QDMA drivers:
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
 
-## Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective) 
+# Details on how the control information & data is interpreted between the x86 host and the target
+
+![Linux SW components](../../media/software_components.png )
+
+Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective) 
 
 * G-streamer plugins :
 		Following G-streamer plugins are supported and provided as part of package.
@@ -217,8 +223,7 @@ https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
 
 
-![Linux SW components](../../media/software_components.png )
-
+# Data and control information Flow
 
 Data/Control information flow at Host application to achive below described usecases :
 -----------------------------------------------------------------------------------------
