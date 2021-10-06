@@ -41,7 +41,7 @@ Endpoint software stack :
  	- Includes device drivers and kernel frameworks (subsystems)
 	- Access to hardware IPs
 
-### Vertically, the software components are divided by domain:Vertically, the software components are divided by domain:
+## Vertically, the Endpoint software components are divided by domain :
 
 Video Capture
 ---------------
@@ -148,16 +148,15 @@ Connector
 The connector models the physical interface to the display. Both DisplayPort and HDMI protocols use a query mechanism to receive data about the monitor resolution, and refresh rate by reading the extended display identification data (EDID) (see VESA Standard ) stored inside the monitor. This data can then be used to correctly set the CRTC mode. The DisplayPort support hot-plug events to detect if a cable has been connected or disconnected as well as handling display power management signaling (DPMS) power modes.
 
 Libdrm
--------------
+-------
 
 The framework exposes two device nodes per display pipeline to user space: the /dev/dri/card* device node and an emulated /dev/fb* device node for backward compatibility with the legacy fbdev Linux framework. The latter is not used in this design. libdrm was created to facilitate the interface of user space programs with the DRM subsystem. This library is merely a wrapper that provides a function written in C for every ioctl of the DRM API, as well as constants, structures and other helper elements. The use of libdrm not only avoids exposing the kernel interface directly to user space, but presents the usual advantages of reusing and sharing code between programs.
 
-Host machine software stack :
------------------------------
+# Host machine software stack 
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
 
-### The Host machine software stack is horizontally divided into the following layers:
+## The Host machine software stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
 	- An opencv based application, which interprets user inputs to endpoint PCIe bar register.
@@ -173,28 +172,21 @@ Host machine software stack :
  	- Includes device drivers and kernel frameworks (subsystems).
 	- Access to hardware IPs.
 
+## Host machine software components : 
 
-# Below diagram shows linux software components involved at host and Endpoint : 
+PCIe Host application
+----------------------
 
-![Linux SW components](../../media/software_components.png )
- 
-Host Software components
--------------------------
+Application and kernel frameworks
+---------------------------------
+	An Application frameworks such as opencv,QT and Glib are used to develop host application along with kernel framework i.e., sys filesystem to expose PCIe regigter space to user application. 
 
-Data is transferred between the host and the target using the QDMA. QDMA device drivers are installed on the host, are used to configure the QDMA IP on the endpoint and to initiate data transfer from the host. The host reads the media file from the disk, sends control information to the endpoint, also sends the media file to the endpoint using DMA. After receiving filtered output back from the endpoint, the data is displayed on the host monitor. At the device side, the OpenCL-based application is used to receive the data, filter it, and send the data back to the host.
-
- A dedicated BAR is used to send control information between Host and the Device and vice-versa.
-
-host_package: The host package installs the PCIe QDMA driver on the host machine. It identifies the PCIe endpoint  Board connected to the host machine. This package has the application for sending files from the host machine along with the input parameters for 2dfilter on the Versal PCIe endpoint, and displays received content on the monitor.
+QDMA Drivers
+------------
+	QDMA driver on the host machine is used to identify VMK180 device connected to the host machine via PCIe interface and perform data transfer through DMA.
 
 Please refer to below link for more details on QDMA drivers:
-
-https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel
-
-Endpoint/Device Software components
--------------------------------------
-
-In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
+https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
 Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective). 
 
@@ -218,6 +210,21 @@ Following diagram captures, all the SW components involved in achieving differen
 
 * pcie_ep_driver: 
 		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
+
+
+![Linux SW components](../../media/software_components.png )
+
+
+Data/Control information flow at Host application to achive below described usecases :
+-----------------------------------------------------------------------------------------
+	Data is transferred between the host and the target using the QDMA. QDMA device drivers are installed on the host, are used to configure the QDMA IP on the endpoint and to initiate data transfer from the host. The host reads the media file from the disk, sends control information to the endpoint, also sends the media file to the endpoint using DMA. After receiving filtered output back from the endpoint, the data is displayed on the host monitor. At the device side, the OpenCL-based application is used to receive the data, filter it, and send the data back to the host.
+
+ A dedicated BAR is used to send control information between Host and the Device and vice-versa.
+
+Data/Control information flow at Endpoint to achive below mentioned usecases :
+------------------------------------------------------------------------------
+
+	In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
 
 
 # Supported Use cases:
