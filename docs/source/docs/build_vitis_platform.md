@@ -1,4 +1,4 @@
-﻿
+
 Creating a Vitis Platform
 =========================
 
@@ -19,10 +19,10 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal:
 
    ```
-   git clone --recursive https://github.com/Xilinx/vmk180-trd.git
+   git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
    ```
 
-2. Navigate to the `vmk180-trd` which is the working directory.
+2. Navigate to the `vmk180-trd-2021.2` which is the working directory.
 
 Generating an Vitis Extensible platform
 --------------------------------------------
@@ -35,13 +35,19 @@ Generating an Vitis Extensible platform
 2. To build the platform, run the following command. The Makefile calls a lower level Makefile to generate a platform. If an XSA is not already available it builds that as well.
 
    ```
-   make platform PFM=vmk180_TRD
+   make platform PFM=<platform_name>
    ```
+
+   Applications and their corresponding platforms are listed in the table below
+
+   |Application |Platform name (PFM)|
+   |----|----|
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd|
 
 3. The generated platform will be located at
 
    ```
-   $working_dir/platforms/xilinx_vmk180_TRD_<version_number>
+   $working_dir/platforms/xilinx_<platform_name>_<version_number>
    ```
 
    The xpfm file in the above directory will be used as input when building the Vitis accelerator projects. It exposes all the essential Platform Interfaces like Clock, Interrupts, Master AXI interfaces and Slave AXI interfaces for the accelerator to connect to.
