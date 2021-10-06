@@ -9,15 +9,11 @@
 
 The VMK180 TRD consists of a platform, accelerator and Jupyter notebooks to demonstrate various aspects of the design and functionality of various Board interfaces. A platform is a Vivado design with a pre-instantiated set of I/O interfaces and a corresponding PetaLinux BSP and image that includes the required kernel drivers and user-space libraries to exercise those interfaces. Accelerators are mapped to FPGA logic resources and stitched into the platform using the Vitis toolchain. The reference design currently supports the VMK180 evaluation board. 
 
-VMK180 TRD 2021.2 demonstrates:
+Following is the list of Platform design available in 2021.1:
 
-* The video being captured from MIPI image sensor, processed with an accelerator and displayed on a HDMI monitor connected to vmk180 board.
-* The video being captured from MIPI image sensor on the board, processed (optionally) with an accelerator, sent to a x86 host machine (root complex) via PCIe and displayed on a monitor connected to the host machine.
-* The video frames being transferred from a file on the host machine to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface,processed (optionally) with an accelerator, sent back to host and displayed on a monitor connected to the host machine. . 
-
-Accelerator functions can be added to this platform using Vitis platform. Supported acceleration function in this design is a 2D Filter.
-
-<ul><li><a href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/docs/platform1/platform1_landing.html">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_multimedia_trd_prebuilt_2021.1.zip">Pre-Built Package </a></li></ul>
+| Platform Name  | Description  |  Links |
+| -------------- | ------------- |----------------|
+| Platform 1: VMK180 (Multimedia-PCIe) TRD  |The multimedia-PCIe TRD demonstrates video capture either from a MIPI image sensor or a PCIe based video source and displays it on a  HDMI monitor or sends back to host via PCIe where it can be displayed on a monitor. Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter.  |   <ul><li><a href="https://www.xilinx.com/member/forms/download/trd-license-versal.html?filename=vck190_base_trd_single_es_filter2d_prebuilt.zip">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/trd-license-versal.html?filename=vck190_base_trd_single_filter2d_prebuilt.zip">Pre-Built Package</a></li><li><a href="https://www.xilinx.com/member/forms/download/trd-license-versal.html?filename=vck190_base_trd_single_xvdpu_prebuilt.zip">Pre-Built ES1 Package</a></li></ul>
 
 For more information about the VMK180 Evaluation Board , see [Versal Prime Series VMK180 Evaluation Kit](https://www.xilinx.com/products/boards-and-kits/vmk180.html)
 
