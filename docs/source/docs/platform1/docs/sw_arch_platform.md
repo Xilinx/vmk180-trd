@@ -182,11 +182,11 @@ Please refer to below link for more details on QDMA drivers:
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
 
-# Details on how the control information & data is interpreted between the x86 host and the target
+# control information & data interpretation between x86 machine host and  target
+
+Following diagram captures, all the components involved in achieving different usecases(both from Host and Device perspective) 
 
 ![Linux SW components](../../media/software_components.png )
-
-Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective) 
 
 * G-streamer plugins :
 		Following G-streamer plugins are supported and provided as part of package.
@@ -210,20 +210,17 @@ Following diagram captures, all the SW components involved in achieving differen
 		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
 
 
-# Data and control information Flow
+## Details on Data and control information Flow
 
-Data/Control information flow at Host application to achive below described usecases :
------------------------------------------------------------------------------------------
+### Data/Control information flow at Host application to achive below described usecases :
 
 Data is transferred between the host and the target using the QDMA. QDMA device drivers are installed on the host, are used to configure the QDMA IP on the endpoint and to initiate data transfer from the host. The host reads the media file from the disk, sends control information to the endpoint, also sends the media file to the endpoint using DMA. After receiving filtered output back from the endpoint, the data is displayed on the host monitor. At the device side, the OpenCL-based application is used to receive the data, filter it, and send the data back to the host.
 
 A dedicated BAR is used to send control information between Host and the Device and vice-versa.
 
-Data/Control information flow at Endpoint to achive below mentioned usecases :
-------------------------------------------------------------------------------
+### Data/Control information flow at Endpoint to achive below mentioned usecases :
 
 In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
-
 
 # Supported Use cases:
 
@@ -235,8 +232,7 @@ Following use cases are supported in this release.
 
 3. Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
 
-Usecase-1(MIPI --> 2D Image Processing --> HDMI):
-----------------------------------------------------
+## Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 Data is captured using MIPI camera, captured frame is fed through Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port. 
 
@@ -247,8 +243,7 @@ Device application provides user interface to configure  Plan-id and Sync parame
 ![USECASE !](../../media/software_usecase1.png )
 
 
-Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
---------------------------------------------------------------------------------
+## Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
 
 Data is captured using MIPI camera, processed using Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent to the Host using appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
 
@@ -260,8 +255,8 @@ Device application provides user interface to configure  Plan-id and Sync parame
 
 ![USECASE 2](../../media/software_usecase2.png )
 
-Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
+
 Data is captured from the file source, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent back to the Host using Appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
 
 DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
