@@ -182,7 +182,7 @@ Please refer to below link for more details on QDMA drivers:
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
 
-# control information & data interpretation between x86 machine host and  target
+# control information & data interpretation between x86 machine (Host) and  target
 
 Following diagram captures, all the components involved in achieving different usecases(both from Host and Device perspective) 
 
