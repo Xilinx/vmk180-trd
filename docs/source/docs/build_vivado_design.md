@@ -1,4 +1,4 @@
-﻿<table class="sphinxhide">
+<table class="sphinxhide">
  <tr>
    <td align="center"><img src="media/xilinx-logo.png" width="30%"/><h1> Versal Prime-VMK180 Evaluation Kit Tutorial</h1>
    </td>
@@ -28,20 +28,49 @@ This tutorial shows how to build the hardware design for applications running on
 1. To access the reference files, type the following into a terminal:
 
  ```
-git clone --recursive https://github.com/Xilinx/vmk180-trd.git
+git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
 
 ```
 
-2. Navigate to the `vmk180-trd` which is the working directory.
+### Enable Versal device support
+
+   To enable VMK180 ES1 board/device support, you need to create two tcl initialization
+   scripts, one for Vivado and one for HLS. Add the following line to each of
+   the tcl scripts:
+
+```
+  enable_beta_device xcvm1802-vsva2197-2MP-e-S-es1
+```
+
+   The initialization tcl script for Vivado shall be placed at:
+
+   * **Linux**: $HOME/.Xilinx/Vivado/Vivado_init.tcl
+
+   * **Windows**: %APPDATA%/Roaming/Xilinx/Vivado/Vivado_init.tcl
+
+   Similarly, the initialization tcl script for HLS shall be placed at:
+
+   * **Linux**: $HOME/.Xilinx/HLS_init.tcl
+
+   * **Windows**: %APPDATA%/Roaming/Xilinx/HLS_init.tcl
+
+ Navigate to the `vmk180-trd` which is the working directory.
 
 ### Generating an Extensible XSA
 
 1. Go to the platform directory specific to the application
 
    ```
-   cd $working_dir/platforms/vivado/vmk180_TRD
+   cd $working_dir/platforms/vivado/<platform_name>
    ```
-  
+
+   Applications and their corresponding platform names are listed in the table below
+
+   |Application |Platform name|
+   |----|----|
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd|
+
+
 2. To build the XSA, Source Vivado and run the following command. The Makefile uses scripts/main.tcl file to create a Vivado project, populate the block design and finally build a XSA. The XSA generation may take couple of hours depending on the system specification
 
    ```
@@ -51,7 +80,7 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 3. The generated XSA will be located at:
 
    ```
-   $working_dir/platforms/vivado/vmk180_TRD/project/vmk180_TRD.xsa
+   $working_dir/platforms/vivado/<platform_name>/project/<platform_name>.xsa
    ```
 
 
@@ -63,13 +92,13 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 1. Go to the directory specific to the platform design
 
    ```
-   cd $working_dir/platforms/vivado/vmk180_TRD
+   cd $working_dir/platforms/vivado/<platform_name>
    ```
 
 2. To open the Vivado project, first open the Vivado GUI, then run the following command from the Vivado tcl console:
 
    ```
-   open_project ./project/vmk180_TRD.xpr
+   open_project ./project/<platform_name>.xpr
    ```
 
 3. In the Flow Navigator pane on the left-hand side under IP integrator, click on Open Block Design. An IP integrator block design becomes visible that contains the Processing System (PS) IP and other PL IPs.
@@ -86,7 +115,7 @@ git clone --recursive https://github.com/Xilinx/vmk180-trd.git
 6. To write out a new extensible platform XSA file, run the following command from the Vivado tcl console:
 
    ```
-   write_hw_platform -hw -force -file vmk180_TRD.xsa
+   write_hw_platform -force -hw -file <platform_name>.xsa
    ```
 
 
