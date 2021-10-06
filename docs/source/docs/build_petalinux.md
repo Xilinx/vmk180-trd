@@ -60,12 +60,6 @@ Modifying/Configure the petalinux project manually
 
 * Source the PetaLinux 2021.2 tool settings.sh script.
 
-Run the following command to create a new Petalinux project from the working directory
-
-```
-cd petalinux/xilinx-vmk180-trd
-./trd.cfg -p vmk180_TRD
-```
 Next the project needs to be configured with the xsa file from the Vivado project.
 
 ```
