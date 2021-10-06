@@ -16,20 +16,23 @@ Software Architecture of the Platform
 Introduction
 --------------
 
-This chapter describes the application processing unit (APU) Linux software stack and PS application running on the end receives control information using the PCIe BAR map memory and data through the QDMA. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
+In this document it describes the application processing unit (APU),Linux software stack, PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers . 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
 
 The  software stack and details on how the control information & data is interpreted between the x86 host and the target is shown in the following figures.
 
-![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
-![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
+Endpoint software stack :
+-------------------------
 
-The stack is horizontally divided into the following layers:
+![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
+
+
+### The Endpoint software stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
 	- G-streamer/Jupyter notebooks with a simple control and visualization interface     
 	- GStreamer multimedia framework with python bindings for video pipeline control(MIPI → Filtered → HDMI)   
 	- Gstreamer based application to capture data from MIPI on endpoint, process and transfer to host machine via pcie and display on HOST machine.
-	- Gstreamer based application to receive data host machine, process the data on EP and transfer to host machine via pcie and display on HOST machine
+	- Gstreamer based application to receive data host machine, process the data on EP and transfer to host machine via pcie and display on HOST 		  machine
 * Middleware layer (user-space)
 	- Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer
 	- Provides access to kernel frameworks
@@ -38,7 +41,7 @@ The stack is horizontally divided into the following layers:
  	- Includes device drivers and kernel frameworks (subsystems)
 	- Access to hardware IPs
 
-Vertically, the software components are divided by domain:Vertically, the software components are divided by domain:
+### Vertically, the software components are divided by domain:Vertically, the software components are divided by domain:
 
 Video Capture
 ---------------
@@ -149,8 +152,35 @@ Libdrm
 
 The framework exposes two device nodes per display pipeline to user space: the /dev/dri/card* device node and an emulated /dev/fb* device node for backward compatibility with the legacy fbdev Linux framework. The latter is not used in this design. libdrm was created to facilitate the interface of user space programs with the DRM subsystem. This library is merely a wrapper that provides a function written in C for every ioctl of the DRM API, as well as constants, structures and other helper elements. The use of libdrm not only avoids exposing the kernel interface directly to user space, but presents the usual advantages of reusing and sharing code between programs.
 
+Host machine software stack :
+-----------------------------
+
+![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
+
+### The Host machine software stack is horizontally divided into the following layers:
+
+* Application layer (user-space)
+	- An opencv based application, which interprets user inputs to endpoint PCIe bar register.
+	- An opencv based GUI is used to display filtered data received from endpoint.
+	
+* Middleware layer (user-space)
+	- A sysfs entry to expose PCIe bar register space to userspace.
+	- Here application uses Qt as a cross-platform framework to display video through opencv.
+	- Here application uses GLib to stop usecase-1 by monitoring standard input.
+
+* Operating system (OS) layer (kernel-space)
+	- Provides a stable, well-defined API to user-space.
+ 	- Includes device drivers and kernel frameworks (subsystems).
+	- Access to hardware IPs.
+
+
+# Below diagram shows linux software components involved at host and Endpoint : 
+
+![Linux SW components](../../media/software_components.png )
+ 
 Host Software components
 -------------------------
+
 Data is transferred between the host and the target using the QDMA. QDMA device drivers are installed on the host, are used to configure the QDMA IP on the endpoint and to initiate data transfer from the host. The host reads the media file from the disk, sends control information to the endpoint, also sends the media file to the endpoint using DMA. After receiving filtered output back from the endpoint, the data is displayed on the host monitor. At the device side, the OpenCL-based application is used to receive the data, filter it, and send the data back to the host.
 
  A dedicated BAR is used to send control information between Host and the Device and vice-versa.
@@ -161,7 +191,8 @@ Please refer to below link for more details on QDMA drivers:
 
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel
 
-* Device Software components:
+Endpoint/Device Software components
+-------------------------------------
 
 In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
 
@@ -188,9 +219,9 @@ Following diagram captures, all the SW components involved in achieving differen
 * pcie_ep_driver: 
 		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
 
-![Linux SW components](../../media/software_components.png )
 
-Supported Use cases:
+# Supported Use cases:
+
 Following use cases are supported in this release.
 
 1. MIPI --> 2D Image Processing --> HDMI
