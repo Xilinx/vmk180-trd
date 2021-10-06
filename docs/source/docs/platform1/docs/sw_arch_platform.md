@@ -14,19 +14,19 @@ Software Architecture of the Platform
 ======================================
 
 Introduction
---------------
+------------
 
 In this document it describes the application processing unit (APU),Linux software stack, PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers . 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
 
 The  software stack and details on how the control information & data is interpreted between the x86 host and the target is shown in the following figures.
 
-Endpoint software stack :
--------------------------
+Endpoint software stack
+-----------------------
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
 
 
-### The Endpoint software stack is horizontally divided into the following layers:
+## The Endpoint software stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
 	- G-streamer/Jupyter notebooks with a simple control and visualization interface     
@@ -152,11 +152,12 @@ Libdrm
 
 The framework exposes two device nodes per display pipeline to user space: the /dev/dri/card* device node and an emulated /dev/fb* device node for backward compatibility with the legacy fbdev Linux framework. The latter is not used in this design. libdrm was created to facilitate the interface of user space programs with the DRM subsystem. This library is merely a wrapper that provides a function written in C for every ioctl of the DRM API, as well as constants, structures and other helper elements. The use of libdrm not only avoids exposing the kernel interface directly to user space, but presents the usual advantages of reusing and sharing code between programs.
 
-# Host machine software stack 
+Host machine software stack 
+----------------------------
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
 
-## The Host machine software stack is horizontally divided into the following layers:
+## The Host machine software stack is horizontally divided into the following layers
 
 * Application layer (user-space)
 	- An opencv based application, which interprets user inputs to endpoint PCIe bar register.
@@ -172,7 +173,7 @@ The framework exposes two device nodes per display pipeline to user space: the /
  	- Includes device drivers and kernel frameworks (subsystems).
 	- Access to hardware IPs.
 
-## Host machine software components : 
+## Host machine software components
 
 PCIe Host application
 ----------------------
@@ -191,7 +192,8 @@ QDMA driver on the host machine is used to identify VMK180 device connected to t
 Please refer to below link for more details on QDMA drivers:
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
-Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective). 
+
+## Following diagram captures, all the SW components involved in achieving different usecases(both from Host and Device perspective) 
 
 * G-streamer plugins :
 		Following G-streamer plugins are supported and provided as part of package.
