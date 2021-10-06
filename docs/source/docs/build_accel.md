@@ -1,4 +1,4 @@
-﻿<table class="sphinxhide">
+<table class="sphinxhide">
  <tr>
    <td align="center"><img src="media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Tutorial</h1>
    </td>
@@ -28,10 +28,10 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal: 
 
    ```
-   git clone --recursive https://github.com/Xilinx/vmk180-trd.git
+   git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
    ```
 
-2. Navigate to the `vmk180-trd` which is the working directory.
+2. Navigate to the `vmk180-trd-2021.2` which is the working directory.
 
 Integrating an overlay (accelerator functions) into a Vitis Extensible platform
 -------------------------------------------------------------------------------------
@@ -44,8 +44,16 @@ Integrating an overlay (accelerator functions) into a Vitis Extensible platform
 2. To compile and integrate the overlay into the platform, run the following command. The Makefile calls a lower level Makefile to run Vitis. If a platform is not already available it builds that as well. 
 
    ```
-   make overlay PFM=vmk180_TRD OVERLAY=filter2d_pl 
+   make overlay PFM=<val> OVERLAY=<val> 
    ```
+
+   Overlay currently supported are listed below
+
+   |Application name |Platform name(PFM)| Overlay(OVERLAY) Supported |
+   |----|----|----|
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd| filter2d_pl |
+   
+
 
 3. The generated XSA and xclbin will be located at 
 
