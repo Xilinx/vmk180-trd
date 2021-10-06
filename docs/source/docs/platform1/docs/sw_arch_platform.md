@@ -22,13 +22,12 @@ In this document it describes the Linux software stack,PS application running on
 
 The  software stack of VMK180 endpoint device and x86 host is shown in the following figures.
 
-Endpoint software stack
------------------------
+## Endpoint software stack
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
 
 
-## The Endpoint software stack is horizontally divided into the following layers:
+### The Endpoint software stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
 	- G-streamer/Jupyter notebooks with a simple control and visualization interface     
@@ -43,10 +42,10 @@ Endpoint software stack
  	- Includes device drivers and kernel frameworks (subsystems)
 	- Access to hardware IPs
 
-## Vertically, the Endpoint software components are divided by domain :
+### Vertically, the Endpoint software components are divided by domain :
 
-Video Capture
----------------
+#### Video Capture :
+
 The Video Capture software stack is depicted in the following figure using the single-sensor MIPI CSI capture pipeline as an example
 
 ![Video Capture Software Stack](../../media/video_capture.png)
