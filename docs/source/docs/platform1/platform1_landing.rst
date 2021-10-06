@@ -1,13 +1,14 @@
 VMK180 TRD
 ===========================================================
 
-VMK180 TRD demonstrates the following functionalities,
+VMK180 TRD 2021.2 demonstrates following functionalities :
 
-* Video captured from MIPI image sensor is processed and displayed on a Jupyter Notebook or a HDMI monitor connected to x86 host machine (root complex) .
-* Video frames are looped from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing and displayed onto the HDMI monitor connected to the host. 
-* Video frames are transferred from x86 host machine (root complex) to VMK180 evaluation board (end point) processed and displayed onto the HDMI monitor connected to VMK180 evaluation board.
+* Video being captured from MIPI image sensor, processed with an accelerator and displayed on a HDMI monitor connected to vmk180 board.
+* Video being captured from MIPI image sensor on the board, processed (optionally) with an accelerator, sent to a x86 host machine (root complex) via PCIe and displayed on a monitor connected to the host machine.
+* Video frames being transferred from a file on the host machine to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface,processed (optionally) with an accelerator, sent back to host and displayed on a monitor connected to the host machine. . 
 
-Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing .
+Accelerator functions can be added to this platform using Vitis platform. Supported acceleration function in this design is a 2D Filter.
+
 
 .. image:: ../media/sc_image_landing.PNG
    :width: 1200
@@ -17,12 +18,13 @@ Features
 --------
  
 * 4k resolution images from a sensor
-* HDMI or Jupyter notebook display
+* HDMI display
 * Demonstration of Board as PCIe End-Point accelerator Card
 * User programmable 2D filter
 * Loop Back of processed 4k Video data over PCIe
 * Live Display of Loop backed video on Host
-* Jupyter notebook based power and performance monitoring
+* Jupyter notebook based applications control, power and performance monitoring
+* Gstreamer based End point applications
 
 
 Quick Start
