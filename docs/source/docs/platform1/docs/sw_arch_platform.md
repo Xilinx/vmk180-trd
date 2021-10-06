@@ -61,12 +61,11 @@ At a high level it consists of the following layers from top to bottom:
 	- V4L2/Media subsystems: Xilinx video IP pipeline (XVIPP) driver
 	- DMA engine: Xilinx framebuffer driver
 
-Kernel Subsystems
---------------------
+#### Kernel Subsystems
+
 In order to model and control video capture pipelines such as the ones used in this TRD on Linux systems, multiple kernel frameworks and APIs are required to work in concert. For simplicity, we refer to the overall solution as Video4Linux (V4L2) although the framework only provides part of the required functionality. The individual components are discussed in the following sections.
 
-Driver Architecture
----------------------
+#### Driver Architecture
 
 The Video Capture Software Stack figure in the Capture section shows how the generic V4L2 driver model of a video pipeline is mapped to the single-sensor MIPI CSI-2 Rx capture pipelines. The video pipeline driver loads the necessary sub-device drivers and registers the device nodes it needs, based on the video pipeline configuration specified in the device tree. The framework exposes the following device node types to user space to control certain aspects of the pipeline:
 
@@ -74,8 +73,7 @@ The Video Capture Software Stack figure in the Capture section shows how the gen
 	- Video device node: /dev/video*
 	- V4L2 sub-device node: /dev/v4l-subdev*
 
-Media Framework
-----------------
+#### Media Framework
 
 The main goal of the media framework is to discover the device topology of a video pipeline and to configure it at run-time. To achieve this, pipelines are modeled as an oriented graph of building blocks called entities connected through pads. An entity is a basic media hardware building block. It can correspond to a large variety of blocks such as physical hardware devices (e.g. image sensors), logical hardware devices (e.g. soft IP cores inside the PL), DMA channels or physical connectors. Physical or logical devices are modeled as sub-device nodes and DMA channels as video nodes. A pad is a connection endpoint through which an entity can interact with other entities. Data produced by an entity flows from the entity's output to one or more entity inputs. A link is a point-to-point oriented connection between two pads, either on the same entity or on different entities. Data flows from a source pad to a sink pad. A media device node is created that allows the user space application to configure the video pipeline and its sub-devices through the libmediactl and libv4l2subdev libraries. The media controller API provides the following functionality:
 
@@ -91,8 +89,7 @@ The main goal of the media framework is to discover the device topology of a vid
 
 ![Video Capture Media Pipeline: Single MIPI CSI-2 RX](../../media/capture_graph.png)
 
-Video IP Drivers
-------------------
+#### Video IP Drivers
 
 Xilinx adopted the V4L2 framework for most of its video IP portfolio. The currently supported video IPs and corresponding drivers are listed under V4L2. Each V4L driver has a sub-page that lists driver-specific details and provides pointers to additional documentation. The following table provides a quick overview of the drivers used in this design. V4L2 Drivers Used in Capture Pipelines.
 
@@ -102,29 +99,26 @@ Xilinx adopted the V4L2 framework for most of its video IP portfolio. The curren
 | MIPI CSI-2 Rx 				 | - Sets media bus format and resolution on input pad. <br>	- Sets media bus format and resolution on output pad. |
 | IMX274 sensor <br> | - Sets the media bus format and resolution for the sensor Input pad. <br> - Set the media bus format and resolution for output pads.|
 
-HDMI Tx Display
-----------------
+#### HDMI Tx Display
 
 Linux kernel and user-space frameworks for display and graphics are intertwined and the software stack can be quite complex with many layers and different standards / APIs. On the kernel side, the display and graphics portions are split with each having their own APIs. However, both are commonly referred to as a single framework, namely DRM/KMS. This split is advantageous, especially for SoCs that often have dedicated hardware blocks for display and graphics. The display pipeline driver responsible for interfacing with the display uses the kernel mode setting (KMS) API and the GPU responsible for drawing objects into memory uses the direct rendering manager (DRM) API. Both APIs are accessed from user-space through a single device node.
 
 ![DRM/KMS Driver Stack](../../media/display_stack.png)
 
-Direct Rendering Manager
--------------------------
+#### Direct Rendering Manager
 
 This section focuses on the common infrastructure portion around memory allocation and management that is shared with the KMS API.
 
-Driver Features
---------------------
+#### Driver Features
 
 The Xilinx DRM driver uses the GEM memory manager, and implements DRM PRIME buffer sharing. PRIME is the cross device buffer sharing framework in DRM. To user-space PRIME buffers are DMABUF-based file descriptors. The DRM GEM/CMA helpers use the CMA allocator as a means to provide buffer objects that are physically contiguous in memory. This is useful for display drivers that are unable to map scattered buffers via an IOMMU. Frame buffers are abstract memory objects that provide a source of pixels to scan out to a CRTC. Applications explicitly request the creation of frame buffers through the DRM_IOCTL_MODE_ADDFB(2) ioctls and receive an opaque handle that can be passed to the KMS CRTC control, plane configuration and page flip functions
 
-Kernel Mode Setting
----------------------
+#### Kernel Mode Setting
+
 Mode setting is an operation that sets the display mode including video resolution and refresh rate. It was traditionally done in user-space by the X-server which caused a number of issues due to accessing low-level hardware from user-space which, if done wrong, can lead to system instabilities. The mode setting API was added to the kernel DRM framework, hence the name kernel mode setting. The KMS API is responsible for handling the frame buffer and planes, setting the mode, and performing page-flips (switching between buffers). The KMS device is modeled as a set of planes, CRTCs, encoders, and connectors as shown in the top half of Figure above. The bottom half of the figure shows how the driver model maps to the physical hardware components inside the PS DP Tx display pipeline.
 
-CRTC
--------
+#### CRTC
+
 CRTC is an antiquated term that stands for cathode ray tube controller, which today would be simply named display controller as CRT monitors have disappeared and many other display types are available. The CRTC is an abstraction that is responsible for composing the frame to be scanned out to the display and setting the mode of the display. In the Xilinx DRM driver, the CRTC is represented by the buffer manager and blender hardware blocks. The frame buffer (primary plane) to be scanned out can be overlayed and/or alpha-blended with a second plane inside the blender. The DP Tx hardware supports up to two planes, one for video and one for graphics. The z-order (foreground or background position) of the planes and the alpha mode (global or pixel-alpha) can be configured through the driver via custom properties.
 
 The pixel formats of the video and graphics planes can be configured individually at run-time and a variety of formats are supported. The default pixel formats for each plane are set statically in the device tree. Pixel unpacking and format conversions are handled by the buffer manager and blender. The DRM driver configures the hardware accordingly so this is transparent to the user.
@@ -132,33 +126,30 @@ The pixel formats of the video and graphics planes can be configured individuall
 A page-flip is the operation that configures a plane with the new buffer index to be selected for the next scan-out. The new buffer is prepared while the current buffer is being scanned
 out and the flip typically happens during vertical blanking to avoid image tearing.
 
-Plane
---------------
+#### Plane
 
 A plane represents an image source that can be blended with or overlayed on top of a CRTC frame buffer during the scan-out process. Planes are associated with a frame buffer to
 optionally crop a portion of the image memory (source) and scale it to a destination size. The DP Tx display pipeline does not support cropping or scaling, therefore both video and graphics plane dimensions have to match the CRTC mode (i.e., the resolution set on the display). The Xilinx DRM driver supports the universal plane feature, therefore the primary plane and overlay planes can be configured through the same API. The primary plane on the video mixer is configurable and set to the top-most plane to match the DP Tx pipeline.
 As planes are modeled inside KMS, the physical hardware device that reads the data from memory is typically a DMA whose driver is implemented using the dmaengine Linux
 framework. The DPDMA is a 6-channel DMA engine that supports a (up to) 3-channel video stream, a 1-channel graphics stream and two channels for audio (not used in this design). The video mixer uses built-in AXI mater interfaces to fetch video frames from memory.
 
-Encoder
-----------
+#### Encoder
+
 An encoder takes pixel data from a CRTC and converts it to a format suitable for any attached connectors. There are many different display protocols defined, such as HDMI or DisplayPort. The PS display pipeline has a DisplayPort transmitter built in. The encoded video data is then sent to the serial I/O unit (SIOU) which serializes the data using the gigabit transceivers (PS GTRs) before it goes out via the physical DP connector to the display. The PL display pipeline uses a HDMI transmitter which sends the encoded video data to the Video PHY. The Video PHY serializes the data using the GTH transceivers in the PL before it goes out via the HDMI Tx connector.
 
-Connector
------------
+#### Connector
+
 The connector models the physical interface to the display. Both DisplayPort and HDMI protocols use a query mechanism to receive data about the monitor resolution, and refresh rate by reading the extended display identification data (EDID) (see VESA Standard ) stored inside the monitor. This data can then be used to correctly set the CRTC mode. The DisplayPort support hot-plug events to detect if a cable has been connected or disconnected as well as handling display power management signaling (DPMS) power modes.
 
-Libdrm
--------
+#### Libdrm
 
 The framework exposes two device nodes per display pipeline to user space: the /dev/dri/card* device node and an emulated /dev/fb* device node for backward compatibility with the legacy fbdev Linux framework. The latter is not used in this design. libdrm was created to facilitate the interface of user space programs with the DRM subsystem. This library is merely a wrapper that provides a function written in C for every ioctl of the DRM API, as well as constants, structures and other helper elements. The use of libdrm not only avoids exposing the kernel interface directly to user space, but presents the usual advantages of reusing and sharing code between programs.
 
-Host machine software stack 
-----------------------------
+## Host machine software stack 
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
 
-## The Host machine software stack is horizontally divided into the following layers
+### The Host machine software stack is horizontally divided into the following layers
 
 * Application layer (user-space)
 	- An opencv based application, which interprets user inputs to endpoint PCIe bar register.
@@ -174,19 +165,16 @@ Host machine software stack
  	- Includes device drivers and kernel frameworks (subsystems).
 	- Access to hardware IPs.
 
-## Host machine software components
+### Host machine software components
 
-PCIe Host application
-----------------------
+#### PCIe Host application
 
 
-Application and kernel frameworks
----------------------------------
+#### Application and kernel frameworks
 
 An Application frameworks such as opencv,QT and Glib are used to develop host application along with kernel framework i.e., sys filesystem to expose PCIe regigter space to user application. 
 
-QDMA Drivers
-------------
+#### QDMA Drivers
 
 QDMA driver on the host machine is used to identify VMK180 device connected to the host machine via PCIe interface and perform data transfer through DMA.
 
