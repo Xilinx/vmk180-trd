@@ -446,13 +446,13 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 	  1. 3840x2160
 	  2. 1920x1080
 	  Enter your choice : 2
-	  Enter filter type value 0-10:3
+	  Enter filter type value 0-10:9
 	```
 ![Usecase](../../media/Select_filter.png)
 
-5. When application prompts below prints launch (vmk180-trd-mipi-pcie-nb1.ipynb) jupyter notebook. 
+5. When application prompts below prints launch (vmk180-trd-nb1.ipynb) jupyter notebook. 
 
-> Note : Set 'res' variable in vmk180-trd-mipi-pcie-nb1.ipynb to appropriate value to ensure resolution is same at host and end point.
+> Note : Set 'res' variable in vmk180-trd-nb1.ipynb to appropriate value to ensure resolution is same at host and end point.
 
 	```
 	Please run 'vmk180-trd-nb1.ipynb' jupyter from endpoint
