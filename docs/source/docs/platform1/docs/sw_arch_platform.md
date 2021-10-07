@@ -17,7 +17,6 @@ Software Architecture of the Platform
 
 In this document it describes the Linux software stack,PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
 
-
 # Software Stack
 
 The  software stack of VMK180 endpoint device and x86 host is shown in the following figures.
@@ -25,7 +24,6 @@ The  software stack of VMK180 endpoint device and x86 host is shown in the follo
 ## Endpoint software stack
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
-
 
 ### The Endpoint software stack is horizontally divided into the following layers:
 
@@ -152,11 +150,10 @@ The framework exposes two device nodes per display pipeline to user space: the /
 ### The Host machine software stack is horizontally divided into the following layers
 
 * Application layer (user-space)
-	- An opencv based application, which interprets user inputs to endpoint PCIe bar register.
+	- An opencv based application, which interprets user inputs to endpoint PCIe BAR register.
 	- An opencv based GUI is used to display filtered data received from endpoint.
 	
 * Middleware layer (user-space)
-	- A sysfs entry to expose PCIe bar register space to userspace.
 	- Here application uses Qt as a cross-platform framework to display video through opencv.
 	- Here application uses GLib to stop usecase-1 by monitoring standard input.
 
@@ -168,6 +165,8 @@ The framework exposes two device nodes per display pipeline to user space: the /
 ### Host machine software components
 
 #### PCIe Host application
+
+
 
 
 #### Application and kernel frameworks
@@ -182,7 +181,7 @@ Please refer to below link for more details on QDMA drivers:
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
 
-# control information & data interpretation between x86 machine (Host) and  target
+# Communication between x86 machine (Host) and  target
 
 Following diagram captures, all the components involved in achieving different usecases(both from Host and Device perspective) 
 
@@ -212,13 +211,13 @@ Following diagram captures, all the components involved in achieving different u
 
 ## Details on Data and control information Flow
 
-### Data/Control information flow at Host application to achive below described usecases :
+### At x86 Host machine :  
 
 Data is transferred between the host and the target using the QDMA. QDMA device drivers are installed on the host, are used to configure the QDMA IP on the endpoint and to initiate data transfer from the host. The host reads the media file from the disk, sends control information to the endpoint, also sends the media file to the endpoint using DMA. After receiving filtered output back from the endpoint, the data is displayed on the host monitor. At the device side, the OpenCL-based application is used to receive the data, filter it, and send the data back to the host.
 
 A dedicated BAR is used to send control information between Host and the Device and vice-versa.
 
-### Data/Control information flow at Endpoint to achive below mentioned usecases :
+### At Endpoint :
 
 In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
 
