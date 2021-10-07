@@ -6,7 +6,7 @@ enable_beta_device xcvm1802-vsva2197-2MP-e-S-es1
 xhub::refresh_catalog [xhub::get_xstores xilinx_board_store]
 xhub::install [xhub::get_xitems xilinx.com:xilinx_board_store:vmk180_es:*] -quiet
 
-set proj_name vmk180_trd 
+set proj_name vmk180_es1_trd 
 set proj_dir project
 set bd_tcl_dir ./scripts
 set xdc_list {./xdc}
