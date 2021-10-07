@@ -490,7 +490,7 @@ To execute end-point application:
 ---------------------------------
 1. Launch vmk180-trd-nb1.ipynb jupyter notebook. (For MIPI use case modify 'res' variable same as one selected at host application). 
 
-> **NOTE : ** Endpoint application exits after running the usecase, So need to restart `vmk180-trd-nb1.ipynb` to relaunch the endpoint application.
+> **NOTE : ** Endpoint application exits after running the usecase, Hence restart `vmk180-trd-nb1.ipynb` jupyter notebook to relaunch the endpoint 	   application.
 
 Following Table lists the supported filter configuration in the design.
 
