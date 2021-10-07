@@ -150,13 +150,11 @@ The framework exposes two device nodes per display pipeline to user space: the /
 ### The Host machine software stack is horizontally divided into the following layers
 
 * Application layer (user-space)
-	- An opencv based application, which interprets user inputs to endpoint PCIe BAR register.
-	- An opencv based GUI is used to display filtered data received from endpoint.
+	- A Qt based command-line application to display media content on monitor received from endpoint. 
 	
 * Middleware layer (user-space)
-	- Here application uses Qt as a cross-platform framework to display video through opencv.
-	- Here application uses GLib to stop usecase-1 by monitoring standard input.
-
+	- Pcie host lib to access PCIe BAR register and perform dma transfers.
+	
 * Operating system (OS) layer (kernel-space)
 	- Provides a stable, well-defined API to user-space.
  	- Includes device drivers and kernel frameworks (subsystems).
@@ -164,15 +162,14 @@ The framework exposes two device nodes per display pipeline to user space: the /
 
 ### Host machine software components
 
-#### PCIe Host application
+#### Qt application
+- command-line application to communicate control information between host abd endpoint via pcie-host lib.
+- displays media content on monitor received 	   from endpoint. 
 
-
-
-
-#### Application and kernel frameworks
-
-An Application frameworks such as opencv,QT and Glib are used to develop host application along with kernel framework i.e., sys filesystem to expose PCIe regigter space to user application. 
-
+#### Host PCIe lib
+	
+Library functions to perform dma tranfers using dma xfer utils and access PCIe BAR register to communicate control information between host and 	endpoint 
+	
 #### QDMA Drivers
 
 QDMA driver on the host machine is used to identify VMK180 device connected to the host machine via PCIe interface and perform data transfer through DMA.
