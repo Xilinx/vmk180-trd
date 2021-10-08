@@ -67,7 +67,7 @@ Below diagram shows Board and hardware connections.
   
 	Make sure you have the SYSCTRL uSD card inserted in the slot (bottom) and card has the SYSCTRL image. For Latest version of SYSCTRL image, refer to [Beam Tool Wiki Page](https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit )
 
-  * **Monitor** : Before booting, connect a 1080P/4K monitor to the board via either HDMI port. 4K monitor is preferred to demonstrate at the maximum supported resolution.
+  * **Monitor** : Before booting, connect a 1080P/4K monitor to the board via top HDMI port. 4K monitor is preferred to demonstrate at the maximum supported resolution.
 	
 	> **Note**: The design has been validated with Dell Flat panel(U2718Q) & Viewsonic (SS16024) monitors.
 	
@@ -172,7 +172,101 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 
 ```
 
-In case of a private network, user may have to assign a static address within the subnet of the host laptop
+.. note::
+
+    If you do not see any URL for the Juputer Notebook, you may have to setup
+    a private network. Likely, DHCP is not be available to allot the board an
+    IP address. To setup a private network and start the notebook follow the
+    instruction below.
+
+
+Setting up a private network
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In case of a private network, user can assign a static address within
+the subnet of the host machine.
+
+**Setting up a private network with target board and the host machine for
+Windows users:**
+
+* Ensure a direct connection between the windows host machine and the target
+  board using an ethernet cable as shown in the :ref:`Board Setup` section.
+
+* In windows, run command prompt as an admisntrator
+
+  .. code-block:: bash
+
+     Press Windows+R to open the “Run” box.
+     Type “cmd” into the box.
+     press Ctrl+Shift+Enter to run the command as an administrator
+
+* Run ipconfig on the windows machine to list available ethernet adapters and
+  set a static private ip
+
+  .. code-block:: bash
+
+     # A sample output after executing ipconfig
+     # notice interface "Ethernet" has an auto address assigned with no Default Gateway
+
+     ipconfig
+
+     Ethernet adapter Ethernet:
+
+        Connection-specific DNS Suffix  . :
+        Link-local IPv6 Address . . . . . : fe80::1d8d:ac40:ff9b:8d1%21
+        Autoconfiguration IPv4 Address. . : 169.254.8.209
+        Subnet Mask . . . . . . . . . . . : 255.255.0.0
+        Default Gateway . . . . . . . . . :
+
+     # Set static ip address
+     netsh interface ip set address name="YOUR INTERFACE NAME" static "IP_ADDRESS" "SUBNET_MASK"
+
+     # Example
+     netsh interface ip set address name="Ethernet" static 10.0.0.1 255.255.255.0
+
+* Ensure to boot the target board (VCK190) into Linux
+
+* Set a private ip address for the target within the subnet of host machine and
+  verify connectivity.
+
+  .. code-block:: bash
+
+     ifconfig eth0 10.0.0.2 netmask 255.255.255.0
+
+     # Perform a ping test to the host form the target
+     ping -c 3 10.0.0.1
+
+**Setting up a private network with target board and the host machine for Linux
+users:**
+
+* Make a direct connection between the Linux host machine and the target board
+  using an ethernet cable
+
+* Run ifconfig on the Linux machine to list available ethernet adapters and set
+  a static private ip
+
+  .. code-block:: bash
+
+     # Example to set an ip 10.0.0.1 to ethernet interface enp2s0:
+     sudo ifconfig enp2s0 10.0.0.1 netmask 255.255.255.0
+
+* Ensure to boot the target board (VCK190) into Linux
+
+* Set a private ip address for the target within the subnet of host machine and
+  verify connectivity.
+
+  .. code-block:: bash
+
+     ifconfig eth0 10.0.0.2 netmask 255.255.255.0
+
+     # Perform a ping test to the host form the target
+     ping -c 3 10.0.0.1
+
+* To start Jupyter Notebook run
+
+  .. code-block:: bash
+
+     /etc/init.d/jupyterlab-server stop
+     /etc/init.d/jupyterlab-server start
 
 Run the Application
 ----------------------
