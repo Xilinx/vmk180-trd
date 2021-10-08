@@ -1,6 +1,6 @@
 ﻿<table class="sphinxhide">
  <tr>
-   <td align="center"><img src="../../../../_images/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Multimedia TRD Tutorial</h1>
+   <td align="center"><img src="../../../../_images/xilinx-logo.png" width="30%"/><h1> VMK180 TRD Tutorial</h1>
    </td>
  </tr>
  <tr>
@@ -16,13 +16,9 @@ Design Overview
 Introduction
 ------------
 
-The VMK180 TRD application design is built on VMK180 Evaluation Kit and provides a framework for building and customizing video platforms . The design has a platform and integrated accelerator functions.Programmable logic (PL) is used for the accelerator development. The platform supports capture from MIPI single sensor device. The output can be displayed on HDMI monitor or jupyter notebook interface.
+The VMK180 TRD application design is built on VMK180 Evaluation Kit and provides a framework for building and customizing video platforms . The design has a platform and integrated accelerator functions.Programmable logic (PL) is used for the accelerator development. The platform supports capture from MIPI single sensor device and PCIe video Input. The output can be displayed on HDMI monitor or sent to a host machine over PCIe.
 
-The following example Processing functions can be run on this platform
-
-* A user programmable 2D filter in PL
-* VP9 decode and demux in application processing unit (APU)
-
+A user programmable 2D filter in PL example Processing functions can be run on this platform
 
 The following figure shows the various pipelines supported by the design.
 
@@ -37,10 +33,10 @@ The APU application controls the video data paths implemented in the PL:
 
 * Processing/Accelerator/Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.
 
-* An Display/Output pipeline reads video frames from memory and sends the frames to a sink. In this case the sink is a HDMI display/Jupyter notebook Application with display interface or to the host via QDMA's card to host (C2H) channel.
+* An Display/Output pipeline reads video frames from DDR memory and sends the frames to a sink. In this case the sink is a HDMI display or to the host via QDMA's card to host (C2H) channel.
   
 
-The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or jupyter notebook . The video format in the figure is the output format on each block. Details are described in the [Hardware Architecture document](hw_arch_platform.md).
+The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or via monitor on PCIe Host. The video format in the figure is the output format on each block. Details are described in the [Hardware Architecture document](hw_arch_platform.md).
 
 ![End to end example pipelines](../../media/end_to_end_pp.PNG)
 
@@ -52,6 +48,7 @@ Design Components
 
   * VMK180 Evaluation Kit
   * [Leopard IMX274 MIPI FMC Card](https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc)
+  * A x86 server class host machine
   
 </details>
 
@@ -59,12 +56,12 @@ Design Components
  <summary><b>Interfaces and IP</b></summary>
 
 * Video inputs
-   * MIPI CSI-2 Rx/Host x86
+   * MIPI CSI-2 Rx
+   * RAW Video file
 * Video outputs
    * HDMI
-   * Ethernet - Jupyter notebook
+   * PCIe/Display Port on Host
 * Video processing
-   * VP9 decode
    * PL based 2D filter Accelerator
 * Auxiliary Peripherals
    * SD
@@ -87,6 +84,11 @@ Design Components
    * Jupyter
    * GStreamer 
    * Xilinx run-time (XRT)
+* Host components
+  * linux User space frameworks
+  * QT
+  * OpenCV
+  * QDMA Driver
 
  </details>
 
@@ -95,9 +97,11 @@ Design Components
 
 * Resolutions
    * MIPI: 1080p60,2160p60
+   * PCIe Use-Cases: 1080p30, 2160p30
   
 * Pixel format
    * YUVY8 
+   * YUYV
  </details>
 &nbsp;
 
