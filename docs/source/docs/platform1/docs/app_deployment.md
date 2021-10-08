@@ -509,7 +509,7 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 	  Enter 4 to 	: Exit application
 	  Enter your choice : 1
 	```
-![Usecase](../../media/Run_usecase.png)
+![Usecase](../../media/Select_usecase.png)
 
 3. Select desired resolution (Enter 1 or 2 ):
 	```	
