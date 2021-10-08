@@ -446,17 +446,20 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 	  1. 3840x2160
 	  2. 1920x1080
 	  Enter your choice : 2
-	  Enter filter type value 0-10:3
+	  Enter filter type value 0-10:9
+	
 	```
 ![Usecase](../../media/Select_filter.png)
 
-5. When application prompts below prints launch (vmk180-trd-mipi-pcie-nb1.ipynb) jupyter notebook. 
+5. When application prompts below prints launch (vmk180-trd-nb1.ipynb) jupyter notebook. 
 
-> Note : Set 'res' variable in vmk180-trd-mipi-pcie-nb1.ipynb to appropriate value to ensure resolution is same at host and end point.
+> Note : Set 'res' variable in vmk180-trd-nb1.ipynb to appropriate value to ensure resolution is same at host and end point.
 
 	```
+	
 	Please run 'vmk180-trd-nb1.ipynb' jupyter from endpoint
 	To quit usecase, hit <q+enter> from host 
+	
 	```
 ![Usecase](../../media/Running_Usecase.png)
 
@@ -479,13 +482,15 @@ Similarly for Usecase-2 and Usecase-3, User is expected to pass rawvideo file as
 	   1. 3840x2160
 	   2. 1920x1080
 	   Enter your choice:2
-	   Enter input filename with path to transfer: ~/4k30.yuv
+	   Enter input filename with path to transfer: ~/xxx.yuv
 	```
 ![Usecase](../../media/usecase_2_3.PNG)
 	
 To execute end-point application: 
 ---------------------------------
 1. Launch vmk180-trd-nb1.ipynb jupyter notebook. (For MIPI use case modify 'res' variable same as one selected at host application). 
+
+> **NOTE : ** Endpoint application exits after running the usecase, Hence restart `vmk180-trd-nb1.ipynb` jupyter notebook to relaunch the endpoint 	   application.
 
 Following Table lists the supported filter configuration in the design.
 
