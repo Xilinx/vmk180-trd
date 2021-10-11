@@ -32,21 +32,11 @@ Video Accelerator/processing pipeline: This comprises of mem to mem pipelines th
 * The 2D Filter accelerator (PL) integrated into the platform using Vitis.
 
 
-
-**Note:**  The PS interconnects in the figure are conceptual.
-
 MIPI Capture
 ------------
 
 
-A capture pipeline receives video frames and writes it into memory.Video frames are received from :
-
-** Single sensor MIPI CSI-2 camera
-
-** x86 host
-
-
-** If the input source is a single sensor MIPI CSI-2 receiver then the following figure describes the components present.
+MIPI capture pipeline receives video frames from an external Image sensor and writes it into memory. The single sensor MIPI CSI-2 receiver capture pipeline is shown in the following figure.
 
 
 .. image:: ../../media/CSI_Video_Capture_Pipeline.png
@@ -82,15 +72,9 @@ All of the IPs in this pipeline are configured to transport 4 ppc, enabling up t
 
 
 HDMI Display
-----------
+-------------
 
-Display pipeline fetches video frames from DDR memory and displays it onto HDMI monitor connected to :  
-
-** VMK180 Evaluation Board 
-
-** X86 host
-
-** The HDMI TX display pipeline (in the PL) is controlled by the video frame buffer read, which fetches the video layer from memory and sends the data to the HDMI TX subsystem. The HDMI TX subsystem processes data and sends it out to an external display device. The HDMI
+The HDMI TX display pipeline (in the PL) is controlled by the video frame buffer read, which fetches the video layer from memory and sends the data to the HDMI TX subsystem. The HDMI TX subsystem processes data and sends it out to an external display device. The HDMI
 transmitter display pipeline is shown in the following figure.
 
 
@@ -103,10 +87,12 @@ As shown in the figure, the pipeline comprises three main components, each of th
 
 * The HDMI transmitter subsystem (HDMI TX) interfaces with PHY layers and provides HDMI encoding functionality. The subsystem is a hierarchical IP that bundles a collection of HDMI TXrelated IP sub-cores and outputs them as a single IP. The subsystem generates an HDMI stream from the incoming AXI4-Stream video data and sends the generated TMDS data to the video PHY layer. For more information, see the HDMI 1.4/2.0 Transmitter Subsystem Product Guide (`PG235 <https://www.xilinx.com/content/dam/xilinx/support/documentation/ip_documentation/v_hdmi_tx_ss/v3_2/pg235-v-hdmi-tx-ss.pdf>`_).
 
-* The HDMI GT controller (PHY) enables plug-and-play connectivity with video transmit or receive subsystems. The interface between the media access control (MAC) and physical (PHY) layers are standardized to enable ease of use in accessing shared gigabit-transceiver (GT) resources. The data recovery unit (DRU) supports lower line rates for the HDMI protocol. An AXI4-Lite register interface is provided to enable dynamic accesses of transceiver controls/status. For more information, see the HDMI GT Controller LogiCORE IP Product Guide (`PG334 <https://www.xilinx.com/support/documentation/ip_documentation/hdmi_gt_controller/v1_0/pg334-hdmi-gt-controller.pdf>_`).
+* The HDMI GT controller (PHY) enables plug-and-play connectivity with video transmit or receive subsystems. The interface between the media access control (MAC) and physical (PHY) layers are standardized to enable ease of use in accessing shared gigabit-transceiver (GT) resources. The data recovery unit (DRU) supports lower line rates for the HDMI protocol. An AXI4-Lite register interface is provided to enable dynamic accesses of transceiver controls/status. For more information, see the HDMI GT Controller LogiCORE IP Product Guide (`PG334 <https://www.xilinx.com/support/documentation/ip_documentation/hdmi_gt_controller/v1_0/pg334-hdmi-gt-controller.pdf>`_).
 
- CPM-PCIe Capture & Display
-------------
+
+CPM-PCIe Capture & Display
+---------------------------
+
 The integrated block for PCIe Rev. 4.0 with DMA and CCIX Rev. 1.0  (CPM) including DMA (QDMA) and two PCIe Controllers 0 & 1, is hardened in Versal ACAP devices.
 PCIE Controller 0 configured in Gen4 x8 mode transfers data from both host (X86) to end-point (VMK180) and vice-versa.
 On host-to-endpoint channel, Video frames recieved from host are written to DDR by QDMA via Network-on-Chip (NOC). 
@@ -117,10 +103,37 @@ direction are configured by Host via PCIe Interface. The driver for the block pr
 
 
 
-For more information on CPM-PCIe & QDMA please refer to Versal ACAP CPM DMA and Bridge Mode for PCI Express v2.1 Product Guide (`PG278 <https://www.xilinx.com/support/documentation/ip_documentation/versal_cips/v2_1/pg347-cpm-dma-bridge.pdf>`_).
+For more information on CPM-PCIe & QDMA please refer to Versal ACAP CPM DMA and Bridge Mode for PCI Express v2.1 Product Guide (`PG347 <https://www.xilinx.com/support/documentation/ip_documentation/versal_cips/v2_1/pg347-cpm-dma-bridge.pdf>`_).
 
-  Clocks
-----------
+PCIe User Space Register
+------------------------
+
+For hand shaking between host and endpoint applications, the user space register IP provides a set of registers. The following figure shows the logical diagram of the IP.
+
+There are 15 32-bit registers starting from offset that have read/write access from the PS. Each register is byte addressable, which means the address for the second register can be calculated by adding four to the address of the first one. Following these are 15 registers that are read-only for the PS and contain values written by the DMA/bridge IP. Reg14 is used as an Interrupt register and reg30 is an Interrupt Acknowledgment register as described in the previous section.
+
+Similarly, there are 15 32-bit registers starting from offset 0x0000 that have read/write access from the host. Following these are 14 registers that are read-only for the host and contain data written by the PS.
+
+.. image:: ../../media/User_Space_IP_Logical_Diagram.png
+   :width: 800
+
+
+Registers available to the PS are listed in the following table. Of these, reg0-reg14 have read and
+write access and reg15-30 are read-only.
+
+**Registers Available to the PS**
+
+.. image:: ../../media/Registers_Available_to_the_PS.png
+   :width: 400
+   
+
+.. image:: ../../media/Registers_Available_to_the_PS_2.png
+	:width: 400
+
+The same register space is visible to the PCIe DMA with reg0-14 with read/write access and reg15-28 as read-only. Reg29-30 are dummy and are not required.
+
+Clocks & Reset 
+--------------------------
 
 **PS Clocks**
 
@@ -148,6 +161,25 @@ The Clk_out2 clock is generated by the clocking wizard instance. It is used to d
 
 The Clk_out1 clock is generated by the clocking wizard instance. It is used to drive the memory mapped AXI interfaces of the capture pipelines in the PL. These interfaces are in the datapath and, consequently, are needed to support the maximum performance of 2160p60, which roughly corresponds to a 150 MHz clock at 4 ppc. The HLS-based IP core interfaces and Vitis generated modules are based on Clk_out1 (HLS IPs typically share a common input clock between control and data interfaces).
 
+For details on HDMI Tx and HDMI GT clocking structure and requirements refer to
+HDMI 1.4/2.0 Transmitter Subsystem Product Guide (`PG235 <https://www.xilinx.com/cgi-bin/docs/ipdoc?c=v_hdmi_tx_ss%3Bv%3Dlatest%3Bd%3Dpg235-v-hdmi-tx-ss.pdf>`_) and HDMI GT Controller
+LogiCORE IP Product Guide (`PG334 <https://www.xilinx.com/support/documentation/ip_documentation/hdmi_gt_controller/v1_0/pg334-hdmi-gt-controller.pdf>`_). For HDMI Tx, an external clock chip is used
+to generate the GT reference clock depending on the display resolution. Various
+other HDMI related clocks are derived from the GT reference clock and generated
+internally by the HDMI GT controller.
+
+For details on the various clock chips used refer to the VMK180 Evaluation Board
+User Guide (`UG1366 <https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf>`_).
+
+The master reset (pl_resetn0) is generated by the PS during boot and is used as
+input to the THREE processing system (PS) reset modules in the PL. Each module
+generates synchronous, active-Low and active-High interconnect and peripheral
+resets that drive all IP cores synchronous to the respective, clk_out0, clk_out1,
+and clk_out2 clock domains.
+
+Apart from these system resets, there are asynchronous resets driven by PS GPIO
+pins. The respective device drivers control these resets which can be toggled at
+run-time to reset HLS- based cores. 
 
 
 **Next Steps**

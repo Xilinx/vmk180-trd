@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: ''
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -65,6 +55,8 @@
   <link rel="stylesheet" href="../../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/pro.min.css" media="all" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
     <link rel="prev" title="Hardware Architecture of the Accelerator" href="hw_arch_accel.html" /> 
 	</head>
 	<body>
@@ -85,7 +77,7 @@
 															<div class="logo-column">
 																<div class="logo">
 																	<a href="https://www.xilinx.com/">
-																	<img src="https://www.xilinx.com/etc.clientlibs/site/clientlibs/xilinx/all/resources/imgs/header/xilinx-header-logo.svg" title="Xilinx Inc"/>
+																	<img src="https://github.com/Xilinx/Image-Collateral/blob/main/xilinx-header-logo.svg?raw=true" title="Xilinx Inc"/>
 																	</a>
 																</div>
 															</div>
@@ -313,7 +305,7 @@
             
             
               <div class="version">
-                2.0
+                3.0
               </div>
             
           
@@ -345,7 +337,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#tutorials">Tutorials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#architecture-documents">Architecture Documents</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../platform1_landing.html#other">Other</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="">Known Issues</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Known Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../platform1_landing.html#xilinx-support">Xilinx Support</a></li>
@@ -353,17 +345,12 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Versions</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
-</ul>
 
             
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/issue_sc.txt"
+				  <li class="toctree-l1"><a href="../../../_sources/docs/platform1/docs/issue_sc.md.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -417,7 +404,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../../_sources/docs/platform1/docs/issue_sc.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/docs/platform1/docs/issue_sc.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -430,57 +417,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <dl class="docutils">
-<dt>&lt;table class=&#8221;sphinxhide&#8221;&gt;</dt>
-<dd><dl class="first docutils">
-<dt>&lt;tr&gt;</dt>
-<dd>&lt;td align=&#8221;center&#8221;&gt;&lt;img src=&#8221;../../media/xilinx-logo.png&#8221; width=&#8221;30%&#8221;/&gt;&lt;h1&gt;Versal Prime -VMK180 Evaluation Kit &lt;br&gt;Multimedia TRD Tutorial&lt;/h1&gt;
-&lt;/td&gt;</dd>
-</dl>
-<p>&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#8221;center&#8221;&gt;&lt;h1&gt;Known Issues&lt;/h1&gt;</p>
-<p class="last">&lt;/td&gt;
-&lt;/tr&gt;</p>
-</dd>
-</dl>
-<p>&lt;/table&gt;</p>
-<div class="section" id="known-issues">
+  <table class="sphinxhide">
+ <tr>
+   <td align="center"><img src="../../media/xilinx-logo.png" width="30%"/><h1>Versal Prime -VMK180 Evaluation Kit <br>Multimedia TRD Tutorial</h1>
+   </td>
+ </tr>
+ <tr>
+ <td align="center"><h1>Known Issues</h1> </td>
+ </tr>
+</table><div class="section" id="known-issues">
 <h1>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>The APM, CPU utilization and power graph plots result in high CPU utilization. If the plots are disabled, the CPU utilization is reduced. This can be verified by running the top command from a terminal.</li>
-<li>The monitor should show a blue standby screen after boot. If that is not the case, re-plug the HDMI cable and the blue standby screen should appear.</li>
-<li>The gstreamer pipeline involving USB may sometimes fail with the following error. In this case click the rectangular icon to interrupt the kernel then select ‘Kernel’ –&gt; ‘Restart Kernel and Run All Cells’ from the top menu bar to restart the pipeline.</li>
+<li><p>The APM, CPU utilization and power graph plots result in high CPU utilization. If the plots are disabled, the CPU utilization is reduced. This can be verified by running the top command from a terminal.</p></li>
+<li><p>The monitor should show a blue standby screen after boot. If that is not the case, re-plug the HDMI cable and the blue standby screen should appear.</p></li>
+<li><p>Enabling the primary plane on the Video Mixer by default results in a bandwidth utilization of 2GB. A patch is applied to disable the mixer primary plane by default. To enable/disable the primary plane through module_param and devmem use the following commands. To render a test pattern on the display using a utility like modetest, the primary plane should be enabled.</p></li>
+<li><p>Enable:</p></li>
 </ul>
-<p><code class="docutils literal"><span class="pre">`</span>
-<span class="pre">ERROR:</span> <span class="pre">from</span> <span class="pre">element</span> <span class="pre">/GstPipeline:pipeline0/GstMediaSrcBin:mediasrcbin0/GstV4l2Src:v4l2src0:</span> <span class="pre">Cannot</span> <span class="pre">identify</span> <span class="pre">device</span> <span class="pre">'/dev/video3'.</span>
-<span class="pre">Additional</span> <span class="pre">debug</span> <span class="pre">info:</span>
-<span class="pre">../../../git/sys/v4l2/v4l2_calls.c(610):</span> <span class="pre">gst_v4l2_open</span> <span class="pre">():</span> <span class="pre">/GstPipeline:nb3/GstMediaSrcBin:mediasrcbin0/GstV4l2Src:v4l2src0:system</span> <span class="pre">error:</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">module</span><span class="o">/</span><span class="n">xlnx_mixer</span><span class="o">/</span><span class="n">parameters</span><span class="o">/</span><span class="n">mixer_primary_enable</span>
+</pre></div>
+</div>
 <ul class="simple">
-<li>If vivid or USB webcam is selected as video source, the following gstreamer error message is printed on the serial console. It is benign and can be ignored.</li>
+<li><p>Disable:</p></li>
 </ul>
-<p><code class="docutils literal"><span class="pre">`</span>
-<span class="pre">**</span> <span class="pre">(python3:1404):</span> <span class="pre">CRITICAL</span> <span class="pre">**:</span> <span class="pre">11:28:06.903:</span> <span class="pre">gst_video_info_from_caps:</span> <span class="pre">assertion</span> <span class="pre">'gst_caps_is_fixed</span> <span class="pre">(caps)'</span> <span class="pre">failed</span>
-<span class="pre">0:00:02.146225828</span>&nbsp; <span class="pre">1404</span> <span class="pre">0xaaab03b29060</span> <span class="pre">ERROR</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">mediasrcbin</span> <span class="pre">gstmediasrcbin.c:285:get_media_bus_format:</span> <span class="pre">Gst</span> <span class="pre">Fourcc</span> <span class="pre">64205312</span> <span class="pre">not</span> <span class="pre">handled</span>
-<span class="pre">`</span></code></p>
-<ul class="simple">
-<li>Enabling the primary plane on the Video Mixer by default results in a bandwidth utilization of 2GB. A patch is applied to disable the mixer primary plane by default. To enable/disable the primary plane through module_param and devmem use the following commands. To render a test pattern on the display using a utility like modetest, the primary plane should be enabled.</li>
-<li>Enable:</li>
-</ul>
-<p><code class="docutils literal"><span class="pre">`</span>
-<span class="pre">echo</span> <span class="pre">Y</span> <span class="pre">&gt;</span> <span class="pre">/sys/module/xlnx_mixer/parameters/mixer_primary_enable</span>
-<span class="pre">`</span></code>
-* Disable:
-<code class="docutils literal"><span class="pre">`</span>
-<span class="pre">devmem</span> <span class="pre">0xa0070040</span> <span class="pre">32</span> <span class="pre">0x0</span>
-<span class="pre">echo</span> <span class="pre">N</span> <span class="pre">&gt;</span> <span class="pre">/sys/module/xlnx_mixer/parameters/mixer_primary_enable</span>
-<span class="pre">`</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">devmem</span> <span class="mh">0xa0070040</span> <span class="mi">32</span> <span class="mh">0x0</span>
+<span class="n">echo</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">module</span><span class="o">/</span><span class="n">xlnx_mixer</span><span class="o">/</span><span class="n">parameters</span><span class="o">/</span><span class="n">mixer_primary_enable</span>
+</pre></div>
+</div>
 <p><strong>License</strong></p>
-<p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;); you may not use this file except in compliance with the License.</p>
+<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
-[<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
-<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
 </div>
 
 
@@ -510,7 +477,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on April 17, 2021.
+        Last updated on October 11, 2021.
       </span>
 
     </p>

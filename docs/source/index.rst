@@ -15,14 +15,10 @@ Contents:
    
 
    ./docs/platform1/platform1_landing.rst
-   ./docs/platform2/platform2_landing.rst
    
 .. toctree::
    :maxdepth: 2
    :caption: Versions
    :hidden:
 
-   Master (2021.1) <https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html>
-   2020.2 <https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html>
 
-   versions

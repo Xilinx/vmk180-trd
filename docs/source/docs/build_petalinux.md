@@ -88,6 +88,7 @@ Run the below commands to build and package the wic image in compressed format:
 
 ```
 petalinux-build
+petalinux-package --boot --plm --psmfw --u-boot --dtb --force
 petalinux-package --wic --extra-bootfiles "binary_container_1.xclbin" --wic-extra-args "-c xz"
 ```
 > **Note** : Before running above command copy binary_container_1.xclbin into images/linux folder. 

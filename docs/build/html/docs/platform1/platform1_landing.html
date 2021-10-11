@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: ''
-          };
-      </script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -65,6 +55,8 @@
   <link rel="stylesheet" href="../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/css/pro.min.css" media="all" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Design Overview" href="docs/introduction.html" />
     <link rel="prev" title="VMK180 TRD Documentation" href="../../index.html" /> 
 	</head>
@@ -86,7 +78,7 @@
 															<div class="logo-column">
 																<div class="logo">
 																	<a href="https://www.xilinx.com/">
-																	<img src="https://www.xilinx.com/etc.clientlibs/site/clientlibs/xilinx/all/resources/imgs/header/xilinx-header-logo.svg" title="Xilinx Inc"/>
+																	<img src="https://github.com/Xilinx/Image-Collateral/blob/main/xilinx-header-logo.svg?raw=true" title="Xilinx Inc"/>
 																	</a>
 																</div>
 															</div>
@@ -314,7 +306,7 @@
             
             
               <div class="version">
-                2.0
+                3.0
               </div>
             
           
@@ -340,7 +332,7 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">VMK180 TRD</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">VMK180 TRD</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="docs/introduction.html">Design Overview</a></li>
@@ -370,17 +362,12 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Versions</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
-</ul>
 
             
 			
 			<p class="caption"><span class="caption-text">This Page</span></p>
 				<ul class="current">
-				  <li class="toctree-l1"><a href="../../_sources/docs/platform1/platform1_landing.txt"
+				  <li class="toctree-l1"><a href="../../_sources/docs/platform1/platform1_landing.rst.txt"
 						rel="nofollow">Show Source</a></li>
 				</ul>
           
@@ -432,7 +419,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/docs/platform1/platform1_landing.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/docs/platform1/platform1_landing.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -447,24 +434,25 @@
             
   <div class="section" id="vmk180-trd">
 <h1>VMK180 TRD<a class="headerlink" href="#vmk180-trd" title="Permalink to this headline">¶</a></h1>
-<p>VMK180 TRD demonstrates the following functionalities,</p>
+<p>VMK180 TRD 2021.2 demonstrates following functionalities :</p>
 <ul class="simple">
-<li>Video captured from MIPI image sensor is processed and displayed on a Jupyter Notebook or a HDMI monitor connected to x86 host machine (root complex) .</li>
-<li>Video frames are looped from a x86 host machine (root complex) to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface for data processing and displayed onto the HDMI monitor connected to the host.</li>
-<li>Video frames are transferred from x86 host machine (root complex) to VMK180 evaluation board (end point) processed and displayed onto the HDMI monitor connected to VMK180 evaluation board.</li>
+<li><p>Video being captured from MIPI image sensor, processed with an accelerator and displayed on a HDMI monitor connected to vmk180 board.</p></li>
+<li><p>Video being captured from MIPI image sensor on the board, processed (optionally) with an accelerator, sent to a x86 host machine (root complex) via PCIe and displayed on a monitor connected to the host machine.</p></li>
+<li><p>Video frames being transferred from a file on the host machine to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface, processed (optionally) with an accelerator, sent back to host and displayed on a monitor connected to the host machine. .</p></li>
 </ul>
-<p>Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter this 2D Filter is used to demonstrate image processing .</p>
+<p>Accelerator functions can be added to this platform using Vitis platform. Supported acceleration function in this design is a 2D Filter.</p>
 <a class="reference internal image-reference" href="../../_images/sc_image_landing.PNG"><img alt="Smart Camera Landing" src="../../_images/sc_image_landing.PNG" style="width: 1200px;" /></a>
 <div class="section" id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>4k resolution images from a sensor</li>
-<li>HDMI or Jupyter notebook display</li>
-<li>Demonstration of Board as PCIe End-Point accelerator Card</li>
-<li>User programmable 2D filter</li>
-<li>Loop Back of processed 4k Video data over PCIe</li>
-<li>Live Display of Loop backed video on Host</li>
-<li>Jupyter notebook based power and performance monitoring</li>
+<li><p>4k resolution images from a sensor</p></li>
+<li><p>HDMI display</p></li>
+<li><p>Demonstration of Board as PCIe End-Point accelerator Card</p></li>
+<li><p>User programmable 2D filter</p></li>
+<li><p>Loop Back of processed 4k Video data over PCIe</p></li>
+<li><p>Live Display of Loop backed video on Host</p></li>
+<li><p>Jupyter notebook based applications control, power and performance monitoring</p></li>
+<li><p>Gstreamer based End point applications</p></li>
 </ul>
 </div>
 <div class="section" id="quick-start">
@@ -512,10 +500,10 @@
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;); you may not use this file except in compliance with the License.</p>
+<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
 [<a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0</a>)</p>
-<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
 </div>
 </div>
 
@@ -548,7 +536,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on April 17, 2021.
+        Last updated on October 11, 2021.
       </span>
 
     </p>

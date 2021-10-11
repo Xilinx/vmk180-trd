@@ -1,4 +1,4 @@
-﻿<table class="sphinxhide">
+<table class="sphinxhide">
  <tr>
    <td align="center"><img src="media/xilinx-logo.png" width="30%"/><h1> Versal Prime -VMK180 Evaluation Kit Tutorial</h1>
    </td>
@@ -18,7 +18,7 @@ Introduction
 This tutorial walks through the typical steps of creating and customizing a
 bootable Linux image for the VMK180 Evaluation Board. 
 
-In the follwing sections, you will:
+In the following sections, you will:
 
 1. Build the BSP with the default rootfs configuration.
 2. Learn how to add your own Vivado or Vitis generated bitstream/xclbin firmware
@@ -26,7 +26,7 @@ In the follwing sections, you will:
 
 Prerequisites
 --------------
-1. PetaLinux 2021.1 tools installation
+1. PetaLinux 2021.2 tools installation
 
 Accessing the Tutorial Reference Files
 --------------------------------------
@@ -36,10 +36,10 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal:
 
    ```
-   git clone --recursive https://github.com/Xilinx/vmk180-trd.git
+   git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
    ```
 
-2. Navigate to the `vmk180-trd` which is the working directory.
+2. Navigate to the `vmk180-trd-2021.2` which is the working directory.
 
 
 To Build Designs and Petalinux in one step:
@@ -59,27 +59,19 @@ make all sdcard PFM=<val> OVERLAY=<val> YES=1
 
    |Application name |Platform name(PFM)| Overlay(OVERLAY) Supported |
    |----|----|----|
-   |Multimedia TRD |vmk180_multimedia_platform| filter2d_pl |
-   |PCIe TRD |vmk180_pcie_platform| filter2d_pl |
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd| filter2d_pl |
 
 
 Modifying/Configure the petalinux project manually
 --------------------------------
 
-* Source the PetaLinux 2021.1 tool settings.sh script.
+* Source the PetaLinux 2021.2 tool settings.sh script.
 
 Run the following command to create a new Petalinux project from the working directory
 
 ```
 cd petalinux/xilinx-vmk180-trd
-./trd.cfg -p <PFM>
 ```
- Applications and their corresponding platform names are listed in the table below
-
-|Application |Platform name(PFM)|
-   |----|----|
-   |Multimedia TRD |vmk180_multimedia_platform|
-   |PCIe TRD |vmk180_pcie_platform|
 
 Next the project needs to be configured with the xsa file from the Vivado project.
 
@@ -96,6 +88,7 @@ Run the below commands to build and package the wic image in compressed format:
 
 ```
 petalinux-build
+petalinux-package --boot --plm --psmfw --u-boot --dtb --force
 petalinux-package --wic --extra-bootfiles "binary_container_1.xclbin" --wic-extra-args "-c xz"
 ```
 > **Note** : Before running above command copy binary_container_1.xclbin into images/linux folder. 
@@ -140,9 +133,9 @@ screen.
 
 ```
 $ images/linux/sdk.sh
-PetaLinux SDK installer version 2021.1
+PetaLinux SDK installer version 2021.2
 ============================================
-Enter target directory for SDK (default: /opt/petalinux/2021.1): ./images/linux/sdk
+Enter target directory for SDK (default: /opt/petalinux/2021.2): ./images/linux/sdk
 ```
 
 Once the SDK is installed, source the file
@@ -154,8 +147,7 @@ to set up the cross-development environment.
 **Next Step**
 
 * Setting up the Board and Application Deployment Tutorial
-  * [Multimedia TRD](./platform1/docs/app_deployment.md)
-  * [PCIe TRD](./platform2/docs/app_deployment_aib.md)
+  * [VMK180 TRD](./platform1/docs/app_deployment.md)
 * Go back to the [VMK180 Targeted Reference Designs start page](../index.html)
 
 **References**

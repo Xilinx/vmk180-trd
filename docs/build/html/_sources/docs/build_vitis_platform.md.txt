@@ -1,4 +1,4 @@
-﻿
+
 Creating a Vitis Platform
 =========================
 
@@ -10,7 +10,7 @@ This tutorial shows how to build a Platform for applications running on VMK180 E
 Prerequisites
 --------------------
 
-* Vitis Unified Software Platform 2021.1
+* Vitis Unified Software Platform 2021.2
 
 Accessing the Tutorial Reference Files
 -------------------------------------------
@@ -19,10 +19,10 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal:
 
    ```
-   git clone --recursive https://github.com/Xilinx/vmk180-trd.git
+   git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
    ```
 
-2. Navigate to the `vmk180-trd` which is the working directory.
+2. Navigate to the `vmk180-trd-2021.2` which is the working directory.
 
 Generating an Vitis Extensible platform
 --------------------------------------------
@@ -42,8 +42,7 @@ Generating an Vitis Extensible platform
 
    |Application |Platform name (PFM)|
    |----|----|
-   |Multimedia TRD |vmk180_multimedia_platform|
-   |PCIe TRD |vmk180_pcie_platform|
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd|
 
 3. The generated platform will be located at
 

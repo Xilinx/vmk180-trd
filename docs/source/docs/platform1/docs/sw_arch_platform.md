@@ -13,11 +13,13 @@
 Software Architecture of the Platform
 ======================================
 
-# Introduction
+Introduction
+------------
 
 In this document it describes the Linux software stack,PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
 
-# Software Stack
+Software Stack
+---------------
 
 The  software stack of VMK180 endpoint device and x86 host is shown in the following figures.
 
@@ -178,7 +180,8 @@ Please refer to below link for more details on QDMA drivers:
 https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
 
 
-# Communication between x86 machine (Host) and  target
+Communication between x86 machine (Host) and  target
+------------------------------------------------------
 
 Following diagram captures, all the components involved in achieving different usecases(both from Host and Device perspective) 
 
@@ -218,7 +221,8 @@ A dedicated BAR is used to send control information between Host and the Device 
 
 In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
 
-# Supported Use cases:
+Supported Use cases:
+--------------------
 
 Following use cases are supported in this release.
 
@@ -228,7 +232,7 @@ Following use cases are supported in this release.
 
 3. Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
 
-## Usecase-1(MIPI --> 2D Image Processing --> HDMI):
+### Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
 Data is captured using MIPI camera, captured frame is fed through Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port. 
 
@@ -239,7 +243,7 @@ Device application provides user interface to configure  Plan-id and Sync parame
 ![USECASE !](../../media/software_usecase1.png )
 
 
-## Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
+### Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
 
 Data is captured using MIPI camera, processed using Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent to the Host using appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
 
@@ -251,7 +255,7 @@ Device application provides user interface to configure  Plan-id and Sync parame
 
 ![USECASE 2](../../media/software_usecase2.png )
 
-## Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
+### Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
 
 Data is captured from the file source, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent back to the Host using Appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
 

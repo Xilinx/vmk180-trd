@@ -18,8 +18,6 @@ the Vivado® HLS compiler. The data motion network used to transfer video buffer
 memory and to program parameters (such as video dimensions and filter coefficients) is inferred
 automatically by the v++ compiler within the Vitis tool.
 
-Vitis integrates the pre-processing IP and DPU IP in the platform. The table below shows utilization numbers after optimization of the hardware design.
-
 **Resource usage of current design**
 
 .. csv-table:: **Table 1: Key Component Clock Frequencies**

@@ -55,7 +55,7 @@ Below diagram shows Board and hardware connections.
 ![GitHub Logo](../../media/vmk180-setup.png)
 
    
-  * **Board jumper and switch settings**
+**Board jumper and switch settings**
   
 	This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.
 
@@ -71,14 +71,12 @@ Below diagram shows Board and hardware connections.
 	
 	> **Note**: The design has been validated with Dell Flat panel(U2718Q) & Viewsonic (SS16024) monitors.
 	
-  * **FMC and Vadj settings**:
+**FMC and Vadj settings**
     Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
     Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:
 
 	* Download the BoardUI Utility from VMK180 Product Page: [BoardUI/ Board Interface Test](https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&xlnxdocumentid=XTP623 )
-	
 	* Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.
-	
 	* In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
   
    ![BoardUI](../../media/boardui.jpg)
@@ -172,37 +170,31 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 
 ```
 
-.. note::
-
-    If you do not see any URL for the Juputer Notebook, you may have to setup
-    a private network. Likely, DHCP is not be available to allot the board an
-    IP address. To setup a private network and start the notebook follow the
-    instruction below.
+> **Note**: If you do not see any URL for the Juputer Notebook, you may have to setup a private network. Likely, DHCP is not be available to allot the board an IP address. To setup a private network and start the notebook follow the instruction below.
 
 
-Setting up a private network
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### Setting up a private network
+
 In case of a private network, user can assign a static address within
 the subnet of the host machine.
 
-**Setting up a private network with target board and the host machine for
-Windows users:**
+**Setting up a private network with target board and the host machine for Windows users:**
 
 * Ensure a direct connection between the windows host machine and the target
   board using an ethernet cable as shown in the :ref:`Board Setup` section.
 
 * In windows, run command prompt as an admisntrator
 
-  .. code-block:: bash
-
+```
      Press Windows+R to open the “Run” box.
      Type “cmd” into the box.
      press Ctrl+Shift+Enter to run the command as an administrator
+```
 
 * Run ipconfig on the windows machine to list available ethernet adapters and
   set a static private ip
 
-  .. code-block:: bash
+ ```
 
      # A sample output after executing ipconfig
      # notice interface "Ethernet" has an auto address assigned with no Default Gateway
@@ -222,51 +214,53 @@ Windows users:**
 
      # Example
      netsh interface ip set address name="Ethernet" static 10.0.0.1 255.255.255.0
+```
 
 * Ensure to boot the target board (VCK190) into Linux
 
 * Set a private ip address for the target within the subnet of host machine and
   verify connectivity.
 
-  .. code-block:: bash
+  ```
 
      ifconfig eth0 10.0.0.2 netmask 255.255.255.0
 
      # Perform a ping test to the host form the target
      ping -c 3 10.0.0.1
+  ```
+  
+	**Setting up a private network with target board and the host machine for Linux users**
 
-**Setting up a private network with target board and the host machine for Linux
-users:**
+* Make a direct connection between the Linux host machine and the target board using an ethernet cable
 
-* Make a direct connection between the Linux host machine and the target board
-  using an ethernet cable
+* Run ifconfig on the Linux machine to list available ethernet adapters and set a static private ip
 
-* Run ifconfig on the Linux machine to list available ethernet adapters and set
-  a static private ip
-
-  .. code-block:: bash
+	```
 
      # Example to set an ip 10.0.0.1 to ethernet interface enp2s0:
      sudo ifconfig enp2s0 10.0.0.1 netmask 255.255.255.0
+	```
 
 * Ensure to boot the target board (VCK190) into Linux
 
 * Set a private ip address for the target within the subnet of host machine and
   verify connectivity.
 
-  .. code-block:: bash
+  ```
 
      ifconfig eth0 10.0.0.2 netmask 255.255.255.0
 
      # Perform a ping test to the host form the target
      ping -c 3 10.0.0.1
+  ```
 
 * To start Jupyter Notebook run
 
-  .. code-block:: bash
+```
 
      /etc/init.d/jupyterlab-server stop
      /etc/init.d/jupyterlab-server start
+```
 
 Run the Application
 ----------------------
@@ -562,8 +556,8 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 
 ![Usecase](../../media/quiting_usecase.png)
 
-Similarly for Usecase-2 and Usecase-3, User is expected to pass rawvideo file as an additional parameter.
----------------------------------------------------------------------------------------------------------
+For Usecase-2 and Usecase-3, User is expected to pass rawvideo file as an additional parameter.
+
 6. Enter input filename with absolute path to play and depending on rawvideo file size usecases stops  
 	```
 	 # ./pcie_host_app 
@@ -580,15 +574,15 @@ Similarly for Usecase-2 and Usecase-3, User is expected to pass rawvideo file as
 	```
 ![Usecase](../../media/usecase_2_3.PNG)
 	
-To execute end-point application: 
----------------------------------
+**To execute end-point application:** 
+
 1. Launch vmk180-trd-nb1.ipynb jupyter notebook. (For MIPI use case modify 'res' variable same as one selected at host application). 
 
-> **NOTE : ** Endpoint application exits after running the usecase, Hence restart `vmk180-trd-nb1.ipynb` jupyter notebook to relaunch the endpoint 	   application.
+> **Note:** Endpoint application exits after running the usecase, Hence restart `vmk180-trd-nb1.ipynb` jupyter notebook to relaunch the endpoint 	   application.
 
 Following Table lists the supported filter configuration in the design.
 
-|Filter_type |Filter name|
+   |Filter_type |Filter name|
    |----|----|
    |0 |Blur filter|
    |1 |Edge filter|
