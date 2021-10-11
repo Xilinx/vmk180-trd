@@ -52,7 +52,7 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/common-ui-all.mPNGin.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/common-ui-all.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/header-footer.min.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/css/pro.min.css" media="all" />
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -438,7 +438,7 @@
 <p>The VMK180 TRD application design is built on VMK180 Evaluation Kit and provides a framework for building and customizing video platforms . The design has a platform and integrated accelerator functions.Programmable logic (PL) is used for the accelerator development. The platform supports capture from MIPI single sensor device and PCIe video Input. The output can be displayed on HDMI monitor or sent to a host machine over PCIe.</p>
 <p>A user programmable 2D filter in PL example Processing functions can be run on this platform</p>
 <p>The following figure shows the various pipelines supported by the design.</p>
-<p><img alt="Pipelines Supported" src="../../../_images/pipelines.png" /></p>
+<p><img alt="Pipelines Supported" src="docs/platform1/docs/../../media/pipelines.png" /></p>
 <p>The APU in the Processing Sytem (PS) consists of two Arm® Cortex®-A72 cores and is configured to run in symmetric multi-processing (SMP) Linux mode in the  design. The application running on Linux is responsible for configuring and controlling the video pipeline and accelerators using Jupyter notebooks.</p>
 <p>The APU application controls the video data paths implemented in the PL:</p>
 <ul class="simple">
@@ -447,7 +447,7 @@
 <li><p>An Display/Output pipeline reads video frames from DDR memory and sends the frames to a sink. In this case the sink is a HDMI display or to the host via QDMA’s card to host (C2H) channel.</p></li>
 </ul>
 <p>The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or via monitor on PCIe Host. The video format in the figure is the output format on each block. Details are described in the <a class="reference internal" href="hw_arch_platform.html"><span class="doc">Hardware Architecture document</span></a>.</p>
-<p><img alt="End to end example pipelines" src="../../../_images/end_to_end_pp.png" /></p>
+<p><img alt="End to end example pipelines" src="docs/platform1/docs/../../media/end_to_end_pp.png" /></p>
 </div>
 <div class="section" id="design-components">
 <h2>Design Components<a class="headerlink" href="#design-components" title="Permalink to this headline">¶</a></h2>
