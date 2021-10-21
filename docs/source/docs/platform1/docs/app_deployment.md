@@ -118,11 +118,11 @@ Below diagram shows Board and hardware connections.
 	
   * On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”
 	
-  * In about 60 seconds boot is complete. Observe the Linux prompt root@xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:
+  * In about 60 seconds boot is complete. Observe the Linux prompt root@vmk180-trd and autostart of JupyterLab server as shown in the example below:
 	
 
  ```
- root@xilinx-vmk180-2021_1:~#
+ root@vmk180-trd:~#
 [W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
 [I 02:30:21.571 LabApp] JupyterLab extension loaded from /usr/lib/python3.5/site-packages/jupyterlab
 [I 02:30:21.572 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
