@@ -1,5 +1,5 @@
 &i2c0 {
-	i2c-switch@74 {
+	i2c-mux@74 {
 		compatible = "nxp,pca9548";
 		status = "okay";
 		#address-cells = <1>;
