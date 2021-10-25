@@ -81,6 +81,6 @@ $(PLNX_SDK):
 
 .PHONY: clean
 clean:
-	-@$(RM) build components/yocto images project-spec/meta-vmk180-trd
+	-@$(RM) build components/yocto images
 	-@$(RM) $(shell grep TMP_DIR project-spec/configs/config | sed -e 's/.*"\(.*\)\"/\1/')
 
