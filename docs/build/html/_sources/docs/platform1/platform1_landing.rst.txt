@@ -70,6 +70,7 @@ Other
   
 
    docs/issue_sc.md
+   docs/debug_sc.md
 
 
 Xilinx Support

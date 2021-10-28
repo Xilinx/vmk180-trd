@@ -19,7 +19,8 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal:
 
    ```
-   git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
+   git clone --branch 2021.2 --recursive https://github.com/Xilinx/vmk180-trd.git
+
    ```
 
 2. Navigate to the `vmk180-trd-2021.2` which is the working directory.

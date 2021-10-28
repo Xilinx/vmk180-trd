@@ -472,10 +472,8 @@ macOS) required to flash the SD card.</p></li>
 <h3>Hardware Setup:<a class="headerlink" href="#hardware-setup" title="Permalink to this headline">¶</a></h3>
 <p>Below diagram shows Board and hardware connections.</p>
 <p><img alt="GitHub Logo" src="../../../_images/vmk180-setup.png" /></p>
-<p><strong>Board jumper and switch settings</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">onetime</span> <span class="n">setup</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">board</span> <span class="n">should</span> <span class="n">have</span> <span class="n">been</span> <span class="n">delivered</span> <span class="n">to</span> <span class="n">you</span> <span class="k">with</span> <span class="n">this</span> <span class="n">default</span> <span class="n">settings</span><span class="p">,</span> <span class="n">but</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">good</span> <span class="n">to</span> <span class="n">double</span> <span class="n">check</span> <span class="k">for</span> <span class="n">the</span> <span class="n">first</span> <span class="n">time</span> <span class="n">when</span> <span class="n">you</span> <span class="n">get</span> <span class="n">the</span> <span class="n">board</span><span class="o">.</span>
-</pre></div>
-</div>
+<p><strong>Board jumper and switch settings</strong>
+This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.</p>
 <ul>
 <li><p>Make sure you remove J326 (7-8) jumper.</p></li>
 <li><p>Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p></li>
@@ -489,14 +487,14 @@ macOS) required to flash the SD card.</p></li>
 </div></blockquote>
 </li>
 </ul>
-<p><strong>FMC and Vadj settings</strong>
-Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
+<p><strong>FMC and Vadj settings</strong></p>
+<p>Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
 Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>* Download the BoardUI Utility from VMK180 Product Page: [BoardUI/ Board Interface Test](https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623 )
-* Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.
-* In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
-</pre></div>
-</div>
+<ul class="simple">
+<li><p>Download the BoardUI Utility from VMK180 Product Page: <a class="reference external" href="https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623">BoardUI/ Board Interface Test</a></p></li>
+<li><p>Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.</p></li>
+<li><p>In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.</p></li>
+</ul>
 <p><img alt="BoardUI" src="../../../_images/boardui.jpg" /></p>
 <ul class="simple">
 <li><p>Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.</p></li>
@@ -536,9 +534,9 @@ Perform the following steps to set the Vadj voltage rail to 1.2V using the Board
 <li><p>Make physical connections to ethernet, HDMI, UART, webcam and power as shown in the image.</p></li>
 <li><p>Turn ON power switch SW13.</p></li>
 <li><p>On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”</p></li>
-<li><p>In about 60 seconds boot is complete. Observe the Linux prompt root&#64;xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:</p></li>
+<li><p>In about 60 seconds boot is complete. Observe the Linux prompt root&#64;vmk180-trd and autostart of JupyterLab server as shown in the example below:</p></li>
 </ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>root@xilinx-vmk180-2021_1:~#
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>root@vmk180-trd:~#
 [W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
 [I 02:30:21.571 LabApp] JupyterLab extension loaded from /usr/lib/python3.5/site-packages/jupyterlab
 [I 02:30:21.572 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
@@ -1072,7 +1070,7 @@ To quit usecase, hit &lt;q+enter&gt; from host
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on October 11, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

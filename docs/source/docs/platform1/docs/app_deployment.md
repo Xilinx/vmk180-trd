@@ -56,8 +56,7 @@ Below diagram shows Board and hardware connections.
 
    
 **Board jumper and switch settings**
-  
-	This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.
+  This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.
 
    * Make sure you remove J326 (7-8) jumper.
    * Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.
@@ -72,12 +71,14 @@ Below diagram shows Board and hardware connections.
 	> **Note**: The design has been validated with Dell Flat panel(U2718Q) & Viewsonic (SS16024) monitors.
 	
 **FMC and Vadj settings**
-    Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
-    Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:
-
-	* Download the BoardUI Utility from VMK180 Product Page: [BoardUI/ Board Interface Test](https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&xlnxdocumentid=XTP623 )
-	* Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.
-	* In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
+   
+   Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
+   Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:
+   
+   * Download the BoardUI Utility from VMK180 Product Page: [BoardUI/ Board Interface Test](https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&xlnxdocumentid=XTP623 )
+   * Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.
+   * In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.
+  
   
    ![BoardUI](../../media/boardui.jpg)
 

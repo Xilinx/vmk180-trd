@@ -38,7 +38,8 @@ Vitis linker and packager: The Vitis linker integrates the PL kernels into the p
 1. To access the reference files, type the following into a terminal: 
 
   ```
-  git clone --recursive https://gitenterprise.xilinx.com/SIV-HW-APPS/vmk180-trd.git
+  git clone --branch 2021.2 --recursive https://github.com/Xilinx/vmk180-trd.git
+
   ```
 
 ## Directory Structure

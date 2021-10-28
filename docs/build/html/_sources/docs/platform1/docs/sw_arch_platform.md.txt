@@ -168,7 +168,7 @@ The framework exposes two device nodes per display pipeline to user space: the /
 - command-line application to communicate control information between host abd endpoint via pcie-host lib.
 - displays media content on monitor received 	   from endpoint. 
 
-#### Host PCIe lib
+#### PCIe Host lib
 	
 Library functions to perform dma tranfers using dma xfer utils and access PCIe BAR register to communicate control information between host and 	endpoint 
 	
