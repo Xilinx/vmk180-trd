@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -371,7 +361,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -477,11 +468,11 @@ mechanism between the host and the endpoint.</p>
 <h2>Network On Chip<a class="headerlink" href="#network-on-chip" title="Permalink to this headline">¶</a></h2>
 <p>Versal™ ACAP devices are designed around a network on chip (NoC) interconnect, which provides high-bandwidth communication between different areas of the device. In the base platform, the NoC is used for the following:</p>
 <ul class="simple">
-<li>Connects the CPM module to DDR memory, allowing the host server to have DMA to the DDR memory controllers.</li>
-<li>Allows the Arm®-A72 processor within the processor subsystem (PS) to connect to the DDR memory.</li>
-<li>Allows the platform management controller (PMC) to communicate to or from the PCIe and the DDR memory.</li>
-<li>Allows all the CPM and PS Cortex-A72 masters to access the programmable logic (PL) peripherals.</li>
-<li>Exposes the platform interfaces to connect the accelerator to the base platform, which allows the accelerators to access the DDR      memory.</li>
+<li><p>Connects the CPM module to DDR memory, allowing the host server to have DMA to the DDR memory controllers.</p></li>
+<li><p>Allows the Arm®-A72 processor within the processor subsystem (PS) to connect to the DDR memory.</p></li>
+<li><p>Allows the platform management controller (PMC) to communicate to or from the PCIe and the DDR memory.</p></li>
+<li><p>Allows all the CPM and PS Cortex-A72 masters to access the programmable logic (PL) peripherals.</p></li>
+<li><p>Exposes the platform interfaces to connect the accelerator to the base platform, which allows the accelerators to access the DDR      memory.</p></li>
 </ul>
 </div>
 <div class="section" id="ddr-memory-controllers">
@@ -502,8 +493,8 @@ DDR MCs. This operation is typically known as the QDMA memory mapped operation.<
 scheduling of customer accelerator functions and monitoring for accelerator function completion.</p>
 <p>Of the provided PS peripherals, the peripherals required for the accelerator card are as follows:</p>
 <ul class="simple">
-<li>JTAG/UART: for connection to the Vivado® lab tools (e.g., for bitstream download and debug) and to the on-card satellite controller</li>
-<li>I2C: for connection to board peripherals, such as the onboard fan and programmable clock sources</li>
+<li><p>JTAG/UART: for connection to the Vivado® lab tools (e.g., for bitstream download and debug) and to the on-card satellite controller</p></li>
+<li><p>I2C: for connection to board peripherals, such as the onboard fan and programmable clock sources</p></li>
 </ul>
 </div>
 <div class="section" id="programmable-logic-infrastructure">
@@ -525,8 +516,8 @@ write access and reg15-30 are read-only.</p>
 <p><strong>Next Steps</strong></p>
 <p>You can choose any of the following next steps:</p>
 <ul class="simple">
-<li>Read <a class="reference internal" href="hw_arch_accel_aib.html"><span class="doc">Hardware Architecture of the Accelerator</span></a></li>
-<li>Go back to the <a class="reference internal" href="../platform2_landing.html"><span class="doc">VMK180 TRD PCIe TRD design start page</span></a></li>
+<li><p>Read <a class="reference internal" href="hw_arch_accel_aib.html"><span class="doc">Hardware Architecture of the Accelerator</span></a></p></li>
+<li><p>Go back to the <a class="reference internal" href="../platform2_landing.html"><span class="doc">VMK180 TRD PCIe TRD design start page</span></a></p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -565,7 +556,7 @@ write access and reg15-30 are read-only.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

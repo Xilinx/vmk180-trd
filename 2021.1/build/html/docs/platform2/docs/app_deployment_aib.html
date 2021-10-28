@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -367,7 +357,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -461,25 +452,22 @@
 <div class="section" id="flash-the-sd-card">
 <h3>Flash the SD Card<a class="headerlink" href="#flash-the-sd-card" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Download  the <code class="docutils literal"><span class="pre">vmk180_pcie_trd_pre-built_2021.1.zip</span></code> package, unzip and save it on your computer. Alternatively, Go through tutorials section to build <code class="docutils literal"><span class="pre">petalinux-sdimage.wic</span></code> locally.</p>
-</li>
-<li><p class="first">To uncompress wic file use following command</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">vmk180_pcie_trd_prebuilt_2021</span><span class="o">.</span><span class="mi">1</span>
+<li><p>Download  the <code class="docutils literal notranslate"><span class="pre">vmk180_pcie_trd_pre-built_2021.1.zip</span></code> package, unzip and save it on your computer. Alternatively, Go through tutorials section to build <code class="docutils literal notranslate"><span class="pre">petalinux-sdimage.wic</span></code> locally.</p></li>
+<li><p>To uncompress wic file use following command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">vmk180_pcie_trd_prebuilt_2021</span><span class="o">.</span><span class="mi">1</span>
 <span class="n">xz</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">v</span> <span class="n">petalinux</span><span class="o">-</span><span class="n">sdimage</span><span class="o">.</span><span class="n">wic</span><span class="o">.</span><span class="n">xz</span>
 </pre></div>
 </div>
 <p>This generates a output file named
-<code class="docutils literal"><span class="pre">petalinux-sdimage.wic</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">petalinux-sdimage.wic</span></code>.</p>
 </li>
-<li><p class="first">Connect the microSD to your computer.</p>
-</li>
-<li><p class="first">Download the <a class="reference external" href="https://www.balena.io/etcher/">Balena Etcher tool</a> (recommended; available for Window, Linux, and
-macOS) required to flash the SD card.</p>
-</li>
-<li><p class="first">Follow the instructions in the tool and select the downloaded image to flash onto your microSD card.</p>
+<li><p>Connect the microSD to your computer.</p></li>
+<li><p>Download the <a class="reference external" href="https://www.balena.io/etcher/">Balena Etcher tool</a> (recommended; available for Window, Linux, and
+macOS) required to flash the SD card.</p></li>
+<li><p>Follow the instructions in the tool and select the downloaded image to flash onto your microSD card.</p>
 <p><img alt="Balena Etcher" src="../../../_images/balena1.png" /></p>
 </li>
-<li><p class="first">Eject the SD card from your computer.</p>
+<li><p>Eject the SD card from your computer.</p>
 <p>If you are looking for other OS specific tools to write the image to the SD card refer to <a class="reference external" href="https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/setting-up-the-sd-card-image.html">Setting up the SD Card Image</a></p>
 </li>
 </ul>
@@ -488,40 +476,37 @@ macOS) required to flash the SD card.</p>
 <h3>Board Setup:<a class="headerlink" href="#board-setup" title="Permalink to this headline">¶</a></h3>
 <p><img alt="GitHub Logo" src="../../../_images/vmk180-setup-pcie.png" /></p>
 <ul class="simple">
-<li><strong>Board jumper and switch settings</strong></li>
+<li><p><strong>Board jumper and switch settings</strong></p></li>
 </ul>
 <p>This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.</p>
 <ul>
-<li><p class="first">Make sure you remove J326 (7-8) jumper.</p>
-</li>
-<li><p class="first">Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p>
-</li>
-<li><p class="first">Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p>
-</li>
-<li><p class="first"><strong>microSD</strong>: Insert the SD card into slot at Versal microSD slot (top).</p>
+<li><p>Make sure you remove J326 (7-8) jumper.</p></li>
+<li><p>Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p></li>
+<li><p>Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p></li>
+<li><p><strong>microSD</strong>: Insert the SD card into slot at Versal microSD slot (top).</p>
 <p>Make sure you have the SYSCTRL uSD card inserted in the slot (bottom) and card has the SYSCTRL image. For Latest version of SYSCTRL image, refer to <a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit">Beam Tool Wiki Page</a></p>
 </li>
-<li><p class="first">Monitor:</p>
+<li><p>Monitor:</p>
 <p>Before booting, connect a 1080P/4K monitor to the board via either HDMI port.</p>
 <p>4K monitor is preferred to demonstrate at the maximum supported resolution.</p>
 </li>
-<li><p class="first"><strong>Serial console settings</strong>: VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART ports should be visible in Device Manager:</p>
+<li><p><strong>Serial console settings</strong>: VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART ports should be visible in Device Manager:</p>
 <ul class="simple">
-<li>Versal UART0</li>
-<li>Versal UART1 &amp;</li>
-<li>System Controller UART</li>
+<li><p>Versal UART0</p></li>
+<li><p>Versal UART1 &amp;</p></li>
+<li><p>System Controller UART</p></li>
 </ul>
 </li>
-<li><p class="first">Connect a USB-C cable to the USB-UART connector. In the terminal emulator choose Versal UART0 and use the following settings:</p>
+<li><p>Connect a USB-C cable to the USB-UART connector. In the terminal emulator choose Versal UART0 and use the following settings:</p>
 <ul class="simple">
-<li>Baud Rate: 115200</li>
-<li>Data: 8 bit</li>
-<li>Parity: None</li>
-<li>Stop: 1 bit</li>
-<li>Flow Control: None</li>
+<li><p>Baud Rate: 115200</p></li>
+<li><p>Data: 8 bit</p></li>
+<li><p>Parity: None</p></li>
+<li><p>Stop: 1 bit</p></li>
+<li><p>Flow Control: None</p></li>
 </ul>
 </li>
-<li><p class="first"><strong>Network connection</strong>:</p>
+<li><p><strong>Network connection</strong>:</p>
 <p>Connect the Ethernet cable to your local network with DHCP enabled to run Jupyter Notebooks</p>
 </li>
 </ul>
@@ -529,16 +514,16 @@ macOS) required to flash the SD card.</p>
 <div class="section" id="host-hardware-setup">
 <h3>Host hardware setup:<a class="headerlink" href="#host-hardware-setup" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Insert the board into a PCIe slot present on the host’s motherboard either directly or using a PCIe extender cable</li>
-<li>Connect a DP Monitor to the host via a DP port of a graphic card installed on host</li>
-<li>Install Qt 5.9</li>
-<li>Install OpenCV 3.4.11</li>
+<li><p>Insert the board into a PCIe slot present on the host’s motherboard either directly or using a PCIe extender cable</p></li>
+<li><p>Connect a DP Monitor to the host via a DP port of a graphic card installed on host</p></li>
+<li><p>Install Qt 5.9</p></li>
+<li><p>Install OpenCV 3.4.11</p></li>
 </ul>
 </div>
 <div class="section" id="power-on-the-board-and-boot-the-linux-image">
 <h3>Power on the board, and boot the Linux image.<a class="headerlink" href="#power-on-the-board-and-boot-the-linux-image" title="Permalink to this headline">¶</a></h3>
 <p>Follow these steps to boot the board into Linux</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>* Ensure all steps under the section ‘Board jumper and switch settings’ are verified.
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>* Ensure all steps under the section ‘Board jumper and switch settings’ are verified.
 * Insert the prepared micro SD card into the Versal SD card slot (refer to the image VMK180 Board Setup)
 * Make physical connections to PCIe, UART and power as shown in the image.
 * Turn ON power switch SW13.
@@ -546,7 +531,7 @@ macOS) required to flash the SD card.</p>
 * In about 60 seconds boot is complete. Observe the Linux prompt root@xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span>root@xilinx-vmk180-2021_1:~#
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>root@xilinx-vmk180-2021_1:~#
 [W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
 [I 02:30:21.571 LabApp] JupyterLab extension loaded from /usr/lib/python3.5/site-packages/jupyterlab
 [I 02:30:21.572 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
@@ -564,25 +549,27 @@ Or copy and paste one of these URLs:
 </div>
 <p>Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.</p>
 <blockquote>
-<div><strong>Note</strong>:  This demo is tested with Chrome browser only.</div></blockquote>
+<div><p><strong>Note</strong>:  This demo is tested with Chrome browser only.</p>
+</div></blockquote>
 <p>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
 </pre></div>
 </div>
 <blockquote>
-<div><strong>Note</strong>: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:</div></blockquote>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
+<div><p><strong>Note</strong>: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">jupyterlab</span><span class="o">-</span><span class="n">server</span> <span class="n">stop</span>
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">jupyterlab</span><span class="o">-</span><span class="n">server</span> <span class="n">start</span>
 </pre></div>
 </div>
 <p>To look up the jupyter server IP address and token on the target, run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span> <span class="nb">list</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span> <span class="nb">list</span>
 </pre></div>
 </div>
 <p>In case of a private network, user may have to assign a static address within the subnet of the host laptop</p>
 <p>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 </pre></div>
 </div>
@@ -591,198 +578,203 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 <h3>Run the Jupyter Notebooks<a class="headerlink" href="#run-the-jupyter-notebooks" title="Permalink to this headline">¶</a></h3>
 <p>This TRD includes the following jupyter notebooks:</p>
 <ol class="simple">
-<li><strong>vmk180-trd-cpu.ipynb</strong>: Demonstrates how to plot the CPU usage while running applications and pipelines.</li>
-<li><strong>vmk180-trd-power.ipynb</strong>: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.</li>
+<li><p><strong>vmk180-trd-cpu.ipynb</strong>: Demonstrates how to plot the CPU usage while running applications and pipelines.</p></li>
+<li><p><strong>vmk180-trd-power.ipynb</strong>: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.</p></li>
 </ol>
 <p>to run the notebooks, follow the below steps:</p>
 <ol class="simple">
-<li>On the left pane of the browser, 2 notebooks are available under the folder VMK180 TRD.</li>
-<li>Double click to open the notebook</li>
-<li>Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run’s all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.</li>
+<li><p>On the left pane of the browser, 2 notebooks are available under the folder VMK180 TRD.</p></li>
+<li><p>Double click to open the notebook</p></li>
+<li><p>Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run’s all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.</p></li>
 </ol>
 <p><img alt="BoardUI" src="../../../_images/jnbh_pcie.png" /></p>
 <ol class="simple">
-<li>Click the rectangular icon to interrupt the kernel and stop the video stream.</li>
+<li><p>Click the rectangular icon to interrupt the kernel and stop the video stream.</p></li>
 </ol>
 <p><img alt="Interrupt" src="../../../_images/platform2_interrupt.png" /></p>
 <ol class="simple">
-<li>Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.</li>
+<li><p>Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.</p></li>
 </ol>
 <blockquote>
-<div><strong>NOTE</strong> : Please follow ‘’step 3 to step 5’’, without this you may observe incorrect behavior while moving to different notebook.</div></blockquote>
+<div><p><strong>NOTE</strong> : Please follow ‘’step 3 to step 5’’, without this you may observe incorrect behavior while moving to different notebook.</p>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="host-machine-software-setup">
 <h2>Host Machine Software setup<a class="headerlink" href="#host-machine-software-setup" title="Permalink to this headline">¶</a></h2>
 <p><strong>Directory and file description</strong></p>
-<p>Following are the list of directories in <code class="docutils literal"><span class="pre">pcie_host_package</span></code> directory.</p>
+<p>Following are the list of directories in <code class="docutils literal notranslate"><span class="pre">pcie_host_package</span></code> directory.</p>
 <ul class="simple">
-<li><strong>apps</strong>: QDMA User space application to configure and control QDMA</li>
-<li><strong>docs</strong>: Documentation for the Xilinx QDMA Linux Driver</li>
-<li><strong>driver/src</strong>: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers</li>
-<li><strong>driver/libqdma</strong>: QDMA library to configure and control the QDMA IP</li>
-<li><strong>scripts</strong>: Sample scripts for perform DMA operations</li>
-<li><strong>Makefile</strong>: Makefile to compile the driver</li>
-<li><strong>pcie_app</strong>: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver</li>
+<li><p><strong>apps</strong>: QDMA User space application to configure and control QDMA</p></li>
+<li><p><strong>docs</strong>: Documentation for the Xilinx QDMA Linux Driver</p></li>
+<li><p><strong>driver/src</strong>: Provides interfaces to manage the PCIe device and exposes character driver interface to perform QDMA transfers</p></li>
+<li><p><strong>driver/libqdma</strong>: QDMA library to configure and control the QDMA IP</p></li>
+<li><p><strong>scripts</strong>: Sample scripts for perform DMA operations</p></li>
+<li><p><strong>Makefile</strong>: Makefile to compile the driver</p></li>
+<li><p><strong>pcie_app</strong>: This application receives frame buffer data from host, processes it and sends frame buffer to host using QDMA driver</p></li>
 </ul>
 <blockquote>
-<div><strong>NOTE</strong> : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully</div></blockquote>
+<div><p><strong>NOTE</strong> : Make sure, the VMK180 board is powered on before booting the HOST machine to enumerate VMK180 board as PCIe endpoint device successfully</p>
+</div></blockquote>
 <ul class="simple">
-<li>Power on the HOST machine</li>
-<li>Execute following command on HOST machine’s terminal to check If the Board is linking up:</li>
+<li><p>Power on the HOST machine</p></li>
+<li><p>Execute following command on HOST machine’s terminal to check If the Board is linking up:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lspci</span> <span class="o">-</span><span class="n">vd</span> <span class="mi">10</span><span class="n">ee</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lspci</span> <span class="o">-</span><span class="n">vd</span> <span class="mi">10</span><span class="n">ee</span><span class="p">:</span>
 </pre></div>
 </div>
 <p>On successful Linkup below entry appears followed by additional capabilities of VMK180 as endpoint:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">03</span><span class="p">:</span><span class="mf">00.0</span> <span class="n">RAM</span> <span class="n">memory</span><span class="p">:</span> <span class="n">Xilinx</span> <span class="n">Corporation</span> <span class="n">Device</span> <span class="n">b03f</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">03</span><span class="p">:</span><span class="mf">00.0</span> <span class="n">RAM</span> <span class="n">memory</span><span class="p">:</span> <span class="n">Xilinx</span> <span class="n">Corporation</span> <span class="n">Device</span> <span class="n">b03f</span>
 </pre></div>
 </div>
 <p>If above entry is missing QDMA driver will not be able to recognized PCIe endpoint device.</p>
 <ul class="simple">
-<li>if not already done, copy <code class="docutils literal"><span class="pre">pcie_host_package</span></code> directory to PCIe host machine.</li>
+<li><p>if not already done, copy <code class="docutils literal notranslate"><span class="pre">pcie_host_package</span></code> directory to PCIe host machine.</p></li>
 </ul>
 </div>
 <div class="section" id="updating-the-pcie-device-id-if-needed">
 <h2>Updating the PCIe device ID (if needed)<a class="headerlink" href="#updating-the-pcie-device-id-if-needed" title="Permalink to this headline">¶</a></h2>
-<p>Make sure that PCIe Device ID in the driver is matching to Device ID observed in linkup status. in above output <code class="docutils literal"><span class="pre">b03f</span></code> is device ID.</p>
+<p>Make sure that PCIe Device ID in the driver is matching to Device ID observed in linkup status. in above output <code class="docutils literal notranslate"><span class="pre">b03f</span></code> is device ID.</p>
 <p>During the PCIe DMA IP customization in Vivado you can specify a PCIe Device ID. This Device ID must be recognized by the driver in order to properly identify the PCIe QDMA device.</p>
-<p>To Check/modify the PCIe Device ID in the driver, open the <code class="docutils literal"><span class="pre">$vmk180-trd/pcie_host_package/qdma/driver/src/pci_ids.h</span></code> file (line no : 320) from the driver source and search for the pcie_device_id struct.
+<p>To Check/modify the PCIe Device ID in the driver, open the <code class="docutils literal notranslate"><span class="pre">$vmk180-trd/pcie_host_package/qdma/driver/src/pci_ids.h</span></code> file (line no : 320) from the driver source and search for the pcie_device_id struct.
 This struct defines the PCIe Device IDs that are recognized by the driver in the following format:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">PCI_DEVICE</span> <span class="p">(</span><span class="mh">0x10ee</span><span class="p">,</span> <span class="mh">0xb03f</span><span class="p">),},</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">PCI_DEVICE</span> <span class="p">(</span><span class="mh">0x10ee</span><span class="p">,</span> <span class="mh">0xb03f</span><span class="p">),},</span> 
 </pre></div>
 </div>
 <p>Add, remove, or modify the PCIe Device IDs in this struct. The PCIe DMA driver will only recognize device IDs identified in this struct as PCIe QDMA devices. User can also remove PCIe Device IDs that are not be used in their solution.
 On every modification, the driver must be un-installed and recompiled, if compiled previously.</p>
 <p>For additional information refer https://xilinx.github.io/dma_ip_drivers/master/QDMA/linux-kernel/html/build.html</p>
 <ul class="simple">
-<li>follow below steps to Install the QDMA driver</li>
+<li><p>follow below steps to Install the QDMA driver</p></li>
 </ul>
 <blockquote>
-<div><strong>NOTE</strong> : Root permissions will be required to install qdma driver.</div></blockquote>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pcie_host_package</span><span class="o">/</span><span class="n">qdma</span>
+<div><p><strong>NOTE</strong> : Root permissions will be required to install qdma driver.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pcie_host_package</span><span class="o">/</span><span class="n">qdma</span>
 <span class="n">make</span> 
 </pre></div>
 </div>
 <ul class="simple">
-<li>Install the QDMA driver</li>
+<li><p>Install the QDMA driver</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">install</span><span class="o">-</span><span class="n">mods</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">install</span><span class="o">-</span><span class="n">mods</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Configure the QDMA module paramters using following script:</li>
+<li><p>Configure the QDMA module paramters using following script:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>./scripts/qdma_generate_conf_file.sh &lt;bus_num&gt; &lt;num_pfs&gt; &lt;mode&gt; &lt;config_bar&gt; &lt;master_pf&gt;` 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>./scripts/qdma_generate_conf_file.sh &lt;bus_num&gt; &lt;num_pfs&gt; &lt;mode&gt; &lt;config_bar&gt; &lt;master_pf&gt;` 
 </pre></div>
 </div>
 <p>Ex: (Assuming PCIe BDF - 03:00.0)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">qdma_generate_conf_file</span><span class="o">.</span><span class="n">sh</span> <span class="mh">0x03</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">scripts</span><span class="o">/</span><span class="n">qdma_generate_conf_file</span><span class="o">.</span><span class="n">sh</span> <span class="mh">0x03</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">1</span> <span class="mi">0</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)</li>
+<li><p>For loading the driver, execute the following command: (This is required only First time, from next boot driver loads automatically)</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">modprobe</span> <span class="n">qdma</span><span class="o">-</span><span class="n">pf</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">modprobe</span> <span class="n">qdma</span><span class="o">-</span><span class="n">pf</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
+<li><p>Setup and Enable Queues for H2C and C2H:  (Refer link in NOTE_1 for more details)
 Allocate the Queues to a function. QDMA IP supports maximum of 2048 queues.
 By default, all functions have 0 queues assigned.
 qmax configuration parameter enables the user to update the number of queues for a PF.
 This configuration parameter indicates “Maximum number of queues associated for the current pf”.
-To set 1024 as qmax for PF0:</li>
+To set 1024 as qmax for PF0:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span> echo 1024 &gt; /sys/bus/pci/drivers/qdma-pf/$BDF/qdma/qmax
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> echo 1024 &gt; /sys/bus/pci/drivers/qdma-pf/$BDF/qdma/qmax
  
 </pre></div>
 </div>
 <ul class="simple">
-<li>To Add a Queue:</li>
+<li><p>To Add a Queue:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma</span><span class="o">&lt;</span><span class="n">bbddf</span><span class="o">&gt;</span> <span class="n">q</span> <span class="n">add</span> <span class="n">idx</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">mode</span> <span class="o">&lt;</span><span class="n">st</span><span class="o">|</span><span class="n">mm</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="nb">dir</span> <span class="o">&lt;</span><span class="n">h2c</span><span class="o">|</span><span class="n">c2h</span><span class="o">|</span><span class="n">bi</span><span class="o">&gt;</span><span class="p">]</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma</span><span class="o">&lt;</span><span class="n">bbddf</span><span class="o">&gt;</span> <span class="n">q</span> <span class="n">add</span> <span class="n">idx</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">mode</span> <span class="o">&lt;</span><span class="n">st</span><span class="o">|</span><span class="n">mm</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="nb">dir</span> <span class="o">&lt;</span><span class="n">h2c</span><span class="o">|</span><span class="n">c2h</span><span class="o">|</span><span class="n">bi</span><span class="o">&gt;</span><span class="p">]</span> 
  
 </pre></div>
 </div>
 <p>Ex: (Assuming PCIe BDF - 03:00.0)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma03000</span> <span class="n">q</span> <span class="n">add</span> <span class="n">idx</span> <span class="mi">0</span> <span class="n">mode</span> <span class="n">mm</span> <span class="nb">dir</span> <span class="n">h2c</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma03000</span> <span class="n">q</span> <span class="n">add</span> <span class="n">idx</span> <span class="mi">0</span> <span class="n">mode</span> <span class="n">mm</span> <span class="nb">dir</span> <span class="n">h2c</span>
 <span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma03000</span> <span class="n">q</span> <span class="n">add</span> <span class="n">idx</span> <span class="mi">1</span> <span class="n">mode</span> <span class="n">mm</span> <span class="nb">dir</span> <span class="n">c2h</span> 
        
 </pre></div>
 </div>
 <ul class="simple">
-<li>To start a Queue:</li>
+<li><p>To start a Queue:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma</span><span class="o">&lt;</span><span class="n">bbddf</span><span class="o">&gt;</span> <span class="n">q</span> <span class="n">start</span> <span class="n">idx</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="p">[</span><span class="nb">dir</span> <span class="o">&lt;</span><span class="n">h2c</span><span class="o">|</span><span class="n">c2h</span><span class="o">|</span><span class="n">bi</span><span class="o">&gt;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma</span><span class="o">&lt;</span><span class="n">bbddf</span><span class="o">&gt;</span> <span class="n">q</span> <span class="n">start</span> <span class="n">idx</span> <span class="o">&lt;</span><span class="n">N</span><span class="o">&gt;</span> <span class="p">[</span><span class="nb">dir</span> <span class="o">&lt;</span><span class="n">h2c</span><span class="o">|</span><span class="n">c2h</span><span class="o">|</span><span class="n">bi</span><span class="o">&gt;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Ex: (Assuming PCIe BDF - 03:00.0)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma03000</span> <span class="n">q</span> <span class="n">start</span> <span class="n">idx</span> <span class="mi">0</span> <span class="nb">dir</span> <span class="n">h2c</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma03000</span> <span class="n">q</span> <span class="n">start</span> <span class="n">idx</span> <span class="mi">0</span> <span class="nb">dir</span> <span class="n">h2c</span>
 <span class="n">dma</span><span class="o">-</span><span class="n">ctl</span> <span class="n">qdma03000</span> <span class="n">q</span> <span class="n">start</span> <span class="n">idx</span> <span class="mi">1</span> <span class="nb">dir</span> <span class="n">c2h</span>  
    
 </pre></div>
 </div>
 <ul class="simple">
-<li>Build host application:</li>
+<li><p>Build host application:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pcie_app</span><span class="o">/</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">pcie_app</span><span class="o">/</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>modify macros <code class="docutils literal"><span class="pre">H2C_DEVICE</span></code> , <code class="docutils literal"><span class="pre">C2H_DEVICE</span></code> , <code class="docutils literal"><span class="pre">REG_DEVICE_NAME</span></code> in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its <code class="docutils literal"><span class="pre">Bus:Device:Function</span> <span class="pre">number</span></code>.</li>
+<li><p>modify macros <code class="docutils literal notranslate"><span class="pre">H2C_DEVICE</span></code> , <code class="docutils literal notranslate"><span class="pre">C2H_DEVICE</span></code> , <code class="docutils literal notranslate"><span class="pre">REG_DEVICE_NAME</span></code> in pcie_host.cpp , using /dev/ nodes generated for  the pcie device based on its <code class="docutils literal notranslate"><span class="pre">Bus:Device:Function</span> <span class="pre">number</span></code>.</p></li>
 </ul>
-<p>Ex: Assuming PCIe BDF as <code class="docutils literal"><span class="pre">03:00.0</span></code> the above macros need to be set as:</p>
+<p>Ex: Assuming PCIe BDF as <code class="docutils literal notranslate"><span class="pre">03:00.0</span></code> the above macros need to be set as:</p>
 <ul class="simple">
-<li>If H2C queue index is 0 device node is <code class="docutils literal"><span class="pre">/dev/qdma03000-MM-0</span></code>  (Queue index for H2C is set in above “Add a queue” step)</li>
-<li>If C2H queue index is 1 device node is <code class="docutils literal"><span class="pre">/dev/qdma03000-MM-1</span></code>  (Queue index for C2H is set in above “Add a queue” step)</li>
+<li><p>If H2C queue index is 0 device node is <code class="docutils literal notranslate"><span class="pre">/dev/qdma03000-MM-0</span></code>  (Queue index for H2C is set in above “Add a queue” step)</p></li>
+<li><p>If C2H queue index is 1 device node is <code class="docutils literal notranslate"><span class="pre">/dev/qdma03000-MM-1</span></code>  (Queue index for C2H is set in above “Add a queue” step)</p></li>
 </ul>
-<p>REG_DEVICE_NAME is <code class="docutils literal"><span class="pre">/sys/bus/pci/devices/0000:03:00.0/resource0</span></code></p>
+<p>REG_DEVICE_NAME is <code class="docutils literal notranslate"><span class="pre">/sys/bus/pci/devices/0000:03:00.0/resource0</span></code></p>
 <ul class="simple">
-<li>Modify pcie_app/app1.pro line no 35 and 39 for opencv library path and opencv include path before compilation</li>
-<li>set <code class="docutils literal"><span class="pre">QMAKE_PATH</span></code> to installed QT qmake path</li>
+<li><p>Modify pcie_app/app1.pro line no 35 and 39 for opencv library path and opencv include path before compilation</p></li>
+<li><p>set <code class="docutils literal notranslate"><span class="pre">QMAKE_PATH</span></code> to installed QT qmake path</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>export QMAKE_PATH=/opt/Qt5.9/5.9/gcc_64/bin/qmake`
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export QMAKE_PATH=/opt/Qt5.9/5.9/gcc_64/bin/qmake`
 </pre></div>
 </div>
 <p>compile application:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">do_compile</span><span class="o">.</span><span class="n">sh</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">do_compile</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="generate-of-raw-video-input-file">
 <h2>Generate of Raw video Input file.<a class="headerlink" href="#generate-of-raw-video-input-file" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><strong>Note</strong>:: : Ensure that Gstreamer packages installed on the Linux PC. If using Ubuntu distribution, ensure that the version is atleast 16.04.</div></blockquote>
+<div><p><strong>Note</strong>:: : Ensure that Gstreamer packages installed on the Linux PC. If using Ubuntu distribution, ensure that the version is atleast 16.04.</p>
+</div></blockquote>
 <ol class="simple">
-<li>Download VP9 encoded sample file such as <a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.vp9.webm">Big_Buck_Bunny</a></li>
-<li>Run following GST command to create 3840x2160 resolution raw file with YUY2 format with 30fps</li>
+<li><p>Download VP9 encoded sample file such as <a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/transcoded/c/c0/Big_Buck_Bunny_4K.webm/Big_Buck_Bunny_4K.webm.480p.vp9.webm">Big_Buck_Bunny</a></p></li>
+<li><p>Run following GST command to create 3840x2160 resolution raw file with YUY2 format with 30fps</p></li>
 </ol>
-<div class="highlight-default"><div class="highlight"><pre><span></span>gst-launch-1.0 filesrc location=&lt;file_path&gt;/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=3840, height=2160, format=YUY2, framerate=30/1 ! filesink location=&lt;file_path&gt;/4k30.yuv
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>gst-launch-1.0 filesrc location=&lt;file_path&gt;/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=3840, height=2160, format=YUY2, framerate=30/1 ! filesink location=&lt;file_path&gt;/4k30.yuv
 </pre></div>
 </div>
 <ul class="simple">
-<li>Run following GST command to create 1920x1080 resolution raw file with YUY2 format with 30fps</li>
+<li><p>Run following GST command to create 1920x1080 resolution raw file with YUY2 format with 30fps</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>gst-launch-1.0 filesrc location=&lt;file_path&gt;/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=1920, height=1080, format=YUY2, framerate=30/1 ! filesink location=&lt;file_path&gt;/1080p30.yuv
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>gst-launch-1.0 filesrc location=&lt;file_path&gt;/Big_Buck_Bunny_4K.webm.480p.vp9.webm ! decodebin ! queue ! videoconvert ! videoscale ! videorate ! video/x-raw, width=1920, height=1080, format=YUY2, framerate=30/1 ! filesink location=&lt;file_path&gt;/1080p30.yuv
 </pre></div>
 </div>
 </div>
 <div class="section" id="run-host-and-ep-applications">
 <h2>Run Host and EP applications<a class="headerlink" href="#run-host-and-ep-applications" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><strong>Note:</strong>  Make sure, HOST application is launched before starting EP application.</div></blockquote>
+<div><p><strong>Note:</strong>  Make sure, HOST application is launched before starting EP application.</p>
+</div></blockquote>
 <ul>
-<li><p class="first">Execute following command to run the Host application(pcie_host_app)</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">pcie_host_app</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">input_file_name</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">d</span> <span class="o">&lt;</span> <span class="n">input_resolution</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">filter_type</span> <span class="o">&gt;</span>  
+<li><p>Execute following command to run the Host application(pcie_host_app)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">pcie_host_app</span> <span class="o">-</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">input_file_name</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">d</span> <span class="o">&lt;</span> <span class="n">input_resolution</span> <span class="o">&gt;</span> <span class="o">-</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">filter_type</span> <span class="o">&gt;</span>  
 </pre></div>
 </div>
 <p>For 1080p, 30fps:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">pcie_host_app</span> <span class="o">-</span><span class="n">i</span> <span class="n">file</span><span class="o">.</span><span class="n">yuy2</span> <span class="o">-</span><span class="n">d</span> <span class="mi">1920</span><span class="n">x1080</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">pcie_host_app</span> <span class="o">-</span><span class="n">i</span> <span class="n">file</span><span class="o">.</span><span class="n">yuy2</span> <span class="o">-</span><span class="n">d</span> <span class="mi">1920</span><span class="n">x1080</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> 
 </pre></div>
 </div>
 <p>For 4K, 30fps:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">pcie_host_app</span> <span class="o">-</span><span class="n">i</span> <span class="n">file</span><span class="o">.</span><span class="n">yuy2</span> <span class="o">-</span><span class="n">d</span> <span class="mi">3840</span><span class="n">x2160</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">pcie_host_app</span> <span class="o">-</span><span class="n">i</span> <span class="n">file</span><span class="o">.</span><span class="n">yuy2</span> <span class="o">-</span><span class="n">d</span> <span class="mi">3840</span><span class="n">x2160</span> <span class="o">-</span><span class="n">t</span> <span class="mi">4</span> 
 </pre></div>
 </div>
 </li>
@@ -846,26 +838,23 @@ To set 1024 as qmax for PF0:</li>
 </tr>
 </tbody>
 </table><ul>
-<li><p class="first">Execute following command on Target(EP) to start application(pcie-testapp)</p>
-</li>
-<li><p class="first">login into UART Terminal with <code class="docutils literal"><span class="pre">root</span></code> user &amp; <code class="docutils literal"><span class="pre">root</span></code> as password</p>
-</li>
-<li><p class="first">set the following environment variable:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="n">export</span> <span class="n">XILINX_XRT</span><span class="o">=/</span><span class="n">usr</span>
+<li><p>Execute following command on Target(EP) to start application(pcie-testapp)</p></li>
+<li><p>login into UART Terminal with <code class="docutils literal notranslate"><span class="pre">root</span></code> user &amp; <code class="docutils literal notranslate"><span class="pre">root</span></code> as password</p></li>
+<li><p>set the following environment variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">export</span> <span class="n">XILINX_XRT</span><span class="o">=/</span><span class="n">usr</span>
  <span class="n">export</span> <span class="n">XCL_BINDIR</span><span class="o">=/</span><span class="n">media</span><span class="o">/</span><span class="n">sd</span><span class="o">-</span><span class="n">mmcblk0p1</span><span class="o">/</span> 
 </pre></div>
 </div>
 </li>
-<li><p class="first">execute following command to run EP Application</p>
-</li>
+<li><p>execute following command to run EP Application</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pcie</span><span class="o">-</span><span class="n">testapp</span> 
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pcie</span><span class="o">-</span><span class="n">testapp</span> 
 </pre></div>
 </div>
 <p>A filter version of big buck bunny video will start playing on DP monitor.</p>
 <p><strong>Next Steps</strong></p>
 <ul class="simple">
-<li>Go back to the <a class="reference internal" href="../platform2_landing.html"><span class="doc">VMK180 PCIe TRD design start page</span></a></li>
+<li><p>Go back to the <a class="reference internal" href="../platform2_landing.html"><span class="doc">VMK180 PCIe TRD design start page</span></a></p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -904,7 +893,7 @@ To set 1024 as qmax for PF0:</li>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

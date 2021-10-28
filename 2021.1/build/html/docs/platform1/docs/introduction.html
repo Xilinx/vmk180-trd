@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -364,7 +354,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -453,30 +444,31 @@
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The Multimedia TRD application design built on VMK180 Evaluation Kit provides a framework for building and customizing video platforms that consist of three pipeline stages:</p>
 <ul class="simple">
-<li>Capture pipeline</li>
-<li>Accelerator/Processing pipeline</li>
-<li>Output pipeline</li>
+<li><p>Capture pipeline</p></li>
+<li><p>Accelerator/Processing pipeline</p></li>
+<li><p>Output pipeline</p></li>
 </ul>
 <p>The design has a platform and integrated accelerator functions. The platform consists of Capture pipeline &amp; Output pipeline. This approach makes the design leaner and provides maximum programmable logic (PL) for the accelerator development. The platform supports capture from MIPI single sensor device, a USB webcam and a file source. The output can be displayed on HDMI monitor or jupyter notebook interface.</p>
 <p>The following example Processing functions can be run on this platform</p>
 <ul class="simple">
-<li>A user programmable 2D filter in PL</li>
-<li>VP9 decode and demux in application processing unit (APU)</li>
+<li><p>A user programmable 2D filter in PL</p></li>
+<li><p>VP9 decode and demux in application processing unit (APU)</p></li>
 </ul>
 <p>The following figure shows the various pipelines supported by the design.</p>
 <p><img alt="Pipelines Supported" src="../../../_images/pipelines.png" /></p>
 <p>The APU in the Processing Sytem (PS) consists of two Arm® Cortex®-A72 cores and is configured to run in symmetric multi-processing (SMP) Linux mode in the  design. The application running on Linux is responsible for configuring and controlling the video pipeline and accelerators using Jupyter notebooks.</p>
 <p>The APU application controls the following video data paths implemented in a combination of the PS and PL:</p>
 <ul class="simple">
-<li>Capture pipeline capturing video frames into DDR memory from<ul>
-<li>A file on a storage device such as an SD card</li>
-<li>A USB webcam using the USB interface inside the PS</li>
-<li>An image sensor connected via MIPI CSI-2 RX through the PL</li>
+<li><p>Capture pipeline capturing video frames into DDR memory from</p>
+<ul>
+<li><p>A file on a storage device such as an SD card</p></li>
+<li><p>A USB webcam using the USB interface inside the PS</p></li>
+<li><p>An image sensor connected via MIPI CSI-2 RX through the PL</p></li>
 </ul>
 </li>
-<li>Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.</li>
-<li>An output pipeline reads video frames from memory and sends the frames to a sink.</li>
-<li>In this case the sink is a display or Jupyter notebook Application with display interface .</li>
+<li><p>Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.</p></li>
+<li><p>An output pipeline reads video frames from memory and sends the frames to a sink.</p></li>
+<li><p>In this case the sink is a display or Jupyter notebook Application with display interface .</p></li>
 </ul>
 <p>The following figure shows an example end-to-end pipeline which could be a single image sensor as the video source, filter 2D for processing. The processed frames are either  displayed via HDMI port or jupyter notebook, as the video sink. The video format in the figure is the output format on each block. Details are described in the <a class="reference internal" href="hw_arch_platform.html"><span class="doc">Hardware Architecture document</span></a>.</p>
 <p><img alt="End to end example pipelines" src="../../../_images/end_to_end_pp.png" /></p>
@@ -485,79 +477,88 @@
 <h2>Design Components<a class="headerlink" href="#design-components" title="Permalink to this headline">¶</a></h2>
 <details>
  <summary><b>Hardware components</b></summary><ul class="simple">
-<li>VMK180 Evaluation Kit</li>
-<li><a class="reference external" href="https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc">Leopard IMX274 MIPI FMC Card</a></li>
-<li>USB webcam (optional)</li>
+<li><p>VMK180 Evaluation Kit</p></li>
+<li><p><a class="reference external" href="https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc">Leopard IMX274 MIPI FMC Card</a></p></li>
+<li><p>USB webcam (optional)</p></li>
 </ul>
 </details><details>
  <summary><b>Interfaces and IP</b></summary><ul class="simple">
-<li>Video inputs<ul>
-<li>File</li>
-<li>USB webcam</li>
-<li>MIPI CSI-2 Rx</li>
+<li><p>Video inputs</p>
+<ul>
+<li><p>File</p></li>
+<li><p>USB webcam</p></li>
+<li><p>MIPI CSI-2 Rx</p></li>
 </ul>
 </li>
-<li>Video outputs<ul>
-<li>HDMI</li>
-<li>File</li>
-<li>Ethernet - Jupyter notebook</li>
+<li><p>Video outputs</p>
+<ul>
+<li><p>HDMI</p></li>
+<li><p>File</p></li>
+<li><p>Ethernet - Jupyter notebook</p></li>
 </ul>
 </li>
-<li>Video processing<ul>
-<li>VP9 decode</li>
-<li>PL based 2D filter Accelerator</li>
+<li><p>Video processing</p>
+<ul>
+<li><p>VP9 decode</p></li>
+<li><p>PL based 2D filter Accelerator</p></li>
 </ul>
 </li>
-<li>Auxiliary Peripherals<ul>
-<li>SD</li>
-<li>I2C</li>
-<li>UART</li>
-<li>Ethernet</li>
-<li>General purpose I/O (GPIO)</li>
+<li><p>Auxiliary Peripherals</p>
+<ul>
+<li><p>SD</p></li>
+<li><p>I2C</p></li>
+<li><p>UART</p></li>
+<li><p>Ethernet</p></li>
+<li><p>General purpose I/O (GPIO)</p></li>
 </ul>
 </li>
 </ul>
 </details><details>
  <summary><b>Software components</b></summary><ul class="simple">
-<li>Operating system<ul>
-<li>APU: SMP Linux</li>
+<li><p>Operating system</p>
+<ul>
+<li><p>APU: SMP Linux</p></li>
 </ul>
 </li>
-<li>Linux kernel subsystems<ul>
-<li>Video source: Video4 Linux (V4L2)</li>
-<li>Display: Direct Rendering Manager (DRM)/Kernel Mode Setting (KMS)</li>
+<li><p>Linux kernel subsystems</p>
+<ul>
+<li><p>Video source: Video4 Linux (V4L2)</p></li>
+<li><p>Display: Direct Rendering Manager (DRM)/Kernel Mode Setting (KMS)</p></li>
 </ul>
 </li>
-<li>Linux user space frameworks<ul>
-<li>Jupyter</li>
-<li>GStreamer</li>
-<li>Xilinx run-time (XRT)</li>
+<li><p>Linux user space frameworks</p>
+<ul>
+<li><p>Jupyter</p></li>
+<li><p>GStreamer</p></li>
+<li><p>Xilinx run-time (XRT)</p></li>
 </ul>
 </li>
 </ul>
  </details> <details>
  <summary><b>Resolution and Format Supported</b></summary><ul class="simple">
-<li>Resolutions<ul>
-<li>MIPI: 1080p60,2160p60</li>
-<li>USB Camera:720p,1080P (Whatever best the camera supports)</li>
-<li>Lower resolution and lower frame rates for file I/O</li>
+<li><p>Resolutions</p>
+<ul>
+<li><p>MIPI: 1080p60,2160p60</p></li>
+<li><p>USB Camera:720p,1080P (Whatever best the camera supports)</p></li>
+<li><p>Lower resolution and lower frame rates for file I/O</p></li>
 </ul>
 </li>
-<li>Pixel format<ul>
-<li>YUVY8</li>
+<li><p>Pixel format</p>
+<ul>
+<li><p>YUVY8</p></li>
 </ul>
 </li>
 </ul>
  </details>
 &nbsp;<p><strong>Next Steps</strong></p>
 <ul class="simple">
-<li><a class="reference internal" href="app_deployment.html"><span class="doc">Setting up the Board and Application Deployment</span></a></li>
-<li>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 TRD Multimedia TRD design start page</span></a></li>
+<li><p><a class="reference internal" href="app_deployment.html"><span class="doc">Setting up the Board and Application Deployment</span></a></p></li>
+<li><p>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 TRD Multimedia TRD design start page</span></a></p></li>
 </ul>
 <p><strong>References</strong></p>
 <ul class="simple">
-<li>VMK180 Evaluation Board User Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf">UG1411</a>)</li>
-<li>Versal Architecture and Product Data Sheet: Overview(<a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf">DS950</a>)</li>
+<li><p>VMK180 Evaluation Board User Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf">UG1411</a>)</p></li>
+<li><p>Versal Architecture and Product Data Sheet: Overview(<a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf">DS950</a>)</p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -596,7 +597,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

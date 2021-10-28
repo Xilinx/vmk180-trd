@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -378,7 +368,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -469,21 +460,24 @@
 <p><img alt="Linux Software Stack and Vertical Domains" src="../../../_images/software_stack.png" /></p>
 <p>The stack is horizontally divided into the following layers:</p>
 <ul class="simple">
-<li>Application layer (user-space)<ul>
-<li>Jupyter notebooks with a simple control and visualization interface</li>
-<li>smartcam application to invoke various gstreamer pipelines</li>
-<li>GStreamer multimedia framework with python bindings for video pipeline control</li>
+<li><p>Application layer (user-space)</p>
+<ul>
+<li><p>Jupyter notebooks with a simple control and visualization interface</p></li>
+<li><p>smartcam application to invoke various gstreamer pipelines</p></li>
+<li><p>GStreamer multimedia framework with python bindings for video pipeline control</p></li>
 </ul>
 </li>
-<li>Middleware layer (user-space)<ul>
-<li>Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer</li>
-<li>Provides access to kernel frameworks</li>
+<li><p>Middleware layer (user-space)</p>
+<ul>
+<li><p>Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer</p></li>
+<li><p>Provides access to kernel frameworks</p></li>
 </ul>
 </li>
-<li>Operating system (OS) layer (kernel-space)<ul>
-<li>Provides a stable, well-defined API to user-space</li>
-<li>Includes device drivers and kernel frameworks (subsystems)</li>
-<li>Access to hardware IPs</li>
+<li><p>Operating system (OS) layer (kernel-space)</p>
+<ul>
+<li><p>Provides a stable, well-defined API to user-space</p></li>
+<li><p>Includes device drivers and kernel frameworks (subsystems)</p></li>
+<li><p>Access to hardware IPs</p></li>
 </ul>
 </li>
 </ul>
@@ -495,14 +489,16 @@
 <p><img alt="Video Capture Software Stack" src="../../../_images/video_capture.png" /></p>
 <p>At a high level it consists of the following layers from top to bottom:</p>
 <ul class="simple">
-<li>User-space layers<ul>
-<li>GStreamer: Media source bin plugin (wrapper around generic v4l2src plugin)</li>
-<li>Media controller: Library to configure v4l subdevices and media devices</li>
+<li><p>User-space layers</p>
+<ul>
+<li><p>GStreamer: Media source bin plugin (wrapper around generic v4l2src plugin)</p></li>
+<li><p>Media controller: Library to configure v4l subdevices and media devices</p></li>
 </ul>
 </li>
-<li>Kernel-space layers<ul>
-<li>V4L2/Media subsystems: Xilinx video IP pipeline (XVIPP) driver</li>
-<li>DMA engine: Xilinx framebuffer driver</li>
+<li><p>Kernel-space layers</p>
+<ul>
+<li><p>V4L2/Media subsystems: Xilinx video IP pipeline (XVIPP) driver</p></li>
+<li><p>DMA engine: Xilinx framebuffer driver</p></li>
 </ul>
 </li>
 </ul>
@@ -514,7 +510,7 @@
 <div class="section" id="driver-architecture">
 <h2>Driver Architecture<a class="headerlink" href="#driver-architecture" title="Permalink to this headline">¶</a></h2>
 <p>The Video Capture Software Stack figure in the Capture section shows how the generic V4L2 driver model of a video pipeline is mapped to the single-sensor MIPI CSI-2 Rx capture pipelines. The video pipeline driver loads the necessary sub-device drivers and registers the device nodes it needs, based on the video pipeline configuration specified in the device tree. The framework exposes the following device node types to user space to control certain aspects of the pipeline:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Media</span> <span class="n">device</span> <span class="n">node</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">media</span><span class="o">*</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Media</span> <span class="n">device</span> <span class="n">node</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">media</span><span class="o">*</span>
 <span class="o">-</span> <span class="n">Video</span> <span class="n">device</span> <span class="n">node</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">video</span><span class="o">*</span>
 <span class="o">-</span> <span class="n">V4L2</span> <span class="n">sub</span><span class="o">-</span><span class="n">device</span> <span class="n">node</span><span class="p">:</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">v4l</span><span class="o">-</span><span class="n">subdev</span><span class="o">*</span>
 </pre></div>
@@ -523,7 +519,7 @@
 <div class="section" id="media-framework">
 <h2>Media Framework<a class="headerlink" href="#media-framework" title="Permalink to this headline">¶</a></h2>
 <p>The main goal of the media framework is to discover the device topology of a video pipeline and to configure it at run-time. To achieve this, pipelines are modeled as an oriented graph of building blocks called entities connected through pads. An entity is a basic media hardware building block. It can correspond to a large variety of blocks such as physical hardware devices (e.g. image sensors), logical hardware devices (e.g. soft IP cores inside the PL), DMA channels or physical connectors. Physical or logical devices are modeled as sub-device nodes and DMA channels as video nodes. A pad is a connection endpoint through which an entity can interact with other entities. Data produced by an entity flows from the entity’s output to one or more entity inputs. A link is a point-to-point oriented connection between two pads, either on the same entity or on different entities. Data flows from a source pad to a sink pad. A media device node is created that allows the user space application to configure the video pipeline and its sub-devices through the libmediactl and libv4l2subdev libraries. The media controller API provides the following functionality:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Enumerate</span> <span class="n">entities</span><span class="p">,</span> <span class="n">pads</span> <span class="ow">and</span> <span class="n">links</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">Enumerate</span> <span class="n">entities</span><span class="p">,</span> <span class="n">pads</span> <span class="ow">and</span> <span class="n">links</span>
 <span class="o">-</span> <span class="n">Configure</span> <span class="n">pads</span>
 	<span class="o">-</span> <span class="n">Set</span> <span class="n">media</span> <span class="n">bus</span> <span class="nb">format</span>
 	<span class="o">-</span> <span class="n">Set</span> <span class="n">dimensions</span> <span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="n">height</span><span class="p">)</span>
@@ -605,8 +601,8 @@ framework. The DPDMA is a 6-channel DMA engine that supports a (up to) 3-channel
 <p><strong>Next Steps</strong></p>
 <p>You can choose any of the following next steps:</p>
 <ul class="simple">
-<li>Read <a class="reference internal" href="hw_arch_platform.html"><span class="doc">Hardware Architecture of the Platform</span></a></li>
-<li>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 Multimedia TRD start page</span></a></li>
+<li><p>Read <a class="reference internal" href="hw_arch_platform.html"><span class="doc">Hardware Architecture of the Platform</span></a></p></li>
+<li><p>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 Multimedia TRD start page</span></a></p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -645,7 +641,7 @@ framework. The DPDMA is a 6-channel DMA engine that supports a (up to) 3-channel
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

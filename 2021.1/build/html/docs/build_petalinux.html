@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -371,7 +361,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -462,41 +453,41 @@
 bootable Linux image for the VMK180 Evaluation Board.</p>
 <p>In the follwing sections, you will:</p>
 <ol class="simple">
-<li>Build the BSP with the default rootfs configuration.</li>
-<li>Learn how to add your own Vivado or Vitis generated bitstream/xclbin firmware
-components.</li>
+<li><p>Build the BSP with the default rootfs configuration.</p></li>
+<li><p>Learn how to add your own Vivado or Vitis generated bitstream/xclbin firmware
+components.</p></li>
 </ol>
 </div>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
-<li>PetaLinux 2021.1 tools installation</li>
+<li><p>PetaLinux 2021.1 tools installation</p></li>
 </ol>
 </div>
 <div class="section" id="accessing-the-tutorial-reference-files">
 <h2>Accessing the Tutorial Reference Files<a class="headerlink" href="#accessing-the-tutorial-reference-files" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><strong>Note</strong>: Skip the following steps if the design files have already been cloned and extracted to a working repository</div></blockquote>
+<div><p><strong>Note</strong>: Skip the following steps if the design files have already been cloned and extracted to a working repository</p>
+</div></blockquote>
 <ol>
-<li><p class="first">To access the reference files, type the following into a terminal:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">recursive</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Xilinx</span><span class="o">/</span><span class="n">vmk180</span><span class="o">-</span><span class="n">trd</span><span class="o">.</span><span class="n">git</span>
+<li><p>To access the reference files, type the following into a terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">branch</span> <span class="mf">2021.1</span> <span class="o">--</span><span class="n">recursive</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Xilinx</span><span class="o">/</span><span class="n">vmk180</span><span class="o">-</span><span class="n">trd</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 </li>
-<li><p class="first">Navigate to the <code class="docutils literal"><span class="pre">vmk180-trd</span></code> which is the working directory.</p>
-</li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">vmk180-trd</span></code> which is the working directory.</p></li>
 </ol>
 </div>
 <div class="section" id="to-build-designs-and-petalinux-in-one-step">
 <h2>To Build Designs and Petalinux in one step:<a class="headerlink" href="#to-build-designs-and-petalinux-in-one-step" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
-<li>Go to the working directory</li>
+<li><p>Go to the working directory</p></li>
 </ol>
-<div class="highlight-default"><div class="highlight"><pre><span></span>cd $working_dir/
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd $working_dir/
 </pre></div>
 </div>
 <p>2   To build and  generate sdcard image (wic), run the following command. The Makefile calls a lower level Makefile to build petalinux. If a platform is not already available it builds and integrate overlay as well.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="nb">all</span> <span class="n">sdcard</span> <span class="n">PFM</span><span class="o">=&lt;</span><span class="n">val</span><span class="o">&gt;</span> <span class="n">OVERLAY</span><span class="o">=&lt;</span><span class="n">val</span><span class="o">&gt;</span> <span class="n">YES</span><span class="o">=</span><span class="mi">1</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="nb">all</span> <span class="n">sdcard</span> <span class="n">PFM</span><span class="o">=&lt;</span><span class="n">val</span><span class="o">&gt;</span> <span class="n">OVERLAY</span><span class="o">=&lt;</span><span class="n">val</span><span class="o">&gt;</span> <span class="n">YES</span><span class="o">=</span><span class="mi">1</span>
 </pre></div>
 </div>
 <table border="1" class="docutils">
@@ -523,10 +514,10 @@ components.</li>
 <div class="section" id="modifying-configure-the-petalinux-project-manually">
 <h2>Modifying/Configure the petalinux project manually<a class="headerlink" href="#modifying-configure-the-petalinux-project-manually" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Source the PetaLinux 2021.1 tool settings.sh script.</li>
+<li><p>Source the PetaLinux 2021.1 tool settings.sh script.</p></li>
 </ul>
 <p>Run the following command to create a new Petalinux project from the working directory</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">petalinux</span><span class="o">/</span><span class="n">xilinx</span><span class="o">-</span><span class="n">vmk180</span><span class="o">-</span><span class="n">trd</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">petalinux</span><span class="o">/</span><span class="n">xilinx</span><span class="o">-</span><span class="n">vmk180</span><span class="o">-</span><span class="n">trd</span>
 <span class="o">./</span><span class="n">trd</span><span class="o">.</span><span class="n">cfg</span> <span class="o">-</span><span class="n">p</span> <span class="o">&lt;</span><span class="n">PFM</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -549,32 +540,34 @@ components.</li>
 </tr>
 </tbody>
 </table><p>Next the project needs to be configured with the xsa file from the Vivado project.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">petalinux</span><span class="o">-</span><span class="n">config</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">hw</span><span class="o">-</span><span class="n">description</span><span class="o">=&lt;</span><span class="n">path</span> <span class="n">of</span> <span class="n">xsa</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">silentconfig</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">petalinux</span><span class="o">-</span><span class="n">config</span> <span class="o">--</span><span class="n">get</span><span class="o">-</span><span class="n">hw</span><span class="o">-</span><span class="n">description</span><span class="o">=&lt;</span><span class="n">path</span> <span class="n">of</span> <span class="n">xsa</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">silentconfig</span>
 </pre></div>
 </div>
 <blockquote>
-<div><strong>Note</strong>: The xsa needs to match the platform and design selected in the previous step.</div></blockquote>
+<div><p><strong>Note</strong>: The xsa needs to match the platform and design selected in the previous step.</p>
+</div></blockquote>
 </div>
 <div class="section" id="build-the-image">
 <h2>Build the Image<a class="headerlink" href="#build-the-image" title="Permalink to this headline">¶</a></h2>
 <p>Run the below commands to build and package the wic image in compressed format:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">petalinux</span><span class="o">-</span><span class="n">build</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">petalinux</span><span class="o">-</span><span class="n">build</span>
 <span class="n">petalinux</span><span class="o">-</span><span class="n">package</span> <span class="o">--</span><span class="n">wic</span> <span class="o">--</span><span class="n">extra</span><span class="o">-</span><span class="n">bootfiles</span> <span class="s2">&quot;binary_container_1.xclbin&quot;</span> <span class="o">--</span><span class="n">wic</span><span class="o">-</span><span class="n">extra</span><span class="o">-</span><span class="n">args</span> <span class="s2">&quot;-c xz&quot;</span>
 </pre></div>
 </div>
 <blockquote>
-<div><strong>Note</strong> : Before running above command copy binary_container_1.xclbin into images/linux folder.</div></blockquote>
+<div><p><strong>Note</strong> : Before running above command copy binary_container_1.xclbin into images/linux folder.</p>
+</div></blockquote>
 <p>The generated compressed image file will be located at
-<code class="docutils literal"><span class="pre">images/linux/petalinux-sdimage.wic.xz</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">images/linux/petalinux-sdimage.wic.xz</span></code>.</p>
 <p><strong>Tip:</strong> The generated wic file assumes a fixed partition size.
 The file size can be significantly lower by compressing the file e.g.
 using xz:</p>
 <p>To uncompress wic file use following command</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">xz</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">v</span> <span class="n">images</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">petalinux</span><span class="o">-</span><span class="n">sdimage</span><span class="o">.</span><span class="n">wic</span><span class="o">.</span><span class="n">xz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xz</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">v</span> <span class="n">images</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">petalinux</span><span class="o">-</span><span class="n">sdimage</span><span class="o">.</span><span class="n">wic</span><span class="o">.</span><span class="n">xz</span>
 </pre></div>
 </div>
 <p>This generates a output file named
-<code class="docutils literal"><span class="pre">images/linux/petalinux-sdimage.wic</span></code> with uncompressed wic file</p>
+<code class="docutils literal notranslate"><span class="pre">images/linux/petalinux-sdimage.wic</span></code> with uncompressed wic file</p>
 <p>Flash the image on an SD card using Balena Etcher. This image is functionally
 equivalent to the prebuilt sdcard image provided with package</p>
 </div>
@@ -584,35 +577,36 @@ equivalent to the prebuilt sdcard image provided with package</p>
 for a specific target architecture e.g. X86 host and ARM 64-bit target. Run the
 below command to generate a cross-compilation that can be used outside the
 PetaLinux:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">petalinux</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">s</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">petalinux</span><span class="o">-</span><span class="n">build</span> <span class="o">-</span><span class="n">s</span>
 </pre></div>
 </div>
 <p>The resulting self-extracting shell script installer file is located at
-<code class="docutils literal"><span class="pre">images/linux/sdk.sh</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">images/linux/sdk.sh</span></code>.</p>
 <p>The SDK installer script can be copied to the application developer’s host
 machine and installed by simply running the script. Follow the prompts on the
 screen.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ images/linux/sdk.sh
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ images/linux/sdk.sh
 PetaLinux SDK installer version 2021.1
 ============================================
 Enter target directory for SDK (default: /opt/petalinux/2021.1): ./images/linux/sdk
 </pre></div>
 </div>
 <p>Once the SDK is installed, source the file
-<code class="docutils literal"><span class="pre">images/linux/sdk/environment-setup-aarch64-xilinx-linux</span></code>
+<code class="docutils literal notranslate"><span class="pre">images/linux/sdk/environment-setup-aarch64-xilinx-linux</span></code>
 to set up the cross-development environment.</p>
 <p><strong>Next Step</strong></p>
 <ul class="simple">
-<li>Setting up the Board and Application Deployment Tutorial<ul>
-<li><a class="reference internal" href="platform1/docs/app_deployment.html"><span class="doc">Multimedia TRD</span></a></li>
-<li><a class="reference internal" href="platform2/docs/app_deployment_aib.html"><span class="doc">PCIe TRD</span></a></li>
+<li><p>Setting up the Board and Application Deployment Tutorial</p>
+<ul>
+<li><p><a class="reference internal" href="platform1/docs/app_deployment.html"><span class="doc">Multimedia TRD</span></a></p></li>
+<li><p><a class="reference internal" href="platform2/docs/app_deployment_aib.html"><span class="doc">PCIe TRD</span></a></p></li>
 </ul>
 </li>
-<li>Go back to the <a class="reference external" href="../index.html">VMK180 Targeted Reference Designs start page</a></li>
+<li><p>Go back to the <a class="reference external" href="../index.html">VMK180 Targeted Reference Designs start page</a></p></li>
 </ul>
 <p><strong>References</strong></p>
 <ul class="simple">
-<li>Petalinux user guide <a class="reference external" href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2020_2/ug1144-petalinux-tools-reference-guide.pdf">UG1144</a></li>
+<li><p>Petalinux user guide <a class="reference external" href="https://www.xilinx.com/support/documentation/sw_manuals/xilinx2020_2/ug1144-petalinux-tools-reference-guide.pdf">UG1144</a></p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -651,7 +645,7 @@ to set up the cross-development environment.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

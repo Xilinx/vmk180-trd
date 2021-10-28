@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -359,7 +349,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -445,33 +436,33 @@
 </table><div class="section" id="known-issues">
 <h1>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li>The APM, CPU utilization and power graph plots result in high CPU utilization. If the plots are disabled, the CPU utilization is reduced. This can be verified by running the top command from a terminal.</li>
-<li>The monitor should show a blue standby screen after boot. If that is not the case, re-plug the HDMI cable and the blue standby screen should appear.</li>
-<li>The gstreamer pipeline involving USB may sometimes fail with the following error. In this case click the rectangular icon to interrupt the kernel then select ‘Kernel’ –&gt; ‘Restart Kernel and Run All Cells’ from the top menu bar to restart the pipeline.</li>
+<li><p>The APM, CPU utilization and power graph plots result in high CPU utilization. If the plots are disabled, the CPU utilization is reduced. This can be verified by running the top command from a terminal.</p></li>
+<li><p>The monitor should show a blue standby screen after boot. If that is not the case, re-plug the HDMI cable and the blue standby screen should appear.</p></li>
+<li><p>The gstreamer pipeline involving USB may sometimes fail with the following error. In this case click the rectangular icon to interrupt the kernel then select ‘Kernel’ –&gt; ‘Restart Kernel and Run All Cells’ from the top menu bar to restart the pipeline.</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span> <span class="kn">from</span> <span class="nn">element</span> <span class="o">/</span><span class="n">GstPipeline</span><span class="p">:</span><span class="n">pipeline0</span><span class="o">/</span><span class="n">GstMediaSrcBin</span><span class="p">:</span><span class="n">mediasrcbin0</span><span class="o">/</span><span class="n">GstV4l2Src</span><span class="p">:</span><span class="n">v4l2src0</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">identify</span> <span class="n">device</span> <span class="s1">&#39;/dev/video3&#39;</span><span class="o">.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span><span class="p">:</span> <span class="kn">from</span> <span class="nn">element</span> <span class="o">/</span><span class="n">GstPipeline</span><span class="p">:</span><span class="n">pipeline0</span><span class="o">/</span><span class="n">GstMediaSrcBin</span><span class="p">:</span><span class="n">mediasrcbin0</span><span class="o">/</span><span class="n">GstV4l2Src</span><span class="p">:</span><span class="n">v4l2src0</span><span class="p">:</span> <span class="n">Cannot</span> <span class="n">identify</span> <span class="n">device</span> <span class="s1">&#39;/dev/video3&#39;</span><span class="o">.</span>
 <span class="n">Additional</span> <span class="n">debug</span> <span class="n">info</span><span class="p">:</span>
 <span class="o">../../../</span><span class="n">git</span><span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">v4l2</span><span class="o">/</span><span class="n">v4l2_calls</span><span class="o">.</span><span class="n">c</span><span class="p">(</span><span class="mi">610</span><span class="p">):</span> <span class="n">gst_v4l2_open</span> <span class="p">():</span> <span class="o">/</span><span class="n">GstPipeline</span><span class="p">:</span><span class="n">nb3</span><span class="o">/</span><span class="n">GstMediaSrcBin</span><span class="p">:</span><span class="n">mediasrcbin0</span><span class="o">/</span><span class="n">GstV4l2Src</span><span class="p">:</span><span class="n">v4l2src0</span><span class="p">:</span><span class="n">system</span> <span class="n">error</span><span class="p">:</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>If vivid or USB webcam is selected as video source, the following gstreamer error message is printed on the serial console. It is benign and can be ignored.</li>
+<li><p>If vivid or USB webcam is selected as video source, the following gstreamer error message is printed on the serial console. It is benign and can be ignored.</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">**</span> <span class="p">(</span><span class="n">python3</span><span class="p">:</span><span class="mi">1404</span><span class="p">):</span> <span class="n">CRITICAL</span> <span class="o">**</span><span class="p">:</span> <span class="mi">11</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mf">06.903</span><span class="p">:</span> <span class="n">gst_video_info_from_caps</span><span class="p">:</span> <span class="n">assertion</span> <span class="s1">&#39;gst_caps_is_fixed (caps)&#39;</span> <span class="n">failed</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">**</span> <span class="p">(</span><span class="n">python3</span><span class="p">:</span><span class="mi">1404</span><span class="p">):</span> <span class="n">CRITICAL</span> <span class="o">**</span><span class="p">:</span> <span class="mi">11</span><span class="p">:</span><span class="mi">28</span><span class="p">:</span><span class="mf">06.903</span><span class="p">:</span> <span class="n">gst_video_info_from_caps</span><span class="p">:</span> <span class="n">assertion</span> <span class="s1">&#39;gst_caps_is_fixed (caps)&#39;</span> <span class="n">failed</span>
 <span class="mi">0</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mf">02.146225828</span>  <span class="mi">1404</span> <span class="mh">0xaaab03b29060</span> <span class="n">ERROR</span>            <span class="n">mediasrcbin</span> <span class="n">gstmediasrcbin</span><span class="o">.</span><span class="n">c</span><span class="p">:</span><span class="mi">285</span><span class="p">:</span><span class="n">get_media_bus_format</span><span class="p">:</span> <span class="n">Gst</span> <span class="n">Fourcc</span> <span class="mi">64205312</span> <span class="ow">not</span> <span class="n">handled</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Enabling the primary plane on the Video Mixer by default results in a bandwidth utilization of 2GB. A patch is applied to disable the mixer primary plane by default. To enable/disable the primary plane through module_param and devmem use the following commands. To render a test pattern on the display using a utility like modetest, the primary plane should be enabled.</li>
-<li>Enable:</li>
+<li><p>Enabling the primary plane on the Video Mixer by default results in a bandwidth utilization of 2GB. A patch is applied to disable the mixer primary plane by default. To enable/disable the primary plane through module_param and devmem use the following commands. To render a test pattern on the display using a utility like modetest, the primary plane should be enabled.</p></li>
+<li><p>Enable:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">module</span><span class="o">/</span><span class="n">xlnx_mixer</span><span class="o">/</span><span class="n">parameters</span><span class="o">/</span><span class="n">mixer_primary_enable</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">module</span><span class="o">/</span><span class="n">xlnx_mixer</span><span class="o">/</span><span class="n">parameters</span><span class="o">/</span><span class="n">mixer_primary_enable</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>Disable:</li>
+<li><p>Disable:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">devmem</span> <span class="mh">0xa0070040</span> <span class="mi">32</span> <span class="mh">0x0</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">devmem</span> <span class="mh">0xa0070040</span> <span class="mi">32</span> <span class="mh">0x0</span>
 <span class="n">echo</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">module</span><span class="o">/</span><span class="n">xlnx_mixer</span><span class="o">/</span><span class="n">parameters</span><span class="o">/</span><span class="n">mixer_primary_enable</span>
 </pre></div>
 </div>
@@ -511,7 +502,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -363,7 +353,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -455,15 +446,15 @@
 <p>The APU in the Processing Sytem (PS) consists of two Arm® Cortex®-A72 cores and is configured to run in symmetric multi-processing (SMP) Linux mode in the design. The application running on Linux is responsible for configuring and controlling the Data data path and accelerator.</p>
 <p>The APU application controls the following video data paths implemented in a combination of the PS and PL:</p>
 <ul class="simple">
-<li>Input pipeline receives video frames into the DDR memory from CPM-QDMA host to card (H2C) Channel.</li>
-<li>Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.</li>
-<li>An output pipeline reads video frames from memory and sends the frames to host via QDMA’s card to host (C2H) channel.</li>
+<li><p>Input pipeline receives video frames into the DDR memory from CPM-QDMA host to card (H2C) Channel.</p></li>
+<li><p>Memory-to-memory (M2M) pipeline implementing 2D Filter. Captured video frames are read from DDR memory, processed by the filter, and then written back to memory.</p></li>
+<li><p>An output pipeline reads video frames from memory and sends the frames to host via QDMA’s card to host (C2H) channel.</p></li>
 </ul>
 <p>The host application on x86 host controls following operations:</p>
 <ul class="simple">
-<li>Sends video frames and metadata from a raw video file stored on the host machine to card via H2C Channel</li>
-<li>Recieves incoming processed video frames from card via C2H Channel</li>
-<li>Displays the received frames on a DP monitor connected to host machine by rendering a GUI.</li>
+<li><p>Sends video frames and metadata from a raw video file stored on the host machine to card via H2C Channel</p></li>
+<li><p>Recieves incoming processed video frames from card via C2H Channel</p></li>
+<li><p>Displays the received frames on a DP monitor connected to host machine by rendering a GUI.</p></li>
 </ul>
 <p>The following figure shows an example end-to-end pipeline which could be host as video video source and 2D filter an a prcessor. The video frames are sent back to host and displayed on a DP monitor. The video format in the figure is the output format on each block. Jupyter notebooks are used to display power rail voltages of the device. Details are described in the <a class="reference internal" href="hw_arch_platform_aib.html"><span class="doc">Hardware Architecture document</span></a>.</p>
 <p><img alt="End to end example pipelines" src="../../../_images/end_to_end_pp_aib.png" /></p>
@@ -472,52 +463,61 @@
 <h2>Design Components<a class="headerlink" href="#design-components" title="Permalink to this headline">¶</a></h2>
 <details>
  <summary><b>Hardware components</b></summary><ul class="simple">
-<li>VMK180 Evaluation Kit</li>
-<li>A x86 server class host machine</li>
+<li><p>VMK180 Evaluation Kit</p></li>
+<li><p>A x86 server class host machine</p></li>
 </ul>
 </details><details>
  <summary><b>Interfaces and IP</b></summary><ul class="simple">
-<li>Video inputs<ul>
-<li>File (on host)</li>
+<li><p>Video inputs</p>
+<ul>
+<li><p>File (on host)</p></li>
 </ul>
 </li>
-<li>Video outputs<ul>
-<li>DisplayPort (on host)</li>
+<li><p>Video outputs</p>
+<ul>
+<li><p>DisplayPort (on host)</p></li>
 </ul>
 </li>
-<li>Video processing<ul>
-<li>PL based 2D filter Accelerator</li>
+<li><p>Video processing</p>
+<ul>
+<li><p>PL based 2D filter Accelerator</p></li>
 </ul>
 </li>
-<li>Auxiliary Peripherals<ul>
-<li>QSPI</li>
-<li>SD</li>
-<li>I2C</li>
-<li>UART</li>
-<li>Ethernet</li>
-<li>General purpose I/O (GPIO)</li>
+<li><p>Auxiliary Peripherals</p>
+<ul>
+<li><p>QSPI</p></li>
+<li><p>SD</p></li>
+<li><p>I2C</p></li>
+<li><p>UART</p></li>
+<li><p>Ethernet</p></li>
+<li><p>General purpose I/O (GPIO)</p></li>
 </ul>
 </li>
 </ul>
 </details><details>
  <summary><b>Software components</b></summary><ul class="simple">
-<li>End Point Components<ul>
-<li>Operating system<ul>
-<li>APU: SMP Linux</li>
+<li><p>End Point Components</p>
+<ul>
+<li><p>Operating system</p>
+<ul>
+<li><p>APU: SMP Linux</p></li>
 </ul>
 </li>
-<li>Linux user space frameworks<ul>
-<li>Jupyter</li>
-<li>Xilinx run-time (XRT)</li>
+<li><p>Linux user space frameworks</p>
+<ul>
+<li><p>Jupyter</p></li>
+<li><p>Xilinx run-time (XRT)</p></li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Host components<ul>
-<li>linux User space frameworks<ul>
-<li>QT</li>
-<li>OpenCV</li>
-<li>QDMA Driver</li>
+<li><p>Host components</p>
+<ul>
+<li><p>linux User space frameworks</p>
+<ul>
+<li><p>QT</p></li>
+<li><p>OpenCV</p></li>
+<li><p>QDMA Driver</p></li>
 </ul>
 </li>
 </ul>
@@ -525,25 +525,27 @@
 </ul>
 </details><details>
  <summary><b>Resolution and format supported</b></summary><ul class="simple">
-<li>Resolutions<ul>
-<li>1080p30</li>
-<li>2160p30</li>
+<li><p>Resolutions</p>
+<ul>
+<li><p>1080p30</p></li>
+<li><p>2160p30</p></li>
 </ul>
 </li>
-<li>Pixel format<ul>
-<li>YUYV</li>
+<li><p>Pixel format</p>
+<ul>
+<li><p>YUYV</p></li>
 </ul>
 </li>
 </ul>
 </details><p><strong>Next Steps</strong></p>
 <ul class="simple">
-<li><a class="reference internal" href="app_deployment_aib.html"><span class="doc">Setting up the Board and Application Deployment Tutorial</span></a></li>
-<li>Go back to the <a class="reference internal" href="../platform2_landing.html"><span class="doc">VMK180 PCIe TRD start page</span></a></li>
+<li><p><a class="reference internal" href="app_deployment_aib.html"><span class="doc">Setting up the Board and Application Deployment Tutorial</span></a></p></li>
+<li><p>Go back to the <a class="reference internal" href="../platform2_landing.html"><span class="doc">VMK180 PCIe TRD start page</span></a></p></li>
 </ul>
 <p><strong>References</strong></p>
 <ul class="simple">
-<li>VMK180 Evaluation Board User Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf">UG1411</a>)</li>
-<li>Versal Architecture and Product Data Sheet: Overview(<a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf">DS950</a>)</li>
+<li><p>VMK180 Evaluation Board User Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/boards_and_kits/vmk180/ug1411-vmk180-eval-bd.pdf">UG1411</a>)</p></li>
+<li><p>Versal Architecture and Product Data Sheet: Overview(<a class="reference external" href="https://www.xilinx.com/support/documentation/data_sheets/ds950-versal-overview.pdf">DS950</a>)</p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -582,7 +584,7 @@
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

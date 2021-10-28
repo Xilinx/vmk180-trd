@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -367,7 +357,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -452,17 +443,17 @@
 <p>At a high level, the design comprises of three pipelines</p>
 <p>Capture/Input pipeline: This comprises of pipelines through which video data are captured.</p>
 <ul class="simple">
-<li>USB capture pipeline (PS)</li>
-<li>MIPI CSI-2 capture pipeline (PL)</li>
+<li><p>USB capture pipeline (PS)</p></li>
+<li><p>MIPI CSI-2 capture pipeline (PL)</p></li>
 </ul>
 <p>Display/Output pipeline: This comprises of pipelines through which video data are outputted.</p>
 <ul class="simple">
-<li>DisplayPort pipeline (PL)</li>
+<li><p>DisplayPort pipeline (PL)</p></li>
 </ul>
 <p>Video Accelerator/processing pipeline: This comprises of mem to mem pipelines through video data is processed/decrypted.</p>
 <ul class="simple">
-<li>The 2D Filter accelerator (PL) integrated into the platform using Vitis.</li>
-<li>VP9 Decoder and demux (PS)</li>
+<li><p>The 2D Filter accelerator (PL) integrated into the platform using Vitis.</p></li>
+<li><p>VP9 Decoder and demux (PS)</p></li>
 </ul>
 <p><strong>Note:</strong>  The PS interconnects in the figure are conceptual.</p>
 </div>
@@ -472,22 +463,23 @@
 <a class="reference internal image-reference" href="../../../_images/CSI_Video_Capture_Pipeline.png"><img alt="../../../_images/CSI_Video_Capture_Pipeline.png" src="../../../_images/CSI_Video_Capture_Pipeline.png" style="width: 800px;" /></a>
 <p>This pipeline consists of six components, four of which are controlled by the APU via an AXI4-Lite-based register interface, one is controlled by the APU via an I2C register interface, and one is configured statically.</p>
 <ul class="simple">
-<li>The Sony IMX274 sensor is a 1/2.5 inch CMOS digital image sensor with an active imaging pixel array of 3864H x 2196V. The image sensor is controlled by an I2C interface using an AXI I2C controller in the PL. It is mounted on an FMC daughter card and has a MIPI output interface that is connected to the MIPI CSI-2 RX subsystem inside the PL. For more information, see the LIIMX274 MIPI FMC data sheet.</li>
-<li>The MIPI CSI-2 receiver subsystem (CSI RX) includes a MIPI D-PHY core that connects four data lanes and one clock lane to the sensor on the FMC card. It implements a CSI-2 receive interface according to the MIPI CSI-2 standard v2.0 with underlying MIPI D-PHY standard v1.2. The subsystem captures images from the IMX274 sensor in RAW10 format and outputs AXI4-Stream video data. For more information, see the MIPI CSI-2 Receiver Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/mipi_csi2_rx_subsystem/v5_0/pg232-mipi-csi2-rx.pdf">PG232</a>).</li>
-<li>The AXI subset converter is a statically-configured IP core that converts the raw 10-bit (RAW10) AXI4-Stream input data to raw 8-bit (RAW8) AXI4-Stream output data by truncating the two least significant bits (LSB) of each data word.</li>
-<li>The Image Single Processing IP available in the Vitis vision librarires (<a class="reference external" href="https://github.com/Xilinx/Vitis_Libraries/tree/master/vision/L1">https://github.com/Xilinx/Vitis_Libraries/tree/master/vision/L1</a>) implements the following functions.
-* The Badpixelcorrection module removes the defective pixels in the image as an image sensor may have a certain number of defective/bad pixels that may be the result of manufacturing faults or variations in pixel voltage levels based on temperature or exposure.<ul>
-<li>The Gain control module improves the overall brightness of the input image by applying a multiplicative gain (weight) for red and blue channel to the input bayerized image.</li>
-<li>The Demosaicing module converts a single plane Bayer pattern output, from the digital camera sensors to a color image.</li>
-<li>The histogram module computes the histogram of given input image. The normalization module changes the range of pixel intensity values. Both modules are used to improve the contrast in the image. See <a class="reference external" href="https://xilinx.github.io/Vitis_Libraries/vision/api-reference.html#vitis-vision-libraryfunctions">https://xilinx.github.io/Vitis_Libraries/vision/api-reference.html#vitis-vision-libraryfunctions</a> for more details</li>
-<li>The ISP IP receives the RAW AXI4-Stream input data and interpolates the missing color
+<li><p>The Sony IMX274 sensor is a 1/2.5 inch CMOS digital image sensor with an active imaging pixel array of 3864H x 2196V. The image sensor is controlled by an I2C interface using an AXI I2C controller in the PL. It is mounted on an FMC daughter card and has a MIPI output interface that is connected to the MIPI CSI-2 RX subsystem inside the PL. For more information, see the LIIMX274 MIPI FMC data sheet.</p></li>
+<li><p>The MIPI CSI-2 receiver subsystem (CSI RX) includes a MIPI D-PHY core that connects four data lanes and one clock lane to the sensor on the FMC card. It implements a CSI-2 receive interface according to the MIPI CSI-2 standard v2.0 with underlying MIPI D-PHY standard v1.2. The subsystem captures images from the IMX274 sensor in RAW10 format and outputs AXI4-Stream video data. For more information, see the MIPI CSI-2 Receiver Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/mipi_csi2_rx_subsystem/v5_0/pg232-mipi-csi2-rx.pdf">PG232</a>).</p></li>
+<li><p>The AXI subset converter is a statically-configured IP core that converts the raw 10-bit (RAW10) AXI4-Stream input data to raw 8-bit (RAW8) AXI4-Stream output data by truncating the two least significant bits (LSB) of each data word.</p></li>
+<li><p>The Image Single Processing IP available in the Vitis vision librarires (<a class="reference external" href="https://github.com/Xilinx/Vitis_Libraries/tree/master/vision/L1">https://github.com/Xilinx/Vitis_Libraries/tree/master/vision/L1</a>) implements the following functions.
+* The Badpixelcorrection module removes the defective pixels in the image as an image sensor may have a certain number of defective/bad pixels that may be the result of manufacturing faults or variations in pixel voltage levels based on temperature or exposure.</p>
+<ul>
+<li><p>The Gain control module improves the overall brightness of the input image by applying a multiplicative gain (weight) for red and blue channel to the input bayerized image.</p></li>
+<li><p>The Demosaicing module converts a single plane Bayer pattern output, from the digital camera sensors to a color image.</p></li>
+<li><p>The histogram module computes the histogram of given input image. The normalization module changes the range of pixel intensity values. Both modules are used to improve the contrast in the image. See <a class="reference external" href="https://xilinx.github.io/Vitis_Libraries/vision/api-reference.html#vitis-vision-libraryfunctions">https://xilinx.github.io/Vitis_Libraries/vision/api-reference.html#vitis-vision-libraryfunctions</a> for more details</p></li>
+<li><p>The ISP IP receives the RAW AXI4-Stream input data and interpolates the missing color
 components for every pixel to generate a 24-bit, 8 bits per pixel (8 bpc) RGB output image
 transported via AXI4-Stream. At 4 ppc, the AXIS width is 96-bit. A GPIO from the PS is
-used to reset the IP between resolution changes.</li>
+used to reset the IP between resolution changes.</p></li>
 </ul>
 </li>
-<li>The video processing subsystem (VPSS) is a collection of video processing IP sub-cores. This instance is uses the color space converter (CSC) configuration to perform color correction tasks including contrast, brightness, and red/green/blue gain control. The CSC takes AXI4-Stream input data and produces AXI4-Stream output data, both in 24-bit RGB format. A GPIO is used to reset the subsystem between resolution changes. For more information, see the Video Processing Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_proc_ss/v2_3/pg231-v-proc-ss.pdf">PG231</a>).</li>
-<li>The video frame buffer takes YUV 4:2:0 sub-sampled AXI4-Stream input data and converts it to the memory mapped AXI4 format, which is written to memory as 12-bit packed YUYV. The memory mapped AXI interface is connected to the system DDR via the NoC. For each video frame transfer, an interrupt is generated. A GPIO is used to reset the IP between resolution changes.</li>
+<li><p>The video processing subsystem (VPSS) is a collection of video processing IP sub-cores. This instance is uses the color space converter (CSC) configuration to perform color correction tasks including contrast, brightness, and red/green/blue gain control. The CSC takes AXI4-Stream input data and produces AXI4-Stream output data, both in 24-bit RGB format. A GPIO is used to reset the subsystem between resolution changes. For more information, see the Video Processing Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_proc_ss/v2_3/pg231-v-proc-ss.pdf">PG231</a>).</p></li>
+<li><p>The video frame buffer takes YUV 4:2:0 sub-sampled AXI4-Stream input data and converts it to the memory mapped AXI4 format, which is written to memory as 12-bit packed YUYV. The memory mapped AXI interface is connected to the system DDR via the NoC. For each video frame transfer, an interrupt is generated. A GPIO is used to reset the IP between resolution changes.</p></li>
 </ul>
 <p>All of the IPs in this pipeline are configured to transport 4 ppc, enabling up to 2160p60
 performance.</p>
@@ -503,88 +495,88 @@ transmitter display pipeline is shown in the following figure.</p>
 by the APU via an AXI4-Lite base register interface. These components are described in the
 following paragraphs.</p>
 <ul class="simple">
-<li>The video frame buffer read IP provides high-bandwidth direct memory access between memory and AXI4-Stream video type target peripherals, which support the AXI4-Stream video protocol. IP takes memory mapped AXI4 input data from DDR and converts it to AXI4-Stream format. The output is connected to HDMI transmitter subsystem. For each video frame transfer, an interrupt is generated. A GPIO is used to reset the core between resolution changes. For more information, see the Video Frame Buffer Read and Video Frame Buffer Write LogiCORE IP Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_frmbuf/v2_2/pg278-v-frmbuf.pdf">PG278</a>).</li>
-<li>The HDMI transmitter subsystem (HDMI TX) interfaces with PHY layers and provides HDMI encoding functionality. The subsystem is a hierarchical IP that bundles a collection of HDMI TXrelated IP sub-cores and outputs them as a single IP. The subsystem generates an HDMI stream from the incoming AXI4-Stream video data and sends the generated TMDS data to the video PHY layer. For more information, see the HDMI 1.4/2.0 Transmitter Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_hdmi_tx_ss/v3_1/pg235-v-hdmi-tx-ss.pdf">PG235</a>).</li>
-<li>The HDMI GT controller (PHY) enables plug-and-play connectivity with video transmit or receive subsystems. The interface between the media access control (MAC) and physical (PHY) layers are standardized to enable ease of use in accessing shared gigabit-transceiver (GT) resources. The data recovery unit (DRU) supports lower line rates for the HDMI protocol. An AXI4-Lite register interface is provided to enable dynamic accesses of transceiver controls/status. For more information, see the HDMI GT Controller LogiCORE IP Product Guide (<cite>PG334 &lt;https://www.xilinx.com/support/documentation/ip_documentation/hdmi_gt_controller/v1_0/pg334-hdmi-gt-controller.pdf&gt;_</cite>).</li>
+<li><p>The video frame buffer read IP provides high-bandwidth direct memory access between memory and AXI4-Stream video type target peripherals, which support the AXI4-Stream video protocol. IP takes memory mapped AXI4 input data from DDR and converts it to AXI4-Stream format. The output is connected to HDMI transmitter subsystem. For each video frame transfer, an interrupt is generated. A GPIO is used to reset the core between resolution changes. For more information, see the Video Frame Buffer Read and Video Frame Buffer Write LogiCORE IP Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_frmbuf/v2_2/pg278-v-frmbuf.pdf">PG278</a>).</p></li>
+<li><p>The HDMI transmitter subsystem (HDMI TX) interfaces with PHY layers and provides HDMI encoding functionality. The subsystem is a hierarchical IP that bundles a collection of HDMI TXrelated IP sub-cores and outputs them as a single IP. The subsystem generates an HDMI stream from the incoming AXI4-Stream video data and sends the generated TMDS data to the video PHY layer. For more information, see the HDMI 1.4/2.0 Transmitter Subsystem Product Guide (<a class="reference external" href="https://www.xilinx.com/support/documentation/ip_documentation/v_hdmi_tx_ss/v3_1/pg235-v-hdmi-tx-ss.pdf">PG235</a>).</p></li>
+<li><p>The HDMI GT controller (PHY) enables plug-and-play connectivity with video transmit or receive subsystems. The interface between the media access control (MAC) and physical (PHY) layers are standardized to enable ease of use in accessing shared gigabit-transceiver (GT) resources. The data recovery unit (DRU) supports lower line rates for the HDMI protocol. An AXI4-Lite register interface is provided to enable dynamic accesses of transceiver controls/status. For more information, see the HDMI GT Controller LogiCORE IP Product Guide (<cite>PG334 &lt;https://www.xilinx.com/support/documentation/ip_documentation/hdmi_gt_controller/v1_0/pg334-hdmi-gt-controller.pdf&gt;_</cite>).</p></li>
 </ul>
 </div>
 <div class="section" id="clocks">
 <h2>Clocks<a class="headerlink" href="#clocks" title="Permalink to this headline">¶</a></h2>
 <p><strong>PS Clocks</strong></p>
 <p>The following table lists the clock frequencies of key PS components.</p>
-<table border="1" class="colwidths-given docutils" id="id1">
+<table class="colwidths-given docutils align-default" id="id1">
 <caption><span class="caption-text"><strong>Table 1: Key Component Clock Frequencies</strong></span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col style="width: 30%" />
+<col style="width: 70%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Component</th>
-<th class="head">Clock Frequency</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Clock Frequency</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>ACPU</td>
-<td>1,000 MHz</td>
+<tbody>
+<tr class="row-even"><td><p>ACPU</p></td>
+<td><p>1,000 MHz</p></td>
 </tr>
-<tr class="row-odd"><td>NOC</td>
-<td>960 MHz</td>
+<tr class="row-odd"><td><p>NOC</p></td>
+<td><p>960 MHz</p></td>
 </tr>
-<tr class="row-even"><td>NPI</td>
-<td>300 MHz</td>
+<tr class="row-even"><td><p>NPI</p></td>
+<td><p>300 MHz</p></td>
 </tr>
-<tr class="row-odd"><td>LPDDR</td>
-<td>1,600</td>
+<tr class="row-odd"><td><p>LPDDR</p></td>
+<td><p>1,600</p></td>
 </tr>
 </tbody>
 </table>
 <p><strong>System Clocks</strong></p>
 <p>The following table identifies the main clocks of the PL design, their source, their clock frequency, and their function.</p>
-<table border="1" class="colwidths-given docutils" id="id2">
+<table class="colwidths-given docutils align-default" id="id2">
 <caption><span class="caption-text"><strong>Table 2: System Clocks</strong></span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="19%" />
-<col width="19%" />
-<col width="19%" />
-<col width="44%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+<col style="width: 19%" />
+<col style="width: 44%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Clock</th>
-<th class="head">Clock Source</th>
-<th class="head">Clock Frequency</th>
-<th class="head">Function</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Clock</p></th>
+<th class="head"><p>Clock Source</p></th>
+<th class="head"><p>Clock Frequency</p></th>
+<th class="head"><p>Function</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>pl0_ref_clk</td>
-<td>CIPS</td>
-<td>100 MHz</td>
-<td>Clock source for clocking wizard.</td>
+<tbody>
+<tr class="row-even"><td><p>pl0_ref_clk</p></td>
+<td><p>CIPS</p></td>
+<td><p>100 MHz</p></td>
+<td><p>Clock source for clocking wizard.</p></td>
 </tr>
-<tr class="row-odd"><td>clk_out1</td>
-<td>Clocking wizard</td>
-<td>150 MHz</td>
-<td>Memory mapped AXI clock, accelerator clock.</td>
+<tr class="row-odd"><td><p>clk_out1</p></td>
+<td><p>Clocking wizard</p></td>
+<td><p>150 MHz</p></td>
+<td><p>Memory mapped AXI clock, accelerator clock.</p></td>
 </tr>
-<tr class="row-even"><td>clk_out2</td>
-<td>Clocking wizard</td>
-<td>105 MHz</td>
-<td>AXI-Lite clock to configure the different IPs in the design.</td>
+<tr class="row-even"><td><p>clk_out2</p></td>
+<td><p>Clocking wizard</p></td>
+<td><p>105 MHz</p></td>
+<td><p>AXI-Lite clock to configure the different IPs in the design.</p></td>
 </tr>
-<tr class="row-odd"><td>clk_out3</td>
-<td>Clocking wizard</td>
-<td>200 MHz</td>
-<td>MIPI D-PHY core clock, AXI4-Stream clock.</td>
+<tr class="row-odd"><td><p>clk_out3</p></td>
+<td><p>Clocking wizard</p></td>
+<td><p>200 MHz</p></td>
+<td><p>MIPI D-PHY core clock, AXI4-Stream clock.</p></td>
 </tr>
-<tr class="row-even"><td>sys_clk0</td>
-<td>SI570 (External)</td>
-<td>200 MHz</td>
-<td>Differential clock source used internally by the memory controller to generate various clocks to access DDR memory.</td>
+<tr class="row-even"><td><p>sys_clk0</p></td>
+<td><p>SI570 (External)</p></td>
+<td><p>200 MHz</p></td>
+<td><p>Differential clock source used internally by the memory controller to generate various clocks to access DDR memory.</p></td>
 </tr>
-<tr class="row-odd"><td>HDMI DRU clock</td>
-<td>SI570 (External)</td>
-<td>200 MHz</td>
-<td>Clock for data recovery unit for low line rates.</td>
+<tr class="row-odd"><td><p>HDMI DRU clock</p></td>
+<td><p>SI570 (External)</p></td>
+<td><p>200 MHz</p></td>
+<td><p>Clock for data recovery unit for low line rates.</p></td>
 </tr>
 </tbody>
 </table>
@@ -634,7 +626,7 @@ following paragraphs.</p>
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>

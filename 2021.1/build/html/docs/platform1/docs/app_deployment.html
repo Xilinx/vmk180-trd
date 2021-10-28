@@ -39,21 +39,11 @@
     <script type="text/javascript" src="../../../_static/js/Searchbox.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'2021.1-2.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -365,7 +355,8 @@
 </ul>
 <p class="caption"><span class="caption-text">Versions</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">Master (2021.1)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Master (2021.2)</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">2021.1</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/html/intro.html">2020.2</a></li>
 </ul>
 
@@ -459,25 +450,22 @@
 <div class="section" id="flash-the-sd-card">
 <h3>Flash the SD Card<a class="headerlink" href="#flash-the-sd-card" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Download  the <code class="docutils literal"><span class="pre">vmk180_multimedia_trd_prebuilt_2021.1.zip</span></code> package, unzip and save it on your computer. Alternatively, Go through tutorials section to build <code class="docutils literal"><span class="pre">petalinux-sdimage.wic</span></code> locally.</p>
-</li>
-<li><p class="first">To uncompress wic file use following command</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">vmk180_multimedia_trd_prebuilt_2021</span><span class="o">.</span><span class="mi">1</span>
+<li><p>Download  the <code class="docutils literal notranslate"><span class="pre">vmk180_multimedia_trd_prebuilt_2021.1.zip</span></code> package, unzip and save it on your computer. Alternatively, Go through tutorials section to build <code class="docutils literal notranslate"><span class="pre">petalinux-sdimage.wic</span></code> locally.</p></li>
+<li><p>To uncompress wic file use following command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">vmk180_multimedia_trd_prebuilt_2021</span><span class="o">.</span><span class="mi">1</span>
 <span class="n">xz</span> <span class="o">-</span><span class="n">d</span> <span class="o">-</span><span class="n">v</span> <span class="n">petalinux</span><span class="o">-</span><span class="n">sdimage</span><span class="o">.</span><span class="n">wic</span><span class="o">.</span><span class="n">xz</span>
 </pre></div>
 </div>
 <p>This generates a output file named
-<code class="docutils literal"><span class="pre">petalinux-sdimage.wic</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">petalinux-sdimage.wic</span></code>.</p>
 </li>
-<li><p class="first">Connect the microSD to your computer.</p>
-</li>
-<li><p class="first">Download the <a class="reference external" href="https://www.balena.io/etcher/">Balena Etcher tool</a> (recommended; available for Window, Linux, and
-macOS) required to flash the SD card.</p>
-</li>
-<li><p class="first">Follow the instructions in the tool and select the downloaded image to flash onto your microSD card.</p>
+<li><p>Connect the microSD to your computer.</p></li>
+<li><p>Download the <a class="reference external" href="https://www.balena.io/etcher/">Balena Etcher tool</a> (recommended; available for Window, Linux, and
+macOS) required to flash the SD card.</p></li>
+<li><p>Follow the instructions in the tool and select the downloaded image to flash onto your microSD card.</p>
 <p><img alt="Balena Etcher" src="../../../_images/balena.png" /></p>
 </li>
-<li><p class="first">Eject the SD card from your computer.</p>
+<li><p>Eject the SD card from your computer.</p>
 <p>If you are looking for other OS specific tools to write the image to the SD card refer to <a class="reference external" href="https://www.xilinx.com/products/som/kria/kv260-vision-starter-kit/kv260-getting-started/setting-up-the-sd-card-image.html">Setting up the SD Card Image</a></p>
 </li>
 </ul>
@@ -487,61 +475,57 @@ macOS) required to flash the SD card.</p>
 <p>Below diagram shows Board and hardware connections.</p>
 <p><img alt="GitHub Logo" src="../../../_images/vmk180-setup.jpg" /></p>
 <ul>
-<li><p class="first"><strong>Board jumper and switch settings</strong></p>
+<li><p><strong>Board jumper and switch settings</strong></p>
 <p>This is a onetime setup and the board should have been delivered to you with this default settings, but it is good to double check for the first time when you get the board.</p>
 </li>
-<li><p class="first">Make sure you remove J326 (7-8) jumper.</p>
-</li>
-<li><p class="first">Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p>
-</li>
-<li><p class="first">Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p>
-</li>
-<li><p class="first"><strong>microSD</strong>: Insert the SD card into slot at Versal microSD slot (top).</p>
+<li><p>Make sure you remove J326 (7-8) jumper.</p></li>
+<li><p>Setup SYSCTRL Boot mode switch SW11 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p></li>
+<li><p>Setup Versal Boot Mode switch SW1 to (ON,OFF,OFF,OFF) from switch bits 1 to 4 as shown in the above picture.</p></li>
+<li><p><strong>microSD</strong>: Insert the SD card into slot at Versal microSD slot (top).</p>
 <p>Make sure you have the SYSCTRL uSD card inserted in the slot (bottom) and card has the SYSCTRL image. For Latest version of SYSCTRL image, refer to <a class="reference external" href="https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/972914749/BEAM+Tool+for+VMK180+Evaluation+Kit">Beam Tool Wiki Page</a></p>
 </li>
-<li><p class="first"><strong>Monitor</strong> : Before booting, connect a 1080P/4K monitor to the board via either HDMI port. 4K monitor is preferred to demonstrate at the maximum supported resolution.</p>
+<li><p><strong>Monitor</strong> : Before booting, connect a 1080P/4K monitor to the board via either HDMI port. 4K monitor is preferred to demonstrate at the maximum supported resolution.</p>
 <blockquote>
 <div><p><strong>Note</strong>: The design has been validated with Dell Flat panel(U2718Q) &amp; Viewsonic (SS16024) monitors.</p>
 </div></blockquote>
 </li>
-<li><p class="first"><strong>FMC and Vadj settings</strong>:
+<li><p><strong>FMC and Vadj settings</strong>:
 Before power on, install an  Leopard IMX274 MIPI FMC card to the FMCP1 slot (J51) as shown in the above figure.
 Perform the following steps to set the Vadj voltage rail to 1.2V using the BoardUI utility:</p>
 <ul class="simple">
-<li>Download the BoardUI Utility from VMK180 Product Page: <a class="reference external" href="https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623">BoardUI/ Board Interface Test</a></li>
-<li>Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.</li>
-<li>In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.</li>
+<li><p>Download the BoardUI Utility from VMK180 Product Page: <a class="reference external" href="https://www.xilinx.com/support/documentation-navigation/see-all-versions.html?xlnxproducttypes=Boards%20and%20Kits&amp;xlnxdocumentid=XTP623">BoardUI/ Board Interface Test</a></p></li>
+<li><p>Extract the zip file and start the BoardUI tool. Make sure the USB-C cable is connected to your PC and the system controller Micro SD card is inserted.</p></li>
+<li><p>In the BoardUI GUI, navigate to the FMC Boot Up tab following the red circles as shown in the below figure. Enter 1.2 in the Set On-Boot VADJ field and click the button next to it to save the value.</p></li>
 </ul>
 <p><img alt="BoardUI" src="../../../_images/boardui.jpg" /></p>
 </li>
-<li><p class="first">Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.</p>
-</li>
-<li><p class="first">Close the BoardUI utility.</p>
-</li>
+<li><p>Power-cycle the board and navigate to the FMC Current tab. Click the Get VADJ_FMC Voltage button to read out the current voltage setting and confirm it matches the 1.2V set in the previous step.</p></li>
+<li><p>Close the BoardUI utility.</p></li>
 </ul>
 <blockquote>
-<div><strong>Note</strong>: For the IMX274 MIPI FMC v1.1, Vadj voltage rail is required to be set to 1.5V instead of 1.2V.</div></blockquote>
+<div><p><strong>Note</strong>: For the IMX274 MIPI FMC v1.1, Vadj voltage rail is required to be set to 1.5V instead of 1.2V.</p>
+</div></blockquote>
 <ul>
-<li><p class="first"><strong>Serial console settings</strong>: VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART ports should be visible in Device Manager:</p>
+<li><p><strong>Serial console settings</strong>: VMK180 comes with a USB-C connector for JTAG+UART, when connected three UART ports should be visible in Device Manager:</p>
 <ul class="simple">
-<li>Versal UART0</li>
-<li>Versal UART1 &amp;</li>
-<li>System Controller UART</li>
+<li><p>Versal UART0</p></li>
+<li><p>Versal UART1 &amp;</p></li>
+<li><p>System Controller UART</p></li>
 </ul>
 </li>
-<li><p class="first">Connect a USB-C cable to the USB-UART connector. In the terminal emulator choose Versal UART0 and use the following settings:</p>
+<li><p>Connect a USB-C cable to the USB-UART connector. In the terminal emulator choose Versal UART0 and use the following settings:</p>
 <ul class="simple">
-<li>Baud Rate: 115200</li>
-<li>Data: 8 bit</li>
-<li>Parity: None</li>
-<li>Stop: 1 bit</li>
-<li>Flow Control: None</li>
+<li><p>Baud Rate: 115200</p></li>
+<li><p>Data: 8 bit</p></li>
+<li><p>Parity: None</p></li>
+<li><p>Stop: 1 bit</p></li>
+<li><p>Flow Control: None</p></li>
 </ul>
 </li>
-<li><p class="first">You may also use a USB webcam as an input device.</p>
+<li><p>You may also use a USB webcam as an input device.</p>
 <p>The webcam is optional video input device supported in the application. Recommended webcam is the <a class="reference external" href="https://www.logitech.com/en-in/products/webcams/brio-4k-hdr-webcam.960-001105.html">Logitech BRIO</a>.</p>
 </li>
-<li><p class="first"><strong>Network connection</strong>:</p>
+<li><p><strong>Network connection</strong>:</p>
 <p>Connect the Ethernet cable to your local network with DHCP enabled to run Jupyter Notebooks</p>
 </li>
 </ul>
@@ -550,14 +534,14 @@ Perform the following steps to set the Vadj voltage rail to 1.2V using the Board
 <h3>Power on the board, and boot the Linux image.<a class="headerlink" href="#power-on-the-board-and-boot-the-linux-image" title="Permalink to this headline">¶</a></h3>
 <p>Follow these steps to boot the board into Linux:</p>
 <ul class="simple">
-<li>Ensure all steps under the section ‘Board jumper and switch settings’ are verified.</li>
-<li>Insert the prepared micro SD card into the Versal SD card slot (refer to the image VMK180 Board Setup)</li>
-<li>Make physical connections to ethernet, HDMI, UART, webcam and power as shown in the image.</li>
-<li>Turn ON power switch SW13.</li>
-<li>On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”</li>
-<li>In about 60 seconds boot is complete. Observe the Linux prompt root&#64;xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:</li>
+<li><p>Ensure all steps under the section ‘Board jumper and switch settings’ are verified.</p></li>
+<li><p>Insert the prepared micro SD card into the Versal SD card slot (refer to the image VMK180 Board Setup)</p></li>
+<li><p>Make physical connections to ethernet, HDMI, UART, webcam and power as shown in the image.</p></li>
+<li><p>Turn ON power switch SW13.</p></li>
+<li><p>On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”</p></li>
+<li><p>In about 60 seconds boot is complete. Observe the Linux prompt root&#64;xilinx-vmk180-es1-2020_2 and autostart of JupyterLab server as shown in the example below:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>root@xilinx-vmk180-2021_1:~#
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>root@xilinx-vmk180-2021_1:~#
 [W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
 [I 02:30:21.571 LabApp] JupyterLab extension loaded from /usr/lib/python3.5/site-packages/jupyterlab
 [I 02:30:21.572 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
@@ -575,26 +559,28 @@ Or copy and paste one of these URLs:
 </div>
 <p>Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.</p>
 <blockquote>
-<div><strong>Note</strong>:  This demo is tested with Chrome browser only.</div></blockquote>
+<div><p><strong>Note</strong>:  This demo is tested with Chrome browser only.</p>
+</div></blockquote>
 <ul class="simple">
-<li>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</li>
+<li><p>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</p></li>
 </ul>
-<div class="highlight-default"><div class="highlight"><pre><span></span>http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
 </pre></div>
 </div>
 <blockquote>
-<div><strong>Note</strong>: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:</div></blockquote>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
+<div><p><strong>Note</strong>: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix an IP address and restart the jupyter server as shown below:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">jupyterlab</span><span class="o">-</span><span class="n">server</span> <span class="n">stop</span>
 <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">init</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">jupyterlab</span><span class="o">-</span><span class="n">server</span> <span class="n">start</span>
 </pre></div>
 </div>
 <p>To look up the jupyter server IP address and token on the target, run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span> <span class="nb">list</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span> <span class="nb">list</span>
 </pre></div>
 </div>
 <p>Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
 http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 </pre></div>
 </div>
@@ -607,34 +593,35 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
 <h3>Run the Jupyter Notebooks<a class="headerlink" href="#run-the-jupyter-notebooks" title="Permalink to this headline">¶</a></h3>
 <p>This TRD includes the following jupyter notebooks:</p>
 <ol class="simple">
-<li><strong>vmk180-trd-nb1.ipynb</strong>: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb2.ipynb</strong>: Demonstrates streaming video from a v4l2 device on the target to the Jupyter notebook using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb3.ipynb</strong>: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb4.ipynb</strong>: Demonstrates two simultaneous streaming pipelines, one from file source and another from a v4l2 device onto two individual planes of a HDMI monitor using the GStreamer multimedia framework.</li>
-<li><strong>vmk180-trd-nb5.ipynb</strong>: Demonstrates the 2D filter software kernel inserted into the video pipeline of notebook 2.</li>
-<li><strong>vmk180-trd-apm.ipynb</strong>: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.</li>
-<li><strong>vmk180-trd-cpu.ipynb</strong>: Demonstrates how to plot the CPU usage while running applications and pipelines.</li>
-<li><strong>vmk180-trd-power.ipynb</strong>: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.</li>
+<li><p><strong>vmk180-trd-nb1.ipynb</strong>: Demonstrates videoplayback of a file source in rootfs of the target to the Jupyter notebook using the GStreamer multimedia framework.</p></li>
+<li><p><strong>vmk180-trd-nb2.ipynb</strong>: Demonstrates streaming video from a v4l2 device on the target to the Jupyter notebook using the GStreamer multimedia framework.</p></li>
+<li><p><strong>vmk180-trd-nb3.ipynb</strong>: Demonstrates streaming video from a v4l2 device on the target to a HDMI monitor, with and without 2D filter, using the GStreamer multimedia framework.</p></li>
+<li><p><strong>vmk180-trd-nb4.ipynb</strong>: Demonstrates two simultaneous streaming pipelines, one from file source and another from a v4l2 device onto two individual planes of a HDMI monitor using the GStreamer multimedia framework.</p></li>
+<li><p><strong>vmk180-trd-nb5.ipynb</strong>: Demonstrates the 2D filter software kernel inserted into the video pipeline of notebook 2.</p></li>
+<li><p><strong>vmk180-trd-apm.ipynb</strong>: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.</p></li>
+<li><p><strong>vmk180-trd-cpu.ipynb</strong>: Demonstrates how to plot the CPU usage while running applications and pipelines.</p></li>
+<li><p><strong>vmk180-trd-power.ipynb</strong>: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.</p></li>
 </ol>
 <p>to run the notebooks, follow the below steps:</p>
 <ol class="simple">
-<li>On the left pane of the browser, 8 notebooks are available under the folder VMK180 TRD.</li>
-<li>Double click to open the notebook</li>
-<li>Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run’s all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.</li>
+<li><p>On the left pane of the browser, 8 notebooks are available under the folder VMK180 TRD.</p></li>
+<li><p>Double click to open the notebook</p></li>
+<li><p>Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run’s all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.</p></li>
 </ol>
 <p><img alt="BoardUI" src="../../../_images/jnbh.png" /></p>
 <ol class="simple">
-<li>Click the rectangular icon to interrupt the kernel and stop the video stream.</li>
+<li><p>Click the rectangular icon to interrupt the kernel and stop the video stream.</p></li>
 </ol>
 <p><img alt="Interrupt" src="../../../_images/platform1_interrupt.PNG" /></p>
 <ol class="simple">
-<li>Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.</li>
+<li><p>Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.</p></li>
 </ol>
 <blockquote>
-<div><strong>NOTE</strong> : Please follow ‘’step 3 to step 5’’, without this you may observe incorrect behavior while moving to different notebook.</div></blockquote>
+<div><p><strong>NOTE</strong> : Please follow ‘’step 3 to step 5’’, without this you may observe incorrect behavior while moving to different notebook.</p>
+</div></blockquote>
 <p><strong>Next Steps</strong></p>
 <ul class="simple">
-<li>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 Multimedia TRD design start page</span></a></li>
+<li><p>Go back to the <a class="reference internal" href="../platform1_landing.html"><span class="doc">VMK180 Multimedia TRD design start page</span></a></p></li>
 </ul>
 <p><strong>License</strong></p>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
@@ -674,7 +661,7 @@ http://192.168.1.77:8888/?token=06cfb958c61eb0581bb759f40e3a4c3a6252cef3b7075449
   <div role="contentinfo" class="copyright">
     <p class="footerinfo">
       <span class="lastupdated">
-        Last updated on July 02, 2021.
+        Last updated on October 28, 2021.
       </span>
 
     </p>
