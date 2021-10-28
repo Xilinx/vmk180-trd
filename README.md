@@ -19,7 +19,10 @@ For more information about the VMK180 Evaluation Board , see [Versal Prime Serie
 
 This repo uses git submodules. To clone this repo, run
 
+```
 git clone --recursive https://github.com/Xilinx/vmk180-trd.git
+
+```
 
 ## Xilinx Support
 
