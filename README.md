@@ -32,7 +32,7 @@ GitHub issues will be used for tracking requests and bugs. For questions go to [
 
 The design includes files licensed by Xilinx and third parties under the terms
 of the GNU General Public License, GNU Lesser General Public License,
-BSD License, MIT License, and other licenses. The Package includes one
+BSD License, MIT License, and other licenses. The [archiver_2021_2.tar.gz ](https://www.xilinx.com/member/forms/download/xef.html?filename=archiver_2021_2.tar.gz) Package includes one
 folder named ``sources`` containing the complete set of source
 files and one named ``licenses`` containing licenses extracted from
 the source files. These licenses and sources are extracted from petalinux bsp recipes
