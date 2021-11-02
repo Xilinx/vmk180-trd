@@ -33,9 +33,10 @@ GitHub issues will be used for tracking requests and bugs. For questions go to [
 The design includes files licensed by Xilinx and third parties under the terms
 of the GNU General Public License, GNU Lesser General Public License,
 BSD License, MIT License, and other licenses. The Package includes one
-zip file named ``sources.zip`` containing the complete set of design source
-files and one zip file named ``licenses.zip`` containing licenses extracted from
-the design source files. You are solely responsible for checking any files you
+folder named ``sources`` containing the complete set of source
+files and one named ``licenses`` containing licenses extracted from
+the source files. These licenses and sources are extracted from petalinux bsp recipes
+You are solely responsible for checking any files you
 use for notices and licenses and for complying with any terms applicable to your
 use of the design and any third party files supplied with the design.
 
