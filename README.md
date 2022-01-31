@@ -9,7 +9,7 @@
 
 The VMK180 TRD consists of a platform, accelerator and Jupyter notebooks to demonstrate various aspects of the design and functionality of various Board interfaces. A platform is a Vivado design with a pre-instantiated set of I/O interfaces and a corresponding PetaLinux BSP and image that includes the required kernel drivers and user-space libraries to exercise those interfaces. Accelerators are mapped to FPGA logic resources and stitched into the platform using the Vitis toolchain. The reference design currently supports the VMK180 evaluation board. 
 
-Following is the list of Platform design available in 2021.1:
+Following is the list of Platform design available in 2021.2:
 
 | Platform Name  | Description  |  Links |
 | -------------- | ------------- |----------------|
