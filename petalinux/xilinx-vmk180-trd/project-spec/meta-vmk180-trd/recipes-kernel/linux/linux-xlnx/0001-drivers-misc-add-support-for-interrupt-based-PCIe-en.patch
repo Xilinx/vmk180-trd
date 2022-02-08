@@ -1,26 +1,21 @@
-From 5c3f28fc6df36451063579d60f2ce0864fa59439 Mon Sep 17 00:00:00 2001
-From: Anil Kumar M <amamidal@xilinx.com>
-Date: Fri, 19 Apr 2019 12:48:52 +0530
-Subject: [PATCH 1/3] drivers: misc: add support for interrupt based PCIe
- endpoint
+From bfdc829192e5cdb659a01adb1dddf6dc468496b1 Mon Sep 17 00:00:00 2001
+From: thippesw <thippesw@xilinx.com>
+Date: Wed, 26 Jan 2022 23:41:15 -0700
+Subject: [PATCH] Add support to access usersapce bar map registers of PCIe
+ from Xilinx PCIe endpint driver for doing read and write transfers.
 
-Add support to access usersapce bar map registers of PCIe
-from Xilinx PCIe endpint driver for doing read and write transfers.
-
-Signed-off-by: Anil Kumar M <amamidal@xilinx.com>
-Signed-off-by: Manjuraehmad <manjurae@xilinx.com>
 ---
- .../bindings/misc/xilinx-pcie_endpoint.txt         |  27 +
- drivers/misc/Kconfig                               |   6 +
- drivers/misc/Makefile                              |   1 +
- drivers/misc/xilinx_pci_endpoint.c                 | 781 +++++++++++++++++++++
+ .../bindings/misc/xilinx-pcie_endpoint.txt    |  27 +
+ drivers/misc/Kconfig                          |   6 +
+ drivers/misc/Makefile                         |   1 +
+ drivers/misc/xilinx_pci_endpoint.c            | 781 ++++++++++++++++++
  4 files changed, 815 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/misc/xilinx-pcie_endpoint.txt
  create mode 100644 drivers/misc/xilinx_pci_endpoint.c
 
 diff --git a/Documentation/devicetree/bindings/misc/xilinx-pcie_endpoint.txt b/Documentation/devicetree/bindings/misc/xilinx-pcie_endpoint.txt
 new file mode 100644
-index 0000000..25fa29b
+index 000000000000..25fa29b113e4
 --- /dev/null
 +++ b/Documentation/devicetree/bindings/misc/xilinx-pcie_endpoint.txt
 @@ -0,0 +1,27 @@
@@ -52,10 +47,10 @@ index 0000000..25fa29b
 +};
 +
 diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 6c35349..f32115307 100644
+index 19256211e630..223054828eb8 100644
 --- a/drivers/misc/Kconfig
 +++ b/drivers/misc/Kconfig
-@@ -479,6 +479,12 @@ config MISC_RTSX
+@@ -495,6 +495,12 @@ config MISC_RTSX
  	tristate
  	default MISC_RTSX_PCI || MISC_RTSX_USB
  
@@ -65,24 +60,24 @@ index 6c35349..f32115307 100644
 +   This module provides support to access and read write PCIe userspace bar map registers.
 +   If unsure, say N
 +
- config PVPANIC
- 	tristate "pvpanic device support"
- 	depends on HAS_IOMEM && (ACPI || OF)
+ config HISI_HIKEY_USB
+ 	tristate "USB GPIO Hub on HiSilicon Hikey 960/970 Platform"
+ 	depends on (OF && GPIOLIB) || COMPILE_TEST
 diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 1de471f..153bff9 100644
+index c1c0f4368f70..8a621e03a3ec 100644
 --- a/drivers/misc/Makefile
 +++ b/drivers/misc/Makefile
-@@ -54,6 +54,7 @@ obj-$(CONFIG_CXL_BASE)		+= cxl/
- obj-$(CONFIG_PCI_ENDPOINT_TEST)	+= pci_endpoint_test.o
+@@ -53,6 +53,7 @@ obj-$(CONFIG_PCI_ENDPOINT_TEST)	+= pci_endpoint_test.o
  obj-$(CONFIG_OCXL)		+= ocxl/
+ obj-$(CONFIG_BCM_VK)		+= bcm-vk/
  obj-y				+= cardreader/
 +obj-$(CONFIG_XILINX_PCIEP)     += xilinx_pci_endpoint.o
- obj-$(CONFIG_PVPANIC)   	+= pvpanic.o
+ obj-$(CONFIG_PVPANIC)   	+= pvpanic/
  obj-$(CONFIG_HABANA_AI)		+= habanalabs/
- obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+ obj-$(CONFIG_UACCE)		+= uacce/
 diff --git a/drivers/misc/xilinx_pci_endpoint.c b/drivers/misc/xilinx_pci_endpoint.c
 new file mode 100644
-index 0000000..58ce102
+index 000000000000..58ce102111e4
 --- /dev/null
 +++ b/drivers/misc/xilinx_pci_endpoint.c
 @@ -0,0 +1,781 @@
@@ -868,5 +863,5 @@ index 0000000..58ce102
 +MODULE_DESCRIPTION("PCIe usersapce register device driver");
 +MODULE_LICENSE("GPL v2");
 -- 
-2.7.4
+2.17.1
 

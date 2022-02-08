@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:${SYSCONFIG_PATH}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:${SYSCONFIG_PATH}:"
 
-SRC_URI += "file://config \
+SRC_URI:append = "file://config \
 	 	file://system-user.dtsi \
 		file://ina226-power-monitor.dtsi \
 		file://pl-custom.dtsi \
@@ -14,7 +14,7 @@ python () {
 }
 
 export PETALINUX
-do_configure_append () {
+do_configure:append () {
 	script="${PETALINUX}/etc/hsm/scripts/petalinux_hsm_bridge.tcl"
 	data=${PETALINUX}/etc/hsm/data/
 	eval xsct -sdx -nodisp ${script} -c ${WORKDIR}/config \

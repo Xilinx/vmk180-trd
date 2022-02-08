@@ -25,7 +25,7 @@ SRC_URI = " file://Makefile.am \
 
 S = "${WORKDIR}"
 
-CFLAGS_prepend = "-I${S}/include/"
+CFLAGS:prepend = "-I${S}/include/"
 
 DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base v4l-utils libdrm"
 
@@ -37,7 +37,7 @@ inherit pkgconfig autotools
 # Specify any options you want to pass to the configure script using EXTRA_OECONF:
 EXTRA_OECONF = ""
 
-FILES_${PN} += "/usr/bin/pcie_gst_app"
+FILES:${PN} += "/usr/bin/pcie_gst_app"
 
 do_install() {
 	install -d ${D}/${bindir}

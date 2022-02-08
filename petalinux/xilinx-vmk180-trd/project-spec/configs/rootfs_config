@@ -118,7 +118,7 @@ CONFIG_system-versal=y
 #
 # CONFIG_e2fsprogs is not set
 # CONFIG_e2fsprogs-dev is not set
-# CONFIG_e2fsprogs-mke2fs is not set
+CONFIG_e2fsprogs-mke2fs=y
 # CONFIG_e2fsprogs-dbg is not set
 # CONFIG_e2fsprogs-resize2fs is not set
 # CONFIG_e2fsprogs-tune2fs is not set
@@ -534,7 +534,7 @@ CONFIG_can-utils=y
 #
 # nfs-utils 
 #
-# CONFIG_nfs-utils is not set
+CONFIG_nfs-utils=y
 # CONFIG_nfs-utils-stats is not set
 # CONFIG_nfs-utils-dbg is not set
 # CONFIG_nfs-utils-dev is not set
@@ -1034,7 +1034,7 @@ CONFIG_pciutils=y
 #
 # python 
 #
-CONFIG_python=y
+# CONFIG_python is not set
 # CONFIG_python-terminal is not set
 # CONFIG_python-mailbox is not set
 # CONFIG_python-logging is not set
@@ -2800,7 +2800,7 @@ CONFIG_packagegroup-core-ssh-dropbear=y
 #
 # python3 
 #
-# CONFIG_python3 is not set
+CONFIG_python3=y
 # CONFIG_python3-crypt is not set
 # CONFIG_python3-unixadmin is not set
 # CONFIG_python3-io is not set
@@ -3579,6 +3579,13 @@ CONFIG_bridge-utils=y
 # CONFIG_wpa-supplicant-cli is not set
 
 #
+# ntp
+#
+# CONFIG_ntp is not set
+# CONFIG_ntp-dev is not set
+# CONFIG_ntp-dbg is not set
+
+#
 # optional 
 #
 
@@ -4137,6 +4144,8 @@ CONFIG_imagefeature-hwcodecs=y
 # CONFIG_imagefeature-package-management is not set
 # CONFIG_imagefeature-debug-tweaks is not set
 # CONFIG_auto-login is not set
+CONFIG_Init-manager-systemd=y
+# CONFIG_Init-manager-sysvinit is not set
 
 #
 # user packages 
@@ -4146,5 +4155,4 @@ CONFIG_packagegroup-vmk180-trd=y
 #
 # PetaLinux RootFS Settings
 #
-CONFIG_ROOTFS_ROOT_PASSWD="root"
-CONFIG_ADD_EXTRA_USERS="petalinux:petalinux;"
+CONFIG_ADD_EXTRA_USERS="root:root;petalinux::passwd-expire;"

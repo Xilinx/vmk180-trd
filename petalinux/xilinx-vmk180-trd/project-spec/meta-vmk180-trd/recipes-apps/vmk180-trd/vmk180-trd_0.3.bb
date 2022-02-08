@@ -8,7 +8,7 @@ SECTION = "PETALINUX/apps"
 LICENSE = "BSD-3-Clause"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=f9990fcc34ccf1f82ccf1bc5a1cc3bfc"
 
-RDEPENDS_${PN} += " \
+RDEPENDS:${PN} += " \
 	python3-notebook \
 	python3-opencv \
 	python3-pydot \
@@ -31,6 +31,6 @@ do_install() {
 	cp -r ${S}/notebooks/* ${D}/${NOTEBOOK_DIR}/${PN}
 }
 
-FILES_${PN}-notebooks += "${NOTEBOOK_DIR}"
+FILES:${PN}-notebooks += "${NOTEBOOK_DIR}"
 PACKAGES += "${PN}-notebooks"
 

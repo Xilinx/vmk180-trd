@@ -29,7 +29,6 @@ VMK180_TRD_PACKAGES = " \
 	${XRT_PACKAGES} \
 	packagegroup-petalinux-gstreamer \
 	gst-plugins-xlnx \
-        gst-sdx \
         gstreamer1.0-python \
 	packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-v4lutils \
@@ -37,7 +36,6 @@ VMK180_TRD_PACKAGES = " \
         e2fsprogs-resize2fs \
 	kernel-module-hdmi \
 	ldd \
-	libxapm-python \
 	nodejs \
 	nodejs-npm \
 	ntp \
