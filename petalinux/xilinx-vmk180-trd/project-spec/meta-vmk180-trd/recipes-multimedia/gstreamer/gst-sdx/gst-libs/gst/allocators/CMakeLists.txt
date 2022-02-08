@@ -1,5 +1,0 @@
-if (SDSOC_MODE)
-  include(${CMAKE_CURRENT_SOURCE_DIR}/sdxallocator.cmake)
-else ()
-  include(${CMAKE_CURRENT_SOURCE_DIR}/xclallocator.cmake)
-endif ()
