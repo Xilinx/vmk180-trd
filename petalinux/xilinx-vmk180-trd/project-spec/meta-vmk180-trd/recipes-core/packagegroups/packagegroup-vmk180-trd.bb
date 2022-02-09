@@ -32,7 +32,6 @@ VMK180_TRD_PACKAGES = " \
         gstreamer1.0-python \
 	packagegroup-petalinux-self-hosted \
         packagegroup-petalinux-v4lutils \
-	packagegroup-petalinux-v4lutils \
         e2fsprogs-resize2fs \
 	kernel-module-hdmi \
 	ldd \
@@ -45,6 +44,9 @@ VMK180_TRD_PACKAGES = " \
 	tzdata \
 	pcie-gst-app \
 	xmediactl \
+	packagegroup-petalinux-vvas \
+	vvas-utils \
+	vvas-gst \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"
