@@ -11,11 +11,12 @@ inherit meson pkgconfig gettext
 
 S = "${WORKDIR}/git/vvas-utils"
 
+RDEPENDS:${PN} = "xrt jansson"
 
 GIR_MESON_ENABLE_FLAG = "enabled"
 GIR_MESON_DISABLE_FLAG = "disabled"
-
-
-FILES:${PN} = "${libdir}/*.so.* ${includedir}/* ${libdir}/pkgconfig/*"
+INSANE_SKIP:${PN} = "dev-deps"
+FILES:${PN} += "${libdir}/libvvasutil.so ${libdir}/libxrtutil.so ${libdir}/pkgconfig/*"
+FILES:${PN}-dev = "${includedir}"
 
 #CVE_PRODUCT = "gstreamer"
