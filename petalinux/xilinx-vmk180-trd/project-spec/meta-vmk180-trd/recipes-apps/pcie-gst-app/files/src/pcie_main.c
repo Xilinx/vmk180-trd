@@ -244,10 +244,10 @@ static gint gst_set_elements (App *app)
     app->capsfilter     = gst_element_factory_make  ("capsfilter",      NULL);
     app->pciesrc        = gst_element_factory_make  ("appsrc",          NULL);
     app->pciesink       = gst_element_factory_make  ("appsink",         NULL);
-    app->sdxfilter2d    = gst_element_factory_make  ("sdxfilter2d",     NULL);
+    app->vvas_xfilter    = gst_element_factory_make  ("vvas_xfilter",     NULL);
     app->perf           = gst_element_factory_make  ("perf",            NULL);
     if (!app->pipeline || !app->inputsrc  || !app->capsfilter  || \
-        !app->pciesrc  || !app->pciesink  || !app->sdxfilter2d || \
+        !app->pciesrc  || !app->pciesink  || !app->vvas_xfilter || \
         !app->perf) {
       GST_ERROR ("Failed to create required GStreamer elements");
       return PCIE_GST_APP_FAIL;
@@ -264,7 +264,7 @@ static void gst_reset_elements (App *app)
     gst_object_unref (GST_OBJECT (app->capsfilter));
     gst_object_unref (GST_OBJECT (app->pciesrc));
     gst_object_unref (GST_OBJECT (app->pciesink));
-    gst_object_unref (GST_OBJECT (app->sdxfilter2d));
+    gst_object_unref (GST_OBJECT (app->vvas_xfilter));
     gst_object_unref (GST_OBJECT (app->perf));
     GST_DEBUG ("Released GStreamer elements");
 }
@@ -327,12 +327,10 @@ static void set_property (App *app)
             NULL);
 
     if(app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) {
-        /* Configure sdxfilter2d parameters */
+        /* Configure vvas_xfilter parameters */
         GST_DEBUG ("Setting up filter2d plugin");
-        g_object_set (G_OBJECT (app->sdxfilter2d),              \
-                "filter-preset",  app->h_param.filter_preset,   \
-                "filter-mode",    app->h_param.kernel_mode,     \
-                "filter-kernel",  VGST_FILTER_KERNEL_NAME,      \
+        g_object_set (G_OBJECT (app->vvas_xfilter),              \
+                "kernels-config", "/usr/share/vvas/base-trd/kernel_xfilter2d_pl.json",   \
                 NULL);
     }
 }
@@ -344,30 +342,30 @@ static gint create_pipeline (App *app)
     if (app->h_param.usecase == VGST_USECASE_TYPE_MIPISRC_TO_HOST) {
         /* mipi -> filter2d -> pciesink -> displayonhost */
         gst_bin_add_many (GST_BIN (app->pipeline), app->inputsrc,       \
-                app->capsfilter, app->sdxfilter2d, app->perf,           \
+                app->capsfilter, app->vvas_xfilter, app->perf,           \
                 app->pciesink, NULL);
         if (gst_element_link_many (app->inputsrc, app->capsfilter,      \
-                app->sdxfilter2d, app->perf, app->pciesink, NULL)       \
+                app->vvas_xfilter, app->perf, app->pciesink, NULL)       \
                 != TRUE) {
             GST_ERROR ("Error linking v4l2src --> capsfilter --> "      \
-                       "sdxfilter2d --> perf --> pciesink pipeline");
+                       "vvas_xfilter --> perf --> pciesink pipeline");
             ret = PCIE_GST_APP_FAIL;
         } else{
-            GST_DEBUG ("Linked v4l2src --> capsfilter --> sdxfilter2d"  \
+            GST_DEBUG ("Linked v4l2src --> capsfilter --> vvas_xfilter"  \
                        " --> perf --> pciesink successfully");
         }
     }
     else if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST) {
         /* pciesrc -> filter2d -> pciesink -> displayonhost */
         gst_bin_add_many (GST_BIN (app->pipeline), app->pciesrc,        \
-                app->sdxfilter2d, app->perf, app->pciesink, NULL);
-        if (gst_element_link_many (app->pciesrc, app->sdxfilter2d,      \
+                app->vvas_xfilter, app->perf, app->pciesink, NULL);
+        if (gst_element_link_many (app->pciesrc, app->vvas_xfilter,      \
                 app->perf, app->pciesink, NULL) != TRUE) {
-            GST_ERROR ("Error linking pciesrc --> sdxfilter2d --> "     \
+            GST_ERROR ("Error linking pciesrc --> vvas_xfilter --> "     \
                        "perf --> pciesink pipeline");
             ret = PCIE_GST_APP_FAIL;
         } else {
-            GST_DEBUG ("Linked pciesrc --> sdxfilter2d --> perf --> "   \
+            GST_DEBUG ("Linked pciesrc --> vvas_xfilter --> perf --> "   \
                        "pciesink pipeline successfully");
         }
     }
@@ -397,27 +395,27 @@ static void destroy_pipeline (App *app)
     if (app->h_param.usecase == VGST_USECASE_TYPE_MIPISRC_TO_HOST) {
         /* mipi -> filter2d -> pciesink -> displayonhost */
         gst_element_unlink_many (app->inputsrc, app->capsfilter,            \
-                app->sdxfilter2d, app->perf, app->pciesink, NULL);
+                app->vvas_xfilter, app->perf, app->pciesink, NULL);
         gst_object_ref (app->inputsrc);
         gst_object_ref (app->capsfilter);
-        gst_object_ref (app->sdxfilter2d);
+        gst_object_ref (app->vvas_xfilter);
         gst_object_ref (app->pciesink);
         gst_bin_remove_many (GST_BIN (app->pipeline), app->inputsrc,        \
-                app->capsfilter, app->sdxfilter2d, app->perf,               \
+                app->capsfilter, app->vvas_xfilter, app->perf,               \
                 app->pciesink, NULL);
-        GST_DEBUG ("Destroyed v4l2src --> capsfilter --> sdxfilter2d"       \
+        GST_DEBUG ("Destroyed v4l2src --> capsfilter --> vvas_xfilter"       \
                    " --> perf --> pciesink successfully");
     }
     else if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST) {
         /* pciesrc -> filter2d -> pciesink -> displayonhost */
-        gst_element_unlink_many (app->pciesrc, app->sdxfilter2d,            \
+        gst_element_unlink_many (app->pciesrc, app->vvas_xfilter,            \
                 app->perf, app->pciesink, NULL);
         gst_object_ref (app->pciesrc);
-        gst_object_ref (app->sdxfilter2d);
+        gst_object_ref (app->vvas_xfilter);
         gst_object_ref (app->pciesink);
         gst_bin_remove_many (GST_BIN (app->pipeline), app->pciesrc,         \
-                app->sdxfilter2d, app->perf, app->pciesink, NULL);
-        GST_DEBUG ("Destroyed pciesrc --> sdxfilter2d --> perf --> "        \
+                app->vvas_xfilter, app->perf, app->pciesink, NULL);
+        GST_DEBUG ("Destroyed pciesrc --> vvas_xfilter --> perf --> "        \
                    "pciesink pipeline successfully");
     }
     else if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) {

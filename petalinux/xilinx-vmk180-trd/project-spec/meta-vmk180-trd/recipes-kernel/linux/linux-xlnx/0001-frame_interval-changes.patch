@@ -1,0 +1,35 @@
+From febe1c1b012637030e0256861673666fa820f189 Mon Sep 17 00:00:00 2001
+From: thippesw <thippesw@xilinx.com>
+Date: Mon, 14 Feb 2022 03:58:44 -0700
+Subject: [PATCH] frame_interval changes
+
+---
+ drivers/media/i2c/imx274.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/media/i2c/imx274.c b/drivers/media/i2c/imx274.c
+index e921909ee199..eb49fb141be4 100644
+--- a/drivers/media/i2c/imx274.c
++++ b/drivers/media/i2c/imx274.c
+@@ -1368,6 +1368,10 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+ 	int min, max, def;
+ 	int ret;
+ 
++	ret = pm_runtime_resume_and_get(&imx274->client->dev);
++	if (ret < 0)
++		return ret;
++	
+ 	mutex_lock(&imx274->lock);
+ 	ret = imx274_set_frame_interval(imx274, fi->interval);
+ 
+@@ -1399,6 +1403,7 @@ static int imx274_s_frame_interval(struct v4l2_subdev *sd,
+ 
+ unlock:
+ 	mutex_unlock(&imx274->lock);
++	pm_runtime_put(&imx274->client->dev);
+ 
+ 	return ret;
+ }
+-- 
+2.17.1
+

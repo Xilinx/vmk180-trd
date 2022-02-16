@@ -10,4 +10,5 @@ echo "setting scalar:0  RGB24 3840x2160"
 xmedia-ctl -d /dev/media0 -V '"a4080000.scaler":0 [fmt:RBG24/3840x2160 field:none]'
 echo "setting scalar:1  UYVy8_1X16 3840x2160"
 xmedia-ctl -d /dev/media0 -V '"a4080000.scaler":1 [fmt:UYVY8_1X16/3840x2160 field:none]'
-
+echo "updating imx274 sensor exposure to 16623 default"
+v4l2-ctl -d /dev/video0 --set-ctrl=exposure=16623

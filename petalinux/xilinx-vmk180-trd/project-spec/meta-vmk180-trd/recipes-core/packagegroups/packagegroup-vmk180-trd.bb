@@ -47,6 +47,7 @@ VMK180_TRD_PACKAGES = " \
 	packagegroup-petalinux-vvas \
 	vvas-utils \
 	vvas-gst \
+	filter2d-accel \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"

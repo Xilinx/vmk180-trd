@@ -56,8 +56,8 @@ typedef struct {
     host_params h_param;
     dma_buf_imp dma_import;
     dma_buf_export dma_export, dma_map[MAX_BUFFER_POOL_SIZE];
-    GstElement *inputsrc, *sdxfilter2d, *perf;
-    GstElement *pipeline, *pciesrc, *capsfilter, *pciesink;
+    GstElement *inputsrc, *vvas_xfilter, *perf;
+    GstElement *pipeline, *pciesrc, *capsfilter, *pciesink, *videosink;
     guint64 appsrc_framecnt, appsink_framecnt;
     guint64 read_offset, yuv_frame_size, export_fd_size;
 } App;
