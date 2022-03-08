@@ -4155,4 +4155,5 @@ CONFIG_packagegroup-vmk180-trd=y
 #
 # PetaLinux RootFS Settings
 #
+CONFIG_ROOTFS_ROOT_PASSWD="root"
 CONFIG_ADD_EXTRA_USERS="root:root;petalinux::passwd-expire;"
