@@ -179,6 +179,12 @@ CONFIG_SUBSYSTEM_PRODUCT="vmk180-trd"
 CONFIG_SUBSYSTEM_FW_VERSION="1.00"
 
 #
+# Enable Decoupling Flow
+#
+# CONFIG_DECOUPLING_FLOW is not set
+CONFIG_SYSTEM_DTS_FILE=""
+
+#
 # Yocto Settings
 #
 CONFIG_YOCTO_MACHINE_NAME="xilinx-vmk180"

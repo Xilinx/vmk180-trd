@@ -172,7 +172,8 @@ static gint set_host_parameters(App *app)
 
     /* Get input file length */
     if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST ||         \
-        app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) {
+        app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS || \
+	app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
         ret = pcie_get_file_length(app->fd, &(app->h_param.length));
         if(ret < 0) {
             GST_ERROR ("Failed to get file length");
@@ -199,7 +200,8 @@ static gint set_host_parameters(App *app)
     GST_DEBUG ("FPS is %d",app->h_param.fps);
 
     /* Get filter-preset */
-    if (app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) {
+    if (app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS &&  
+    	app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
         ret = pcie_get_filter_type (app->fd, &(app->h_param.filter_preset));
         if (ret < 0) {
             GST_ERROR ("Failed to get filter type");
@@ -244,11 +246,12 @@ static gint gst_set_elements (App *app)
     app->capsfilter     = gst_element_factory_make  ("capsfilter",      NULL);
     app->pciesrc        = gst_element_factory_make  ("appsrc",          NULL);
     app->pciesink       = gst_element_factory_make  ("appsink",         NULL);
+    app->hdmisink       = gst_element_factory_make  ("kmssink",         NULL);
     app->vvas_xfilter    = gst_element_factory_make  ("vvas_xfilter",     NULL);
     app->perf           = gst_element_factory_make  ("perf",            NULL);
     if (!app->pipeline || !app->inputsrc  || !app->capsfilter  || \
         !app->pciesrc  || !app->pciesink  || !app->vvas_xfilter || \
-        !app->perf) {
+	!app->hdmisink || !app->perf) {
       GST_ERROR ("Failed to create required GStreamer elements");
       return PCIE_GST_APP_FAIL;
     }
@@ -264,6 +267,7 @@ static void gst_reset_elements (App *app)
     gst_object_unref (GST_OBJECT (app->capsfilter));
     gst_object_unref (GST_OBJECT (app->pciesrc));
     gst_object_unref (GST_OBJECT (app->pciesink));
+    gst_object_unref (GST_OBJECT (app->hdmisink));
     gst_object_unref (GST_OBJECT (app->vvas_xfilter));
     gst_object_unref (GST_OBJECT (app->perf));
     GST_DEBUG ("Released GStreamer elements");
@@ -274,7 +278,8 @@ static void set_property (App *app)
     GstCaps* srcCaps = NULL;
 
     if ((app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST) ||
-        (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS)) {
+        (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) || 
+	(app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK)) {
         GST_DEBUG ("Setting up appsrc plugin");
         g_object_set (G_OBJECT (app->pciesrc),                      \
                 "stream-type", GST_APP_STREAM_TYPE_STREAM,          \
@@ -319,18 +324,31 @@ static void set_property (App *app)
         gst_caps_unref (srcCaps);
     }
 
+    if (app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
     /* Configure appsink */
     g_object_set (G_OBJECT (app->pciesink), \
             "emit-signals", TRUE,           \
             "sync",         FALSE,          \
             "async",        FALSE,          \
             NULL);
-
-    if(app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) {
+    }
+    else if(app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
+    /* Configure kmssink */
+    g_object_set (G_OBJECT (app->hdmisink), \
+            "driver-name", "xlnx",           \
+            "plane-id",        38,          \
+            "sync",        FALSE,          \
+            NULL);
+    }
+    if(app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS &&
+       app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
         /* Configure vvas_xfilter parameters */
         GST_DEBUG ("Setting up filter2d plugin");
         g_object_set (G_OBJECT (app->vvas_xfilter),              \
-                "kernels-config", "/usr/share/vvas/base-trd/kernel_xfilter2d_pl.json",   \
+                "kernels-config", "/usr/share/vvas/vmk180-trd/kernel_xfilter2d_pl.json",   \
+                NULL);
+	g_object_set (G_OBJECT (app->vvas_xfilter),              \
+                "dynamic-config",  "{\"filter_preset\" : \"identity\" \}" ,   \
                 NULL);
     }
 }
@@ -382,6 +400,20 @@ static gint create_pipeline (App *app)
             GST_DEBUG ("Linked pciesrc --> perf --> pciesink "              \
                        "pipeline successfully");
         }
+     }
+     else if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
+        /* pciesrc -> hdmisink -> displayonmonitor */
+        gst_bin_add_many (GST_BIN (app->pipeline), app->pciesrc,            \
+                app->perf, app->hdmisink, NULL);
+        if (gst_element_link_many (app->pciesrc, app->perf,                 \
+                app->hdmisink, NULL) != TRUE) {
+            GST_ERROR ("Error linking pciesrc --> perf --> "                \
+                       "hdmisink pipeline");
+            ret = PCIE_GST_APP_FAIL;
+        } else {
+            GST_DEBUG ("Linked pciesrc --> perf --> hdmisink "              \
+                       "pipeline successfully");
+        }
     }
 
     return ret;
@@ -428,6 +460,16 @@ static void destroy_pipeline (App *app)
         GST_DEBUG ("Destroyed pciesrc --> perf --> pciesink "               \
                    "pipeline successfully");
      }
+    else if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
+        /* pciesrc -> hdmisink -> displayonmonitor */
+        gst_element_unlink_many (app->pciesrc, app->perf, app->hdmisink, NULL);
+        gst_object_ref (app->pciesrc);
+        gst_object_ref (app->hdmisink);
+        gst_bin_remove_many (GST_BIN (app->pipeline), app->pciesrc,         \
+                app->perf, app->hdmisink, NULL);
+        GST_DEBUG ("Destroyed pciesrc --> perf --> hdmisink "               \
+                   "pipeline successfully");
+		   }
 
 }
 
@@ -548,6 +590,8 @@ gint main (gint argc, gchar *argv[])
                 G_CALLBACK(stop_feed),                          \
                 app);
     }
+
+    if (app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK){
     hid_sample = g_signal_connect(app->pciesink,                \
             "new-sample",                                       \
             G_CALLBACK(new_sample_cb),                          \
@@ -559,7 +603,20 @@ gint main (gint argc, gchar *argv[])
             appsink_query_cb,                                   \
             NULL,                                               \
             NULL);
-
+	}
+    if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
+    hid_sample = g_signal_connect(app->hdmisink,                \
+            "new-sample",                                       \
+            G_CALLBACK(new_sample_cb),                          \
+            app);
+    pad = gst_element_get_static_pad (app->hdmisink, "sink");
+    pid_query = gst_pad_add_probe (pad,                         \
+            GST_PAD_PROBE_TYPE_QUERY_DOWNSTREAM,                \
+            appsink_query_cb,                                   \
+            NULL,                                               \
+            NULL);
+        }
+	
     /* Add watch for messages */
     gst_bus_add_watch (bus, (GstBusFunc) bus_message, app);
 
@@ -611,9 +668,14 @@ DESTROY_PIPELINE:
         g_signal_handler_disconnect (app->pciesrc,  hid_need);
         g_signal_handler_disconnect (app->pciesrc,  hid_enough);
     }
+    if (app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
     g_signal_handler_disconnect (app->pciesink, hid_sample);
     GST_DEBUG ("Disconnected registered signal callbacks");
-
+	}
+    if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
+    g_signal_handler_disconnect (app->hdmisink, hid_sample);
+    GST_DEBUG ("Disconnected registered signal callbacks");
+	}
     /* Remove and unref bus watch */
     gst_bus_remove_watch (bus);
     gst_object_unref (bus);

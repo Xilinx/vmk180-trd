@@ -57,7 +57,7 @@ typedef struct {
     dma_buf_imp dma_import;
     dma_buf_export dma_export, dma_map[MAX_BUFFER_POOL_SIZE];
     GstElement *inputsrc, *vvas_xfilter, *perf;
-    GstElement *pipeline, *pciesrc, *capsfilter, *pciesink, *videosink;
+    GstElement *pipeline, *pciesrc, *capsfilter, *pciesink, *hdmisink;
     guint64 appsrc_framecnt, appsink_framecnt;
     guint64 read_offset, yuv_frame_size, export_fd_size;
 } App;
@@ -72,6 +72,7 @@ typedef enum {
     VGST_USECASE_TYPE_MIPISRC_TO_HOST,
     VGST_USECASE_TYPE_APPSRC_TO_HOST,
     VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS,
+    VGST_USECASE_TYPE_APPSRC_TO_KMSSINK,
     VGST_USECASE_TYPE_MAX,
 } VGST_USECASE_TYPE;
 
