@@ -237,6 +237,13 @@ static gint set_host_parameters(App *app)
     return ret;
 }
 
+static char * getfilterstring(int index) {
+   const char *str1 = "{\"filter_preset\" : \"";
+   char *buf = malloc(strlen(str1) + strlen(filter_presets[index])+1);
+   sprintf(buf, "%s%s\" \}", str1, filter_presets[index] );
+   return buf;
+}
+
 static gint gst_set_elements (App *app)
 {
     gint ret = 0;
@@ -276,7 +283,7 @@ static void gst_reset_elements (App *app)
 static void set_property (App *app)
 {
     GstCaps* srcCaps = NULL;
-
+    char * str;	
     if ((app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST) ||
         (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS) || 
 	(app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK)) {
@@ -325,20 +332,20 @@ static void set_property (App *app)
     }
 
     if (app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
-    /* Configure appsink */
-    g_object_set (G_OBJECT (app->pciesink), \
-            "emit-signals", TRUE,           \
-            "sync",         FALSE,          \
-            "async",        FALSE,          \
-            NULL);
+    	/* Configure appsink */
+    	g_object_set (G_OBJECT (app->pciesink), \
+            	"emit-signals", TRUE,           \
+            	"sync",         FALSE,          \
+            	"async",        FALSE,          \
+            	NULL);
     }
     else if(app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
-    /* Configure kmssink */
-    g_object_set (G_OBJECT (app->hdmisink), \
-            "driver-name", "xlnx",           \
-            "plane-id",        38,          \
-            "sync",        FALSE,          \
-            NULL);
+    	/* Configure kmssink */
+	g_object_set (G_OBJECT (app->hdmisink), \
+            	"driver-name", "xlnx",           \
+            	"plane-id",        38,          \
+            	"sync",        FALSE,          \
+            	NULL);
     }
     if(app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_HOST_BYPASS &&
        app->h_param.usecase != VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
@@ -347,8 +354,9 @@ static void set_property (App *app)
         g_object_set (G_OBJECT (app->vvas_xfilter),              \
                 "kernels-config", "/usr/share/vvas/vmk180-trd/kernel_xfilter2d_pl.json",   \
                 NULL);
+	str = getfilterstring(app->h_param.filter_preset);	
 	g_object_set (G_OBJECT (app->vvas_xfilter),              \
-                "dynamic-config",  "{\"filter_preset\" : \"identity\" \}" ,   \
+                "dynamic-config",str,   \
                 NULL);
     }
 }
