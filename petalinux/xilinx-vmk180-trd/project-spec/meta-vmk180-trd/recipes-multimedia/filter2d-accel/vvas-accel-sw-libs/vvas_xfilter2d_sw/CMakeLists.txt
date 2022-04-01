@@ -7,7 +7,7 @@ set(KERNEL vvas_xfilter2d_sw)
 
 find_package(OpenCV REQUIRED core imgproc)
 
-add_library(${KERNEL} SHARED src/ivas_xfilter2d_sw.cpp)
+add_library(${KERNEL} SHARED src/vvas_xfilter2d_sw.cpp)
 
 target_include_directories(${KERNEL} PRIVATE
     ${JANSSON_INCLUDE_DIRS}
