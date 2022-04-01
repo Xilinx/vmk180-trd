@@ -44,7 +44,6 @@ VMK180_TRD_PACKAGES = " \
 	tzdata \
 	pcie-gst-app \
 	xmediactl \
-	packagegroup-petalinux-vvas \
 	vvas-utils \
 	vvas-gst \
 	filter2d-accel \
