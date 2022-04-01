@@ -16,7 +16,7 @@
 
 #include <vvas/vvaslogs.h>
 
-#include "ivas_xfilter2d.h"
+#include "vvas_xfilter2d.h"
 
 uint32_t xlnx_kernel_deinit(VVASKernel *handle)
 {

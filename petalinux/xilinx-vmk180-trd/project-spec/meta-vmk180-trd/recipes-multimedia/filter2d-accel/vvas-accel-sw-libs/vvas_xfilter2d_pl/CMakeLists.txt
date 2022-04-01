@@ -5,7 +5,7 @@
 
 set(KERNEL vvas_xfilter2d_pl)
 
-add_library(${KERNEL} SHARED src/ivas_xfilter2d_pl.c)
+add_library(${KERNEL} SHARED src/vvas_xfilter2d_pl.c)
 
 target_include_directories(${KERNEL} PRIVATE
     ${JANSSON_INCLUDE_DIRS}

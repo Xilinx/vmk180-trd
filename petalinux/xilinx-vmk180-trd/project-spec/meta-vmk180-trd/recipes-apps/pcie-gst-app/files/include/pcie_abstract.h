@@ -258,6 +258,16 @@ gint pcie_dma_import(gint fpga_fd, struct dma_buf_imp* dma_import);
 gint pcie_dma_import_release(gint fpga_fd, struct dma_buf_imp* dma_import);
 
 /**
+ * @brief To specify number of dma buf to be allocated
+ *
+ * @param[in] fpga_fd pcie ep device node file descriptor.
+ * @param[in] number of dma buffers to be allocated (value 1-3)
+ *
+ * @return 0 on success
+ */
+gint pcie_num_dma_buf(gint fpga_fd, guint nbuf);
+
+/**
  * @brief get the supported usecase type
  *
  * @param[in] fpga_fd pcie ep device node file descriptor.

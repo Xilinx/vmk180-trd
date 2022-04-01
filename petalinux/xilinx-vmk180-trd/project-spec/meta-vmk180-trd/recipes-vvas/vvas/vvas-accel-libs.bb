@@ -1,18 +1,22 @@
-SUMMARY = "VVAS accel sw libs"
-DESCRIPTION = "VVAS accelerator libraries"
+SUMMARY = "VVAS gst"
+DESCRIPTION = "VVAS gstreamer plugins for VVAS SDK"
 SECTION = "multimedia"
-LICENSE = "Apache-2.0"
+LICENSE = "Apache-2.0 & LGPLv2 & MIT & BSD-3-Clause"
 
 include vvas.inc
 
-DEPENDS = "glib-2.0 glib-2.0-native xrt libcap libxml2 bison-native flex-native jansson vvas-utils vvas-gst opencv vitis-ai-library vart"
+DEPENDS = "glib-2.0 glib-2.0-native xrt libcap libxml2 bison-native flex-native gstreamer1.0 jansson vvas-utils"
+
+RDEPENDS:${PN} = "gstreamer1.0-plugins-base"
 
 inherit meson pkgconfig gettext
 
-S = "${WORKDIR}/git/vvas-accel-sw-libs"
+S = "${WORKDIR}/git/vvas-gst-plugins"
 
 GIR_MESON_ENABLE_FLAG = "enabled"
 GIR_MESON_DISABLE_FLAG = "disabled"
 
-FILES:${PN} += "${libdir}/vvas/*.so ${libdir}/*.so"
-FILES:${PN}-dev = "${includedir}"
+FILES:${PN} += "${libdir}/gstreamer-1.0/*.so"
+FILES:${PN}-dev += "${libdir}/gstreamer-1.0/*.a ${libdir}/gstreamer-1.0/include"
+
+#CVE_PRODUCT = "gstreamer"

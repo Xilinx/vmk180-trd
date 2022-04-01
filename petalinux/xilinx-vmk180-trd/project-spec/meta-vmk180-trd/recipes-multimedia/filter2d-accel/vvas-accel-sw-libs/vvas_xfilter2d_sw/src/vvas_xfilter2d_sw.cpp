@@ -18,7 +18,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 
-#include "ivas_xfilter2d.h"
+#include "vvas_xfilter2d.h"
 
 using namespace cv;
 using namespace std;

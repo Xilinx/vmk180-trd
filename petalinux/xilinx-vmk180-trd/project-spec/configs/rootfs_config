@@ -160,6 +160,13 @@ CONFIG_e2fsprogs-mke2fs=y
 CONFIG_fpga-manager-script=y
 
 #
+# dfx-mgr
+#
+# CONFIG_dfx-mgr is not set
+# CONFIG_dfx-mgr-dbg is not set
+# CONFIG_dfx-mgr-dev is not set
+
+#
 # haveged 
 #
 CONFIG_haveged=y

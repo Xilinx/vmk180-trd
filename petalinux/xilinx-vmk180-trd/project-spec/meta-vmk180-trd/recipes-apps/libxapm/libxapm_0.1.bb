@@ -7,10 +7,7 @@ SECTION = "PETALINUX/apps"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=7124841280fe439e1e022aaf7958a7f3"
 
-DEPENDS += " \
-	boost \
-	python3 \
-	"
+DEPENDS += " boost python3 "
 
 SRC_URI = " \
 	file://inc \
@@ -39,4 +36,4 @@ do_install() {
 }
 
 PACKAGES =+ "${PN}-python"
-FILES_${PN}-python += "${PYTHON_SITEPACKAGES_DIR}"
+FILES:${PN}-python += "${PYTHON_SITEPACKAGES_DIR}"

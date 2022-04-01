@@ -23,7 +23,7 @@ VMK180_TRD_PACKAGES = " \
         jupyter-startup \
         nodejs \
         nodejs-npm \
-         parted \
+        parted \
         python3-dev \
         python3-periphery \
 	${XRT_PACKAGES} \
@@ -48,6 +48,7 @@ VMK180_TRD_PACKAGES = " \
 	vvas-utils \
 	vvas-gst \
 	filter2d-accel \
+	libxapm \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"

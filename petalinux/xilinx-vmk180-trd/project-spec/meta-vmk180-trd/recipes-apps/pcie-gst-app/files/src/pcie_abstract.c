@@ -36,6 +36,7 @@
 #define MAP_DMA_BUFF              0x1e
 #define UNMAP_DMA_BUF             0x1f
 #define READ_STOP_MIPI_FEED       0x20
+#define NUM_DMA_BUF       	  0x21
 
 #define SET_READ_TRANSFER_DONE_VAL   0xef
 #define CLR_READ_TRANSFER_DONE_VAL   0x00
@@ -129,6 +130,22 @@ gint pcie_read_stop_mipi_feed(gint fpga_fd, guint *mipi_feed)
 
     if (fpga_fd >= 0) {
         ret = ioctl(fpga_fd, READ_STOP_MIPI_FEED, mipi_feed);
+        if (ret < 0)
+            GST_ERROR ("Failed to run ioctl to read stop mipi feed");
+    }
+
+    return ret;
+}
+
+gint pcie_num_dma_buf(gint fpga_fd, guint nbuf)
+{
+    gint ret = -EINVAL;
+    if((nbuf < 1) && (nbuf >3)) {
+            GST_ERROR ("Failed to run ioctl to set number of dma buf");
+    	    return ret; 
+    }
+    if (fpga_fd >= 0) {
+        ret = ioctl(fpga_fd, NUM_DMA_BUF,&nbuf);
         if (ret < 0)
             GST_ERROR ("Failed to run ioctl to read stop mipi feed");
     }

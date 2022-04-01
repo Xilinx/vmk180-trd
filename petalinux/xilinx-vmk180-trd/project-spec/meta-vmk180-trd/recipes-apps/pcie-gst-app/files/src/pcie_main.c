@@ -539,7 +539,7 @@ gint main (gint argc, gchar *argv[])
     gulong      hid_enough  = 0;   /* handler id - enough data signal     */
     gulong      hid_sample  = 0;   /* handler id - new sample signal      */
     gulong      pid_query   = 0;   /* probe   id - appsink query callback */
-
+    gint        ndmabuf     = 3;
     memset (app, 0, sizeof(App));
 
     gst_init (&argc, &argv);
@@ -635,6 +635,12 @@ gint main (gint argc, gchar *argv[])
     if (app->h_param.usecase != VGST_USECASE_TYPE_MIPISRC_TO_HOST) {
         app->dma_export.fd = 0;
         app->dma_export.size = app->export_fd_size;
+	/* Driver will allocate specified number of dma bufferpool */
+	ret = pcie_num_dma_buf(app->fd,ndmabuf);
+	if (ret < 0) {
+            g_printerr ("Failed to initialize number of buffer");
+            goto DESTROY_PIPELINE;
+        }
         /* Driver will initalize bufferpool and store FDs, which can be
            export to user via dma-map/unmap IOCTLs */
         ret = pcie_dma_export(app->fd, &app->dma_export);
