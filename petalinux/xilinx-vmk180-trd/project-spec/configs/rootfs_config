@@ -4164,6 +4164,6 @@ CONFIG_packagegroup-vmk180-trd=y
 #
 CONFIG_ROOTFS_ROOT_PASSWD="root"
 CONFIG_ADD_EXTRA_USERS="root:root;petalinux::passwd-expire;"
-CONFIG_ADD_USERS_TO_GROUPS="petalinux:video"
+CONFIG_ADD_USERS_TO_GROUPS="petalinux:video;"
 CONFIG_ADD_USERS_TO_SUDOERS="petalinux"
 
