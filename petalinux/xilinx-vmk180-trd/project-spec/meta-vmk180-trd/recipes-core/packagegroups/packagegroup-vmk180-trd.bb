@@ -50,6 +50,7 @@ VMK180_TRD_PACKAGES = " \
 	filter2d-accel \
 	libxapm \
 	libpcie-gst \
+	libxapm-python \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"
