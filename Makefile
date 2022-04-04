@@ -10,7 +10,7 @@ PFM_DIR = $(PWD)/platforms
 PFM_VER = 2021_2
 
 # valid platforms / overlays
-PFM_LIST = vmk180_trd vmk180_es1_trd
+PFM_LIST = vmk180_trd
 OVERLAY_LIST = filter2d_pl
 
 PFM_XPFM = $(PFM_DIR)/xilinx_$(PFM)_$(PFM_VER)/$(PFM).xpfm

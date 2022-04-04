@@ -3,6 +3,7 @@
 
 RM = rm -rf
 MV = mv
+CP = cp -r
 
 # v++ flags
 VPP ?= v++
@@ -16,17 +17,17 @@ XBU_FLAGS = --remove-section BITSTREAM --force
 
 # kernels and xclbin
 KERNEL_OBJS += kernel/filter2d_pl_accel/filter2d_pl_accel.xo
-BINARY_CONTAINER = binary_container_1.xclbin
+XSA = binary_container_1.xsa
+BINARY_CONTAINER = _x/link/int/binary_container_1.xclbin
 
 # Rules
 .PHONY: all link
 all: link
-link: $(BINARY_CONTAINER)
+link: $(XSA)
 
-$(BINARY_CONTAINER): $(KERNEL_OBJS)
+$(XSA): $(KERNEL_OBJS)
 	$(VPP) $(VPP_LINK_FLAGS) -o $@ $(+)
-	$(XBU) $(XBU_FLAGS) --input $(BINARY_CONTAINER) --output tmp.xclbin
-	-@$(MV) tmp.xclbin $(BINARY_CONTAINER)
+	$(XBU) $(XBU_FLAGS) --input $(BINARY_CONTAINER) --output binary_container_1.xclbin
 	-@$(RM) .Xil
 
 $(KERNEL_OBJS):
