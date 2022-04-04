@@ -7,12 +7,12 @@ import queue
 import ctypes
 from ctypes import *
 
+# LoadLibrary function is used to load the library into the process, and to get a handle to it.
 libpath = '/usr/lib/libpciegst.so'
 user32_dll = ctypes.cdll.LoadLibrary(libpath)
 
+# global variable to store the pcie usecase data.
 bytes_played = int(0)
-
-
 class dma_buf_import(Structure):
     _fields_ = [("dbuf_fd", c_int),
                 ("dma_imp_flag", c_uint),
@@ -29,7 +29,7 @@ gst_buffqueue = []
 
 max_buffer = int(0)
 usecase = c_int(0)
-flength = c_int(0)
+flength = c_uint64(0)
 fps = c_int(0)
 kernmode = c_int(0)
 filtertype = c_int(0)
@@ -39,6 +39,7 @@ buff_fd_queue = queue.Queue(3)
 memory_queue = queue.Queue(3)
 max_buffers_count = int(3)
 
+# pcie related control information provided from host machine
 pcie_fd = user32_dll.pcie_open()
 user32_dll.pcie_get_usecase_type(pcie_fd,byref(usecase))
 user32_dll.pcie_get_file_length(pcie_fd,byref(flength))
@@ -69,6 +70,7 @@ class dma_buf(Structure):
 duration = Gst.SECOND / (int(30))
 dts = float(0)
 frame_count = int(0)
+dma_import = dma_buf_import()
 
 # DMA Import callbacks for pciesink
 def new_sample_cb(pcisink: GstApp.AppSink):
@@ -77,8 +79,6 @@ def new_sample_cb(pcisink: GstApp.AppSink):
     memory = buffer.peek_memory(0)
     fd = GstAllocators.dmabuf_memory_get_fd(memory)
     is_dma = GstAllocators.is_dmabuf_memory(memory)
-    dma_import = dma_buf_import()
-    
     dma_import.dbuf_fd = fd
     ret = user32_dll.pcie_dma_import(pcie_fd,byref(dma_import))
     ret = user32_dll.pcie_write(pcie_fd ,yuv_frame_size, 0, 0)
@@ -87,16 +87,23 @@ def new_sample_cb(pcisink: GstApp.AppSink):
 
 # DMA callbacks for python
 def need_data(src: GstApp.AppSrc, length: int):
+    #Created GST buffers
     gstbuffer = Gst.Buffer.new()
+    # Added dma_buf structure instance to buffer object at runtime
     buffer = dma_buf()
+    # Map exported dma buffer to an fd
     user32_dll.pcie_dma_map(pcie_fd,byref(buffer))
     buf_size = buffer.size
+    #store exported dma buffer fd in a queue to get free fds
     buff_fd_queue.put(buffer.fd)
-            
+    # Initiate DMA Read transaction
     user32_dll.pcie_read(pcie_fd,yuv_frame_size)
+    # Return a GstMemory that wraps a dmabuf file descriptor and provided doesnt close
     memory = GstAllocators.DmaBufAllocator.alloc_with_flags(allocator, buffer.fd,  buffer.size,GstAllocators.FdMemoryFlags.DONT_CLOSE)
     memory.size = buffer.size
+    #Appends the memory block mem to buffer.
     gstbuffer.append_memory(memory)
+    #Emit push-buffer signal to next element.
     retval = src.emit('push-buffer', gstbuffer)
     global bytes_played 
     global frame_count
@@ -104,7 +111,7 @@ def need_data(src: GstApp.AppSrc, length: int):
     frame_count = frame_count + 1
     if(retval != Gst.FlowReturn.OK):
         print("Error while emitting buffer")
-    if(bytes_played == flength.value):
+    if(bytes_played >= flength.value):
         print("playback is completed, Sending EOS")
         src.send_event(Gst.Event.new_eos())
     if( buff_fd_queue.qsize() >= max_buffers_count):
@@ -113,14 +120,19 @@ def need_data(src: GstApp.AppSrc, length: int):
         buffer = dma_buf()
         buffer.fd = fd
         buffer.size = buf_size#buf_size
-        result = user32_dll.pcie_dma_unmap(pcie_fd,byref(buffer))
+    # Unap exported dma buffer fd    
+    result = user32_dll.pcie_dma_unmap(pcie_fd,byref(buffer))
 
 def xlnx_pciecleanup() :
+        if(usecase.value != 1) :
+                user32_dll.pcie_dma_export_release(pcie_fd,byref(dma_import))
         user32_dll.pcie_set_read_transfer_done(pcie_fd)
         user32_dll.pcie_set_write_transfer_done(pcie_fd)
         time.sleep(2)
         user32_dll.pcie_clr_write_transfer_done(pcie_fd)
-        print("Pcie Use case end\n")
+        if(usecase.value != 1) :
+            user32_dll.pcie_clr_read_transfer_done(pcie_fd)
+        user32_dll.pcie_close()
 
 class xlnx_pcieappsink :
 	def __init__(self,sink : GstApp.AppSink) :
@@ -164,13 +176,18 @@ def PCIe_GetDevice() :
 def PCIe_Getusecase(pcie_fd) :
 	return usecase
 
+def PCIe_GetResolution(pcie_fd) :
+	return res_inp.y
+
 def export_pciedmabuff(pcie_fd) :
-	export_fd_size = int(0)
-	export_fd_size = user32_dll.get_export_fd_size(yuv_frame_size)
+    ndmabuf = 3 #Allocate 3 exported 3 dma buffer file descriptors
+    export_fd_size = int(0)
+    export_fd_size = user32_dll.get_export_fd_size(yuv_frame_size)
 	#print(export_fd_size)	
-	buffer_main = dma_buf()
-	buffer_main.fd = 0
-	buffer_main.size = export_fd_size
-	user32_dll.pcie_dma_export(pcie_fd,byref(buffer_main))
+    buffer_main = dma_buf()
+    buffer_main.fd = 0
+    buffer_main.size = export_fd_size
+    user32_dll.pcie_num_dma_buf(pcie_fd,ndmabuf)
+    user32_dll.pcie_dma_export(pcie_fd,byref(buffer_main))
 
 

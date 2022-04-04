@@ -34,6 +34,7 @@ VMK180_TRD_PACKAGES = " \
         packagegroup-petalinux-v4lutils \
         e2fsprogs-resize2fs \
 	kernel-module-hdmi \
+	jupyter-startup \
 	ldd \
 	nodejs \
 	nodejs-npm \
@@ -48,6 +49,7 @@ VMK180_TRD_PACKAGES = " \
 	vvas-gst \
 	filter2d-accel \
 	libxapm \
+	libpcie-gst \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"

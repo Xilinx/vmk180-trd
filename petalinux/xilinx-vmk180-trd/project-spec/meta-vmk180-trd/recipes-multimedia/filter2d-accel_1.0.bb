@@ -29,7 +29,6 @@ RDEPENDS:${PN} += " \
 	gstreamer1.0-plugins-bad \
 	gstreamer1.0-plugins-good \
 	gstreamer1.0-python \
-	vvas-accel-libs \
 	vvas-gst \
 	"
 
