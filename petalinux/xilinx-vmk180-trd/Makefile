@@ -12,7 +12,7 @@ PLNX_BOOT_OBJS += $(PLNX_IMG_DIR)/bl31.elf
 PLNX_BOOT_OBJS += $(PLNX_IMG_DIR)/plm.elf
 PLNX_BOOT_OBJS += $(PLNX_IMG_DIR)/psmfw.elf
 PLNX_BOOT_OBJS += $(PLNX_IMG_DIR)/u-boot.elf
-PLNX_BOOT_ARGS =  --plm --psmfw --u-boot --dtb 
+PLNX_BOOT_ARGS =  --plm --psmfw --u-boot --dtb images/linux/system-vmk180-revA.dtb
 
 PLNX_WIC = $(PLNX_IMG_DIR)/petalinux-sdimage.wic.xz
 PLNX_WIC_OBJS += $(PLNX_IMG_DIR)/boot.scr
