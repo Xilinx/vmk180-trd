@@ -9,6 +9,6 @@ SRC_URI:append = " \
 	file://0003-Added-ioctl-to-support-different-formats.patch \
 	file://0004-added-driver-without-filter-support.patch \
 	file://0005-Added-dma-import-and-bufferpool-changes.patch \
-	file://0001-frame_interval-changes.patch \
 	file://0006-PCIe-Endpoint-driver-supoort-VMAP-callback-in-dma_bu.patch \
+	file://bsp.cfg \
 "
