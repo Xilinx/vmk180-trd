@@ -1,0 +1,17 @@
+commit f3a7281efa8f9130f0d325f303d4fc3585cf91ea
+Author: thippesw <thippesw@xilinx.com>
+Date:   Tue Apr 12 11:16:04 2022 -0600
+
+    Added Notebook Directory path
+
+diff --git a/start-jupyter.sh b/start-jupyter.sh
+index 1e9217d..fb65c7e 100755
+--- a/start-jupyter.sh
++++ b/start-jupyter.sh
+@@ -28,4 +28,5 @@ if [ -z $ip ]; then
+     echo "ERROR: Invalid IP address"
+     exit 1
+ fi
+-jupyter-lab --no-browser --allow-root --ip=$ip
++NBDIR="/usr/share/notebooks"
++jupyter-lab --no-browser --allow-root --ip=$ip --notebook-dir=$NBDIR

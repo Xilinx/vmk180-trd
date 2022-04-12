@@ -6,7 +6,7 @@ import queue
 # Import cytypes to use libgstpcie library 
 import ctypes
 from ctypes import *
-
+from threading import Thread
 # LoadLibrary function is used to load the library into the process, and to get a handle to it.
 libpath = '/usr/lib/libpciegst.so'
 user32_dll = ctypes.cdll.LoadLibrary(libpath)
@@ -33,6 +33,7 @@ flength = c_uint64(0)
 fps = c_int(0)
 kernmode = c_int(0)
 filtertype = c_int(0)
+stop_feed = c_int(0)
 
 buff_fd_queue = queue.Queue(3)
 
@@ -41,12 +42,14 @@ max_buffers_count = int(3)
 
 # pcie related control information provided from host machine
 pcie_fd = user32_dll.pcie_open()
+
 user32_dll.pcie_get_usecase_type(pcie_fd,byref(usecase))
 user32_dll.pcie_get_file_length(pcie_fd,byref(flength))
 user32_dll.pcie_get_fps(pcie_fd,byref(fps))
 user32_dll.pcie_get_kernel_mode(pcie_fd,byref(kernmode))
 user32_dll.pcie_get_filter_type(pcie_fd,byref(filtertype))
 user32_dll.pcie_get_input_resolution(pcie_fd,byref(res_inp))
+
 #src = Gst.ElementFactory.make("appsrc")
 yuv_frame_size = res_inp.x * res_inp.y * 2  #YUY2_MULTIPLIER = 2
 
@@ -125,15 +128,17 @@ def need_data(src: GstApp.AppSrc, length: int):
 
 def xlnx_pciecleanup() :
         if(usecase.value != 1) :
-                user32_dll.pcie_dma_export_release(pcie_fd,byref(dma_import))
-        user32_dll.pcie_set_read_transfer_done(pcie_fd)
-        user32_dll.pcie_set_write_transfer_done(pcie_fd)
-        time.sleep(2)
-        user32_dll.pcie_clr_write_transfer_done(pcie_fd)
+            user32_dll.pcie_dma_export_release(pcie_fd,byref(dma_import))
+            user32_dll.pcie_set_read_transfer_done(pcie_fd)
+        if(usecase.value != 4) :
+            user32_dll.pcie_set_write_transfer_done(pcie_fd)
+        time.sleep(1)
+        if(usecase.value != 4) :
+            user32_dll.pcie_clr_write_transfer_done(pcie_fd)
         if(usecase.value != 1) :
             user32_dll.pcie_clr_read_transfer_done(pcie_fd)
         user32_dll.pcie_close()
-
+        
 class xlnx_pcieappsink :
 	def __init__(self,sink : GstApp.AppSink) :
 		self.sink = sink
@@ -170,6 +175,13 @@ def xlnx_pcieappsrc (src, caps) :
     src.set_property("stream-type",int(0))
     src.connect('need-data', need_data)
 
+def stop_mipi_feed() :
+    time.sleep(1)
+    #print("stp_mipi_fee")
+    user32_dll.pcie_read_stop_mipi_feed(pcie_fd,byref(stop_feed))
+    #print(stop_feed.value)
+    return stop_feed.value
+
 def PCIe_GetDevice() :
 	return pcie_fd 
 
@@ -178,6 +190,9 @@ def PCIe_Getusecase(pcie_fd) :
 
 def PCIe_GetResolution(pcie_fd) :
 	return res_inp.y
+
+def PCIe_GetFilterPreset(pcie_fd) :
+	return filtertype
 
 def export_pciedmabuff(pcie_fd) :
     ndmabuf = 3 #Allocate 3 exported 3 dma buffer file descriptors
@@ -189,5 +204,3 @@ def export_pciedmabuff(pcie_fd) :
     buffer_main.size = export_fd_size
     user32_dll.pcie_num_dma_buf(pcie_fd,ndmabuf)
     user32_dll.pcie_dma_export(pcie_fd,byref(buffer_main))
-
-

@@ -18,9 +18,8 @@ VMK180_TRD_PACKAGES = " \
 	ldd \
 	tree \
 	packagegroup-petalinux-python-modules \
-	packagegroup-python3-jupyter \
+	packagegroup-petalinux-jupyter \
         vmk180-trd-notebooks \
-        jupyter-startup \
         nodejs \
         nodejs-npm \
         parted \
@@ -34,7 +33,6 @@ VMK180_TRD_PACKAGES = " \
         packagegroup-petalinux-v4lutils \
         e2fsprogs-resize2fs \
 	kernel-module-hdmi \
-	jupyter-startup \
 	ldd \
 	nodejs \
 	nodejs-npm \
@@ -51,6 +49,7 @@ VMK180_TRD_PACKAGES = " \
 	libxapm \
 	libpcie-gst \
 	libxapm-python \
+	start-jupyterlab \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"
