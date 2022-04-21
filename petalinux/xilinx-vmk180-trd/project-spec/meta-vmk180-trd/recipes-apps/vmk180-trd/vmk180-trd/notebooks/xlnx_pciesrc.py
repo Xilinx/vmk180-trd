@@ -8,7 +8,7 @@ import ctypes
 from ctypes import *
 from threading import Thread
 # LoadLibrary function is used to load the library into the process, and to get a handle to it.
-libpath = '/usr/lib/libpciegst.so'
+libpath = '/usr/lib/libpciegst.so.1.0'
 user32_dll = ctypes.cdll.LoadLibrary(libpath)
 
 # global variable to store the pcie usecase data.

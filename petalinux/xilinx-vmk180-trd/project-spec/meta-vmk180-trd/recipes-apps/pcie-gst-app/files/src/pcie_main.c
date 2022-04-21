@@ -612,18 +612,6 @@ gint main (gint argc, gchar *argv[])
             NULL,                                               \
             NULL);
 	}
-    if (app->h_param.usecase == VGST_USECASE_TYPE_APPSRC_TO_KMSSINK) {
-    hid_sample = g_signal_connect(app->hdmisink,                \
-            "new-sample",                                       \
-            G_CALLBACK(new_sample_cb),                          \
-            app);
-    pad = gst_element_get_static_pad (app->hdmisink, "sink");
-    pid_query = gst_pad_add_probe (pad,                         \
-            GST_PAD_PROBE_TYPE_QUERY_DOWNSTREAM,                \
-            appsink_query_cb,                                   \
-            NULL,                                               \
-            NULL);
-        }
 	
     /* Add watch for messages */
     gst_bus_add_watch (bus, (GstBusFunc) bus_message, app);
