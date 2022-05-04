@@ -6,7 +6,8 @@ SRC_URI:append = "file://config \
 		file://pl-custom.dtsi \
 		file://single-capture.dtsi \ 
 		file://display.dtsi \
-		file://pcie.dtsi" 
+		file://pcie.dtsi \
+		file://zocl.dtsi" 
 
 python () {
     if d.getVar("CONFIG_DISABLE"):
