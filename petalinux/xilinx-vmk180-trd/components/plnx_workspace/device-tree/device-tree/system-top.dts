@@ -20,9 +20,17 @@
 		i2c1 = &i2c1;
 		serial0 = &serial0;
 	};
-	memoryNOC_0: memory@0 {
+	memoryaxi_noc_0: memory@00000000000 {
 		device_type = "memory";
-		reg = <0x0 0x00000000 0x0 0x80000000>;
+		reg = <0x0 0x00000000 0x0 0x80000000>, <0x00000500 0x00000000 0x00000001 0x80000000>;
 	};
+	iio_hwmon {
+		compatible = "iio-hwmon";
+		io-channels = <&sysmon0 0>, <&sysmon0 1>, <&sysmon0 2>,
+			<&sysmon0 3>;
+	};
+};
+&sysmon0 {
+	#io-channel-cells = <1>;
 };
 #include "system-user.dtsi"

@@ -1,0 +1,36 @@
+From 4059f6b37b9667c20a5f12124d10d18e354e3b4f Mon Sep 17 00:00:00 2001
+From: vivekana <vivekana@xilinx.com>
+Date: Thu, 24 Mar 2022 16:23:06 -0700
+Subject: [PATCH] zocl_driver: patch to enable 64 bit addressing on dma
+
+---
+  zocl_drv.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/zocl_drv.c b/zocl_drv.c
+index 8098a7ab4..f35911dc6 100644
+--- a/zocl_drv.c
++++ b/zocl_drv.c
+@@ -1076,6 +1076,19 @@ static int zocl_drm_platform_probe(struct platform_device *pdev)
+ 	mutex_init(&zdev->mm_lock);
+ 	INIT_LIST_HEAD(&zdev->zm_list_head);
+ 
++	#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
++	   /* Platform did not initialize dma_mask, try to set 64-bit DMA first */
++	   ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
++	   if (ret) {
++	       /* If seting 64-bit DMA mask fails, fall back to 32-bit DMA mask */
++	       ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
++	       if (ret) {
++	           dev_err(&pdev->dev,"DMA configuration failed: 0x%x\n", ret);
++	           return -EINVAL;
++	       }
++	   }
++	#endif
++
+ 	subdev = zocl_find_pdev("ert_hw");
+ 	if (subdev) {
+ 		DRM_INFO("ert_hw found: 0x%llx\n", (uint64_t)(uintptr_t)subdev);
+-- 
+2.7.4
+

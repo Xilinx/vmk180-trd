@@ -54,4 +54,5 @@
 #include "display.dtsi"
 #include "pcie.dtsi"
 #include "ina226-power-monitor.dtsi"
+#include "zocl.dtsi"
 
