@@ -110,6 +110,3 @@
 &dwc3_0 {
 	status = "okay";
 };
-&ref_clk {
-	clock-frequency = <33333333>;
-};

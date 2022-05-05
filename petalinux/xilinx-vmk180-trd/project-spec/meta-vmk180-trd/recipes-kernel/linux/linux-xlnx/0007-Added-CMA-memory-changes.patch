@@ -1,0 +1,121 @@
+From 45817d67bce5f9d3ae6e076a531d94c5690d55e8 Mon Sep 17 00:00:00 2001
+From: thippesw <thippesw@xilinx.com>
+Date: Wed, 4 May 2022 17:08:25 +0530
+Subject: [PATCH] Added CMA memory changes
+
+---
+ drivers/misc/xilinx_pci_endpoint.c | 46 ++++++++++++++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/misc/xilinx_pci_endpoint.c b/drivers/misc/xilinx_pci_endpoint.c
+index 64243af..b086122 100644
+--- a/drivers/misc/xilinx_pci_endpoint.c
++++ b/drivers/misc/xilinx_pci_endpoint.c
+@@ -48,6 +48,7 @@
+ #include <linux/dma-mapping.h>
+ #include <asm/page.h>
+ #include <asm/byteorder.h>
++#include <linux/of_reserved_mem.h>
+ 
+ #define DEVICE_MAX_NUM      256
+ #define MAX_INSTANCES	    4
+@@ -55,11 +56,11 @@
+ #define DEVICE_NAME_FORMAT "pciep%d"
+ 
+ #define PCIEP_READ_BUFFER_READY   0x00
+-#define PCIEP_READ_BUFFER_ADDR   0x04
++#define PCIEP_READ_BUFFER_ADDR_LOW   0x04
+ #define PCIEP_READ_BUFFER_OFFSET 0x08
+ #define PCIEP_READ_BUFFER_SIZE   0x0c
+ #define PCIEP_WRITE_BUFFER_READY   0x10
+-#define PCIEP_WRITE_BUFFER_ADDR   0x14
++#define PCIEP_WRITE_BUFFER_ADDR_LOW   0x14
+ #define PCIEP_WRITE_BUFFER_OFFSET 0x18
+ #define PCIEP_WRITE_BUFFER_SIZE   0x1c
+ #define PCIEP_READ_TRANSFER_DONE   0x20
+@@ -69,6 +70,9 @@
+ #define PCIEP_WRITE_TRANSFER_CLR  0x30
+ #define PCIEP_KERNEL_NAME  0x3c
+ 
++#define PCIEP_READ_BUFFER_ADDR_HIGH  0x08
++#define PCIEP_WRITE_BUFFER_ADDR_HIGH 0x18
++
+ #define PCIRC_READ_FILE_LENGTH     0x40
+ #define PCIRC_READ_BUFFER_TRANSFER_DONE 0x44
+ #define PCIRC_WRITE_BUFFER_TRANSFER_DONE 0x48
+@@ -924,14 +928,20 @@ static ssize_t pciep_driver_file_read(struct file *file, char __user *buff,
+ 	struct pciep_driver_data *this = file->private_data;
+ 	u32 value;
+ 	int ret = 0;
+-
++	u32 read_phys;
+ 	/* check the size */
+ 	if (count <= 0)
+ 		return -EINVAL;
+-    reg_write(this, PCIEP_READ_BUFFER_ADDR, this->read_phys_addr[this->active_index]);
+-    reg_write(this, PCIEP_READ_BUFFER_SIZE, count);
+-    value = reg_read(this, PCIEP_READ_BUFFER_READY);
+-    value |= SET_BUFFER_RDY;
++	
++	read_phys = this->read_phys_addr[this->active_index] >> 32;	
++    	reg_write(this, PCIEP_READ_BUFFER_ADDR_HIGH, read_phys);
++    	
++	read_phys = this->read_phys_addr[this->active_index] ;	
++    	reg_write(this, PCIEP_READ_BUFFER_ADDR_LOW,read_phys );
++
++	reg_write(this, PCIEP_READ_BUFFER_SIZE, count);
++	value = reg_read(this, PCIEP_READ_BUFFER_READY);
++    	value |= SET_BUFFER_RDY;
+     reg_write(this, PCIEP_READ_BUFFER_READY, value);
+ 
+ 	/* wait for done event */
+@@ -955,12 +965,17 @@ static ssize_t pciep_driver_file_write(struct file *file,
+ 	struct pciep_driver_data *this = file->private_data;
+ 	int ret = 0;
+ 	u32 value;
+-
++	u32 write_phys;
+ 	/* check the size */
+ 	if (count <= 0)
+ 		return -EINVAL;
+-
+-	reg_write(this, PCIEP_WRITE_BUFFER_ADDR, this->write_phys_addr);
++    	
++	
++	write_phys = this->write_phys_addr >> 32;	
++	reg_write(this, PCIEP_WRITE_BUFFER_ADDR_HIGH, write_phys);
++    	write_phys = this->write_phys_addr;	
++	reg_write(this, PCIEP_WRITE_BUFFER_ADDR_LOW,write_phys);
++	
+ 	reg_write(this, PCIEP_WRITE_BUFFER_SIZE, count);
+ 	value = reg_read(this, PCIEP_WRITE_BUFFER_READY);
+ 	value |= SET_BUFFER_RDY;
+@@ -1117,9 +1132,9 @@ static struct pciep_driver_data *pciep_driver_create(const char *name,
+ 	this->dma_dev = parent;
+ 
+ 	of_dma_configure(this->dma_dev, NULL, true);
+-	dma_set_mask(this->dma_dev, DMA_BIT_MASK(sizeof(dma_addr_t) * 4));
++	dma_set_mask(this->dma_dev, DMA_BIT_MASK(64));
+ 	dma_set_coherent_mask(this->dma_dev,
+-			      DMA_BIT_MASK(sizeof(dma_addr_t) * 4));
++		      DMA_BIT_MASK(64));
+ 
+ 	done |= DONE_ALLOC_CMA;
+ 
+@@ -1226,6 +1241,13 @@ static int pciep_platform_driver_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "Unable to register IRQ\n");
+ 		goto failed;
+ 	}
++	/* Initialize reserved memory resources */
++  	 ret = of_reserved_mem_device_init(&pdev->dev);
++ 	if(ret) {
++    		dev_err(&pdev->dev, "Could not get reserved memory\n");
++    		goto failed;
++  	} 
++	
+ 	dev_set_drvdata(&pdev->dev, driver_data);
+ 	dev_info(&pdev->dev, "pcie driver probe success.\n");
+ 	return 0;
+-- 
+1.8.3.1
+

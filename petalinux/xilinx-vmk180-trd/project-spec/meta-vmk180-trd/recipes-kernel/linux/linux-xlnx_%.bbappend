@@ -10,5 +10,6 @@ SRC_URI:append = " \
 	file://0004-added-driver-without-filter-support.patch \
 	file://0005-Added-dma-import-and-bufferpool-changes.patch \
 	file://0006-PCIe-Endpoint-driver-supoort-VMAP-callback-in-dma_bu.patch \
+	file://0007-Added-CMA-memory-changes.patch \
 	file://bsp.cfg \
 "
