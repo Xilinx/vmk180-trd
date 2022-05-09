@@ -58,9 +58,9 @@
 			clocks = <&misc_clk_0>, <&misc_clk_0>;
 			compatible = "xlnx,pcie-reg-space-v1-0-1.0";
 			reg = <0x0 0xa40e0000 0x0 0x10000 0x00000201 0x40000000 0x0 0x10000>;
-			xlnx,s00-axi-addr-width = <0x7>;
+			xlnx,s00-axi-addr-width = <0x8>;
 			xlnx,s00-axi-data-width = <0x20>;
-			xlnx,s01-axi-addr-width = <0x7>;
+			xlnx,s01-axi-addr-width = <0x8>;
 			xlnx,s01-axi-data-width = <0x20>;
 		};
 		misc_clk_7: misc_clk_7 {

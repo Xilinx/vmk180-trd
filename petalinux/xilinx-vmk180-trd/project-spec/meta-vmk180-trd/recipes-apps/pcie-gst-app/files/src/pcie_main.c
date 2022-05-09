@@ -24,6 +24,8 @@
 
 App s_app;
 GST_DEBUG_CATEGORY (pcie_gst_app_debug);
+char *strbuf;
+
 #define GST_CAT_DEFAULT pcie_gst_app_debug
 
 static gboolean bus_message (GstBus *bus, GstMessage *message, App *app)
@@ -238,9 +240,9 @@ static gint set_host_parameters(App *app)
 
 static char * getfilterstring(int index) {
    const char *str1 = "{\"filter_preset\" : \"";
-   char *buf = malloc(strlen(str1) + strlen(filter_presets[index])+1);
-   sprintf(buf, "%s%s\" \}", str1, filter_presets[index] );
-   return buf;
+   strbuf = malloc(strlen(str1) + strlen(filter_presets[index])+1);
+   sprintf(strbuf, "%s%s\" \}", str1, filter_presets[index] );
+   return strbuf;
 }
 
 static gint gst_set_elements (App *app)
@@ -282,7 +284,7 @@ static void gst_reset_elements (App *app)
 static void set_property (App *app)
 {
     GstCaps* srcCaps = NULL;
-    char * str;	
+    char * preset;	
     if (app->h_param.usecase >= VGST_USECASE_TYPE_APPSRC_TO_HOST) {
         GST_DEBUG ("Setting up appsrc plugin");
         g_object_set (G_OBJECT (app->pciesrc),                      \
@@ -352,11 +354,14 @@ static void set_property (App *app)
         g_object_set (G_OBJECT (app->vvas_xfilter),              \
                 "kernels-config", "/usr/share/vvas/vmk180-trd/kernel_xfilter2d_pl.json",   \
                 NULL);
-	str = getfilterstring(app->h_param.filter_preset);	
+	preset = getfilterstring(app->h_param.filter_preset);	
 	g_object_set (G_OBJECT (app->vvas_xfilter),              \
-                "dynamic-config",str,   \
+                "dynamic-config",preset,   \
                 NULL);
     }
+    free(strbuf);
+    strbuf = NULL;
+    preset = NULL;
 }
 
 static gint create_pipeline (App *app)
@@ -511,6 +516,7 @@ static void destroy_pipeline (App *app)
         gst_element_unlink_many (app->pciesrc, app->perf, app->vvas_xfilter, \
 	app->hdmisink, NULL);
         gst_object_ref (app->pciesrc);
+        gst_object_ref (app->vvas_xfilter);
         gst_object_ref (app->hdmisink);
         gst_bin_remove_many (GST_BIN (app->pipeline), app->pciesrc,app->vvas_xfilter,\
                 app->perf, app->hdmisink, NULL);
@@ -709,11 +715,12 @@ gint main (gint argc, gchar *argv[])
 DESTROY_PIPELINE:
 
     /* Remove and unref pad probe */
-    gst_pad_remove_probe (pad, pid_query);
-    gst_object_unref (pad);
-    pad = NULL;
-    GST_DEBUG ("Removed pad probe");
-
+    if (app->h_param.usecase < VGST_USECASE_TYPE_APPSRC_TO_KMSSINK){
+       gst_pad_remove_probe (pad, pid_query);
+       gst_object_unref (pad);
+       pad = NULL;
+       GST_DEBUG ("Removed pad probe");
+    }
     /* Unregister singal handler */
     if (app->h_param.usecase > VGST_USECASE_TYPE_MIPISRC_TO_HOST_BYPASS) {
         g_signal_handler_disconnect (app->pciesrc,  hid_need);
