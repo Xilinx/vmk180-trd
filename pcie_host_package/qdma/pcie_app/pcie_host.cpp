@@ -51,17 +51,21 @@
 #define MAP_SIZE (32*1024UL)
 #define MAP_MASK (MAP_SIZE - 1)
 #include<signal.h>
+// 
 #define PCIRC_GET_FILE_LENGTH      		0x04
-#define PCIRC_READ_BUFFER_TRANSFER_DONE 	0x2c
-#define PCIRC_PID_SET				0x10
-#define PCIRC_WRITE_BUFFER_TRANSFER_DONE 	0x30
-#define PCIRC_HOST_DONE			  	0x34
-#define PCIRC_FILTER_MODE          		0x24
-#define PCIRC_FPS_SET          			0x28
-#define PCIRC_FMT_SET          			0x1c
-#define PCIRC_UCASE_SET          		0x20
+#define PCIRC_PID_HIGH				0x0C
 #define PCIRC_FILTER_PARAMS        		0x14
 #define PCIRC_RAW_RESOLUTION      		0x18
+#define PCIRC_UCASE_SET          		0x20
+#define PCIRC_FILTER_MODE          		0x24
+#define PCIRC_FPS_SET          			0x28
+#define PCIEP_SET_SIG                           0x34
+#define PCIRC_FMT_SET         			0x3c
+
+//  Interrupts
+#define PCIRC_READ_BUFFER_TRANSFER_DONE 	0x70
+#define PCIRC_WRITE_BUFFER_TRANSFER_DONE 	0x74
+#define PCIRC_HOST_DONE			  	0x78
 
 #define KGREEN  "\x1B[32m"
 #define KRED "\x1B[31m"
@@ -69,17 +73,22 @@
 
 //#define T_DEBUG
 #define FAILURE -1
-#define PCIEP_READ_BUFFER_READY   		0x3c
-#define PCIEP_READ_BUFFER_ADDR   		0x40
-#define PCIEP_READ_BUFFER_OFFSET 		0x44
-#define PCIEP_READ_BUFFER_SIZE   		0x48
-#define PCIEP_WRITE_BUFFER_READY   		0x4c
-#define PCIEP_WRITE_BUFFER_ADDR   		0x50
-#define PCIEP_WRITE_BUFFER_OFFSET 		0x54
-#define PCIEP_WRITE_BUFFER_SIZE   		0x58
-#define PCIEP_READ_TRANSFER_COMPLETE   		0x5c
-#define PCIEP_WRITE_TRANSFER_COMPLETE  		0x60
-#define PCIEP_SET_SIG                           0x38
+
+#define PCIEP_READ_BUFFER_READY   		0x80
+#define PCIEP_READ_BUFFER_ADDR_LOW   		0x84
+#define PCIEP_READ_BUFFER_OFFSET 		0x88
+#define PCIEP_READ_BUFFER_SIZE   		0x8c
+
+#define PCIEP_WRITE_BUFFER_READY   		0x90
+#define PCIEP_WRITE_BUFFER_ADDR_LOW   		0x94
+#define PCIEP_WRITE_BUFFER_OFFSET 		0x98
+#define PCIEP_WRITE_BUFFER_SIZE   		0x9c
+
+#define PCIEP_READ_TRANSFER_COMPLETE   		0xa0
+#define PCIEP_WRITE_TRANSFER_COMPLETE  		0xa4
+#define PCIEP_WRITE_BUFFER_ADDR_HIGH   		0xb8
+#define PCIEP_READ_BUFFER_ADDR_HIGH   		0xbc
+
 
 #define H2C_DEVICE "/dev/qdma03000-MM-0"
 #define C2H_DEVICE "/dev/qdma03000-MM-1"
@@ -133,6 +142,8 @@ struct pcie_transfer {
 } trans;
 
 #define BILLION  1000000000.0
+
+int usecase_sel;
 
 volatile unsigned int *host_done;
 unsigned int filter_type_val = FILTER_TYPE_DEFAULT;
@@ -225,18 +236,23 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 	char *c2h_device = C2H_DEVICE;
 	char *infname;
 	char cross_sign = 0;
-	int choice; int ret;
+	int ret;
 
 	while(1) {
+		usecase_sel = 0;
 		printf("Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost\n");
-		printf("Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost\n");
-		printf("Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost\n");
-		printf("Enter 4 to 	: Exit application\n");
+		printf("Enter 2 to run  : MIPI-->pciesink--> displayonhost\n");
+		printf("Enter 3 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost\n");
+		printf("Enter 4 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost\n");
+		printf("Enter 5 to run  : RawVideofilefromHost--> pciesrc-->filter2d-->kmssink\n");
+		printf("Enter 6 to run  : RawVideofilefromHost--> pciesrc-->kmssink\n");
+		printf("Enter 7 to 	: Exit application\n");
 	
 		printf("Enter your choice:");
-		scanf("%d",&choice);
+		scanf("%d",&usecase_sel);
+		printf("Enter your choice:");
 	
-		switch(choice)
+		switch(usecase_sel)
 		{
 			case 1: ret = mipi_displayonhost(frm,c2h_device);
 				if (ret < 0) {
@@ -245,7 +261,14 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 					return 0;	
 				}	
 				break; 	
-			case 2: 
+			case 2: ret = mipi_displayonhost(frm,c2h_device);
+				if (ret < 0) {
+					printf("please run pipeline correctly \n");
+					frm->getVidFrame0()->ctrlc(); 
+					return 0;	
+				}	
+				break; 	
+			case 3: 
 				ret = host2host(frm,h2c_device,c2h_device);
 				if (ret < 0) {
 					printf("please run pipeline correctly \n");	
@@ -253,7 +276,7 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 					return 0;	
 				} 
 				break; 	
-			case 3: 
+			case 4: 
 				ret = host2host_without_filter(frm,h2c_device,c2h_device);
 				if (ret < 0) {
 					printf("please run pipeline correctly \n");	
@@ -261,11 +284,27 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 					return 0;	
 				}
 				break;
-			case 4 :	
+			case 5:
+				ret = host2kmssink_with_filter(c2h_device);
+                                if (ret < 0) {
+                                        printf("please run pipeline correctly \n");
+                                        frm->getVidFrame0()->ctrlc();
+                                        return 0;
+                                }
+				break;
+			case 6:
+				ret = host2kmssink_with_filter(c2h_device);
+                                if (ret < 0) {
+                                        printf("please run pipeline correctly \n");
+                                        frm->getVidFrame0()->ctrlc();
+                                        return 0;
+                                }
+				break;	
+			case 7 :	
 				frm->getVidFrame0()->ctrlc(); 
 				return 0;	
 			default :
-				printf("Enter choice 1-4\n");
+				printf("Enter choice 1-7\n");
 				break; 	
 		}	 
 
@@ -332,11 +371,11 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 		goto reg_fd;
 
 	}
-
-	printf("Enter filter type value 0-10:");
-	scanf("%d",&filter_type_val);
-
-	u_case = 1;
+	if(usecase_sel == 1){
+		printf("Enter filter type value 0-10:");
+		scanf("%d",&filter_type_val);
+	}
+	u_case = usecase_sel;
 	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
 	*ucase_params = u_case & 0xFFFFFFFF;
 
@@ -352,12 +391,14 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 
 	input_res = ((uint32_t *)(trans.map_base + PCIRC_RAW_RESOLUTION));
 	*input_res = (in_height << 16) | in_width;
-
-	fil_type = (filter_type)filter_type_val;
-	filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
-	*filter_params = fil_type;
 	
-	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n"RESET); 
+	if(usecase_sel == 1){
+		fil_type = (filter_type)filter_type_val;
+		filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
+		*filter_params = fil_type;
+	}
+
+	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n"RESET); 
 	printf(KRED"To quit usecase, hit <q+enter> from host \n\n"RESET);
 	
 	io_stdin = g_io_channel_unix_new (fileno (stdin));
@@ -380,6 +421,8 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 	while(queue_frame.index);
 	host_done = ((uint32_t *)(trans.map_base + PCIRC_HOST_DONE));
 	*host_done = 0x1;
+	set_sig = ((uint32_t *)(trans.map_base + PCIEP_SET_SIG));
+	*set_sig = 0x0;
 
 	if (flag == 1) {	
 		g_source_remove(add_watch);
@@ -400,6 +443,162 @@ out:
 	app_running = false;
 	return rc;
 }
+int host2kmssink_with_filter( char *h2c_device)
+{
+        ssize_t rc;
+        volatile unsigned int *host_done;
+        volatile unsigned int *infile_len;
+        unsigned long int file_len;
+        filter_type fil_type;
+        kernel_mode ker_mode;
+        volatile unsigned int *input_res = NULL;
+        volatile unsigned int *filter_params;
+        volatile unsigned int *kernel_mode_params;
+        volatile unsigned int *fps_mode_params;
+        char infilename[100];
+        int choice;
+        volatile unsigned int *ucase_params;
+
+        pthread_t thread1, thread2;
+
+        printf("select the resolution \n");
+        printf("1. 3840x2160\n");
+        printf("2. 1920x1080\n");
+
+        printf("Enter your choice:");
+        scanf("%d",&choice);
+
+        if (choice == 1) {
+                in_width  = 3840;
+                in_height = 2160;
+        }
+        else {
+                in_height = 1080;
+                in_width  = 1920;
+        }
+
+        trans.h2c_fd = open(h2c_device, O_RDWR);
+        if (trans.h2c_fd < 0) {
+                fprintf(stderr, "unable to open device %s, %d.\n",
+                                h2c_device, trans.h2c_fd);
+                app_running = false;
+                return -EINVAL;
+        }
+
+        trans.reg_fd = open(REG_DEVICE_NAME, O_RDWR);
+        if (trans.reg_fd < 0) {
+                fprintf(stderr, "unable to open device %s, %d.\n",
+                                REG_DEVICE_NAME, trans.reg_fd);
+                rc = -EINVAL;
+                goto h2c_out;
+        }
+
+        /* map one page */
+        trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
+        if (trans.map_base == (void *)-1) {
+                printf("Memory mapped at address %p.\n", trans.map_base);
+                fflush(stdout);
+                rc = -EINVAL;
+                goto reg_fd;
+
+        }
+        printf("Enter input filename with path to transfer:");
+        scanf("%s",infilename);
+
+        trans.infname = infilename;
+        trans.infile_fd = open(infilename, O_RDONLY);
+        if (trans.infile_fd < 0) {
+                fprintf(stderr, "unable to open input file %s, %d.\n",
+                                infilename, trans.infile_fd);
+                rc = -EINVAL;
+                goto reg_unmap;
+        }
+        if(usecase_sel == 5){
+		printf("Enter Filter type value 0-10:");
+        	scanf("%d",&filter_type_val);
+
+        /* setting kernel mode */
+        filter_mode = 1;
+        ker_mode = (kernel_mode)filter_mode;
+        kernel_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_MODE));
+        *kernel_mode_params = ker_mode;
+	}
+
+        fps = 30;
+       	fps_mode_params = ((uint32_t *)(trans.map_base + PCIRC_FPS_SET));
+        *fps_mode_params = fps & 0xFFFFFFFF;
+
+        /* Get the input file length  */
+        if (trans.infile_fd > 0) {
+                file_len = lseek(trans.infile_fd, 0, SEEK_END);
+                if (file_len == (off_t)-1)
+                {
+                        printf("failed to lseek %s numbytes %lu\n", trans.infname, file_len);
+                        rc = -EINVAL;
+                        goto infile_out;
+                }
+                /* reset the file position indicator to
+                   the beginning of the file */
+                lseek(trans.infile_fd, 0L, SEEK_SET);
+                infile_len = ((uint32_t *)(trans.map_base + PCIRC_GET_FILE_LENGTH));
+                *infile_len = (unsigned int)(file_len & 0xFFFFFFFF);
+                infile_len = ((uint32_t *)(trans.map_base + PCIRC_GET_FILE_LENGTH - 4));
+                *infile_len = (unsigned int)(file_len >> 32 & 0xFFFFFFFF);
+        }
+        /* setting input resolution */
+        input_res = ((uint32_t *)(trans.map_base + PCIRC_RAW_RESOLUTION));
+        *input_res = (in_height << 16) | in_width;
+	
+	if(usecase_sel == 5) {
+        	fil_type = (filter_type)filter_type_val;
+        	filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
+        	*filter_params = fil_type;
+	}
+        u_case = usecase_sel;
+        ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
+        *ucase_params = u_case & 0xFFFFFFFF;
+
+        printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+        rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
+        if (rc < 0)
+                goto infile_out;
+
+        rc = cb_init(&queue_file_frame, 120, in_width * in_height * 2);
+        if (rc < 0)
+                goto free_qframe;
+
+        pthread_create( &thread2, NULL, &file_read, NULL);
+        pthread_create( &thread1, NULL, &pcie_dma_read, NULL);
+
+
+        pthread_join( thread1, NULL);
+        pthread_join( thread2, NULL);
+
+        while(queue_frame.index);
+        host_done = ((uint32_t *)(trans.map_base + PCIRC_HOST_DONE));
+        *host_done = 0x1;
+
+
+        *infile_len = 0x0;
+        free(queue_file_frame.buffer);
+
+free_qframe:
+        free(queue_frame.buffer);
+infile_out:
+        if (trans.infile_fd >= 0)
+                close(trans.infile_fd);
+reg_unmap:
+        if (munmap(trans.map_base, MAP_SIZE) == -1)
+                printf("error unmap\n");
+reg_fd:
+        if (trans.reg_fd >= 0)
+                close(trans.reg_fd);
+h2c_out:
+        if (trans.h2c_fd >= 0)
+                close(trans.h2c_fd);
+        return rc;
+}
+
 
 int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 {
@@ -523,11 +722,11 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	filter_params = ((uint32_t *)(trans.map_base + PCIRC_FILTER_PARAMS));
 	*filter_params = fil_type;
 
-	u_case = 2;
+	u_case = usecase_sel;
 	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
 	*ucase_params = u_case & 0xFFFFFFFF;
 
-	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
 	if (rc < 0)
 		goto infile_out;
@@ -669,7 +868,7 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 		if (file_len == (off_t)-1)
 		{
 			printf("failed to lseek %s numbytes %lu\n", trans.infname, file_len);
-			exit(EXIT_FAILURE);
+                        goto infile_out;
 		}
 		/* reset the file position indicator to
 		   the beginning of the file */
@@ -685,11 +884,11 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	*input_res = (in_height << 16) | in_width;
 
 	/* setting Usecase type */
-	u_case = 3;
+	u_case = usecase_sel;
 	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
 	*ucase_params = u_case & 0xFFFFFFFF;
 
-	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
 	
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
 
@@ -801,18 +1000,21 @@ void *file_read (void *vargp)
 	return NULL;
 }
 
-void *pcie_dma_read(void *vargp)
+void *pcie_dma_read(void *)
 {
-	int rc, i;
+	int rc;
 	int num_cpu;
-	volatile unsigned int addr, size, buffer_ready, read_complete;
+	volatile unsigned int addr_high,addr_low, size, buffer_ready, read_complete;
 	volatile unsigned long int offset = 0;
 	volatile unsigned int lsb_offset, msb_offset;
 	volatile unsigned int *transfer_done;
+	volatile uint64_t addr;
 	char *read_allocated = NULL;
 	cpu_set_t cpuset;
+#ifdef T_DEBUG
 	struct timespec ts_start, ts_end;
 	int k = 0;
+#endif
 	num_cpu = get_nprocs();
 	if (num_cpu > 0 && num_cpu > 4) { 
 		CPU_ZERO(&cpuset);
@@ -852,19 +1054,20 @@ void *pcie_dma_read(void *vargp)
 		if (read_complete == 0xef)
 			break;
 
-		addr = *((uint32_t *)(trans.map_base + PCIEP_READ_BUFFER_ADDR));
+		addr_low = *((uint32_t *)(trans.map_base + PCIEP_READ_BUFFER_ADDR_LOW));
+		addr_high = *((uint32_t *)(trans.map_base + PCIEP_READ_BUFFER_ADDR_HIGH));
+		addr = (uint64_t) addr_high << 32 | addr_low;
 		size = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_SIZE));
 		lsb_offset = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_OFFSET));
-		msb_offset = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_READY));	
+		msb_offset = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_READY));
+		lsb_offset = 0;
 		offset = lsb_offset | ((unsigned long int)(msb_offset & 0xFFFF0000) << 16);
-
 		rc = cb_deque(&queue_file_frame, trans.read_buffer);
 		if (rc == 1) {
 			do {
 			} while(queue_file_frame.index == 0);
 			cb_deque(&queue_file_frame, trans.read_buffer);
 		}
-
 		rc = write_from_buffer(H2C_DEVICE, trans.h2c_fd, trans.read_buffer, size, addr);
 		if (rc < 0) {
 			printf("write from buffer failed size %d rc %d", size, rc);
@@ -880,8 +1083,7 @@ void *pcie_dma_read(void *vargp)
 		}
 		k++;
 #endif
-
-
+		
 		*transfer_done = 0x1;
 		while ((buffer_ready & 0x1)) {
 			buffer_ready = *((uint32_t *)(trans.map_base + PCIEP_READ_BUFFER_READY));
@@ -899,17 +1101,20 @@ read_out:
 }
 
 #define BILLION  1000000000.0
-void  *pcie_dma_write(void * argp)
+void  *pcie_dma_write(void *)
 {
 	int rc;
-	volatile unsigned int addr, size, offset, write_buffer_ready, write_complete;
+	volatile unsigned int addr_low,addr_high, size,  write_buffer_ready, write_complete;
+	volatile uint64_t addr;
 	volatile unsigned int *transfer_done;
 	volatile unsigned int *ucase_params;
 	char *write_allocated = NULL;
 	int num_cpu;
 	cpu_set_t cpuset;
+#ifdef T_DEBUG
 	struct timespec ts_start, ts_end;
 	int k = 0;
+#endif
 	num_cpu = get_nprocs();
 	if (num_cpu > 0 && num_cpu > 4) { 
 		CPU_ZERO(&cpuset);
@@ -951,10 +1156,10 @@ void  *pcie_dma_write(void * argp)
 			break;
 		}
 
-		addr = *((uint32_t *)(trans.map_base + PCIEP_WRITE_BUFFER_ADDR));
+		addr_low = *((uint32_t *)(trans.map_base + PCIEP_WRITE_BUFFER_ADDR_LOW));
+		addr_high = *((uint32_t *)(trans.map_base + PCIEP_WRITE_BUFFER_ADDR_HIGH));
+		addr = (uint64_t) addr_high << 32 | addr_low;
 		size = *((uint32_t *) (trans.map_base + PCIEP_WRITE_BUFFER_SIZE));
-		offset = *((uint32_t *) (trans.map_base + PCIEP_WRITE_BUFFER_OFFSET));
-
 		if (trans.c2h_fd) {
 			do {
 			}while (queue_frame.index >= 70);

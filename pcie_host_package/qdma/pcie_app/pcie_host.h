@@ -57,6 +57,7 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device );
  * c2h_device  : qdma channel to host device node for dma read transaction.
  */
 int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device);
+int host2kmssink_with_filter(char *h2c_device);
 
 /**
  * host2host_without_filter   : Function to provide control from host to Endpoint and transfer a video file from host to EP via pcie.(i.e.,appsrc)
@@ -72,12 +73,12 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
  * pcie_dma_read :  Thread function to start dma write transaction from host to channel.
  * @vargp : takes nothing as argument.
  */
-void *pcie_dma_read(void * vargp);
+void *pcie_dma_read(void *);
 /**
  * pcie_dma_write : Thread function to start dma read transaction from channel to host.
  * @vargp : takes nothing as argument.
  */
-void *pcie_dma_write(void * vargp);
+void *pcie_dma_write(void *);
 /**
  * file_read : Read input file and strat dma transaction between channel and host.
  */
