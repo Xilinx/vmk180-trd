@@ -1,9 +1,7 @@
-// (C) Copyright 2020 - 2021 Xilinx, Inc.
-// SPDX-License-Identifier: Apache-2.0
 
 `timescale 1 ns / 1 ps
 
-	module pcie_reg_space_v1_1_S01_AXI #
+	module pcie_reg_space_v1_2_S00_AXI #
 	(
 		// Users to add parameters here
 
@@ -13,11 +11,11 @@
 		// Width of S_AXI data bus
 		parameter integer C_S_AXI_DATA_WIDTH	= 32,
 		// Width of S_AXI address bus
-		parameter integer C_S_AXI_ADDR_WIDTH	= 7
+		parameter integer C_S_AXI_ADDR_WIDTH	= 8
 	)
 	(
 		// Users to add ports here
-		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg0_output ,
+output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg0_output ,
 		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg1_output ,
 		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg2_output ,
 		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg3_output ,
@@ -32,32 +30,62 @@
 		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg12_output ,
 		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg13_output ,
 		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg14_output ,
-
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg15_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg16_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg17_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg18_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg19_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg20_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg21_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg22_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg23_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg24_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg25_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg26_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg27_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg28_input ,
-		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg29_input ,
-		
-		//input wire [15 : 0] Interrupt_ack_input ,
-		output wire [15 :0]IRQ1_to_Host,
-		
+        output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg15_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg16_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg17_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg18_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg19_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg20_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg21_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg22_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg23_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg24_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg25_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg26_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg27_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg28_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg29_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg30_output ,
+		output wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg31_output ,		
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg32_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg33_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg34_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg35_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg36_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg37_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg38_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg39_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg40_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg41_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg42_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg43_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg44_input ,
+        input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg45_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg46_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg47_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg48_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg49_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg50_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg51_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg52_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg53_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg54_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg55_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg56_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg57_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg58_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg59_input ,	
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg60_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg61_input ,	
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg62_input ,
+		input wire [C_S_AXI_DATA_WIDTH-1 : 0] slv_reg63_input ,
+		output wire IRQ1_to_PS,
+		output wire IRQ2_to_PS,
+		output wire IRQ3_to_PS,
+		output wire IRQ4_to_PS,
 		input wire [C_S_AXI_ADDR_WIDTH-1 : 0] S_AXI_ARADDR_clr,
 	    input wire S_AXI_ARVALID_CLR,
-		//output wire IRQ2_to_Host,
-		//output wire IRQ1_Host_Ack,
-		//output wire IRQ2_Host_Ack,
-		
+
 		// User ports ends
 		// Do not modify the ports beyond this line
 
@@ -141,11 +169,11 @@
 	// ADDR_LSB = 2 for 32 bits (n downto 2)
 	// ADDR_LSB = 3 for 64 bits (n downto 3)
 	localparam integer ADDR_LSB = (C_S_AXI_DATA_WIDTH/32) + 1;
-	localparam integer OPT_MEM_ADDR_BITS = 4;
+	localparam integer OPT_MEM_ADDR_BITS = 5;
 	//----------------------------------------------
 	//-- Signals for user logic register space example
 	//------------------------------------------------
-	//-- Number of Slave Registers 31
+	//-- Number of Slave Registers 64
 	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg0;
 	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg1;
 	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg2;
@@ -177,15 +205,44 @@
 	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg28;
 	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg29;
 	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg30;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg31;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg32;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg33;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg34;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg35;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg36;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg37;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg38;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg39;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg40;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg41;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg42;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg43;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg44;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg45;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg46;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg47;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg48;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg49;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg50;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg51;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg52;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg53;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg54;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg55;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg56;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg57;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg58;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg59;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg60;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg61;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg62;
+	reg [C_S_AXI_DATA_WIDTH-1:0]	slv_reg63;
 	wire	 slv_reg_rden;
 	wire	 slv_reg_wren;
 	reg [C_S_AXI_DATA_WIDTH-1:0]	 reg_data_out;
 	integer	 byte_index;
-	integer bit_index;
 	reg	 aw_en;
-	reg IRQ1_Host_Ack_reg;
-	reg IRQ2_Host_Ack_reg;
-	
 	wire [C_S_AXI_DATA_WIDTH-1:0]	S_AXI_ARADDR_clear;
 	
 	wire S_AXI_ARVALID_CLEAR;
@@ -193,6 +250,10 @@
 	// I/O Connections assignments
     assign S_AXI_ARADDR_clear = S_AXI_ARADDR_clr;
     assign S_AXI_ARVALID_CLEAR = S_AXI_ARVALID_CLR;
+	
+
+	// I/O Connections assignments
+
 	assign S_AXI_AWREADY	= axi_awready;
 	assign S_AXI_WREADY	= axi_wready;
 	assign S_AXI_BRESP	= axi_bresp;
@@ -328,134 +389,301 @@
 	      slv_reg28 <= 0;
 	      slv_reg29 <= 0;
 	      slv_reg30 <= 0;
+	      slv_reg31 <= 0;
+	      slv_reg32 <= 0;
+	      slv_reg33 <= 0;
+	      slv_reg34 <= 0;
+	      slv_reg35 <= 0;
+	      slv_reg36 <= 0;
+	      slv_reg37 <= 0;
+	      slv_reg38 <= 0;
+	      slv_reg39 <= 0;
+	      slv_reg40 <= 0;
+	      slv_reg41 <= 0;
+	      slv_reg42 <= 0;
+	      slv_reg43 <= 0;
+	      slv_reg44 <= 0;
+	      slv_reg45 <= 0;
+	      slv_reg46 <= 0;
+	      slv_reg47 <= 0;
+	      slv_reg48 <= 0;
+	      slv_reg49 <= 0;
+	      slv_reg50 <= 0;
+	      slv_reg51 <= 0;
+	      slv_reg52 <= 0;
+	      slv_reg53 <= 0;
+	      slv_reg54 <= 0;
+	      slv_reg55 <= 0;
+	      slv_reg56 <= 0;
+	      slv_reg57 <= 0;
+	      slv_reg58 <= 0;
+	      slv_reg59 <= 0;
+	      slv_reg60 <= 0;
+	      slv_reg61 <= 0;
+	      slv_reg62 <= 0;
+	      slv_reg63 <= 0;
 	    end 
 	  else begin
-		  slv_reg15 <=  slv_reg15_input;  
-	      slv_reg16 <=  slv_reg16_input;  
-	      slv_reg17 <=  slv_reg17_input;  
-	      slv_reg18 <=  slv_reg18_input;  
-	      slv_reg19 <=  slv_reg19_input; 
-		  slv_reg20 <=  slv_reg20_input;  
-	      slv_reg21 <=  slv_reg21_input;  
-	      slv_reg22 <=  slv_reg22_input;  
-	      slv_reg23 <=  slv_reg23_input;  
-	      slv_reg24 <=  slv_reg24_input; 
-		  slv_reg25 <=  slv_reg25_input;  
-	      slv_reg26 <=  slv_reg26_input;  
-	      slv_reg27 <=  slv_reg27_input;  
-	      slv_reg28 <=  slv_reg28_input;  
-	      slv_reg29 <=  slv_reg29_input;
-		//slv_reg30[15:0] <=  Interrupt_ack_input;
-
-	  if (slv_reg_wren)
+	  	  slv_reg32 <= slv_reg32_input;
+	      slv_reg33 <= slv_reg33_input;
+	      slv_reg34 <= slv_reg34_input;
+	      slv_reg35 <= slv_reg35_input;
+	      slv_reg36 <= slv_reg36_input;
+	      slv_reg37 <= slv_reg37_input;
+	      slv_reg38 <= slv_reg38_input;
+	      slv_reg39 <= slv_reg39_input;
+	      slv_reg40 <= slv_reg40_input;
+	      slv_reg41 <= slv_reg41_input;
+	      slv_reg42 <= slv_reg42_input;
+	      slv_reg43 <= slv_reg43_input;
+	      slv_reg44 <= slv_reg44_input;
+	      slv_reg45 <= slv_reg45_input;
+	      slv_reg46 <= slv_reg46_input;
+	      slv_reg47 <= slv_reg47_input;
+	      slv_reg48 <= slv_reg48_input;
+	      slv_reg49 <= slv_reg49_input;
+	      slv_reg50 <= slv_reg50_input;
+	      slv_reg51 <= slv_reg51_input;
+	      slv_reg52 <= slv_reg52_input;
+	      slv_reg53 <= slv_reg53_input;
+	      slv_reg54 <= slv_reg54_input;
+	      slv_reg55 <= slv_reg55_input;
+	      slv_reg56 <= slv_reg56_input;
+	      slv_reg57 <= slv_reg57_input;
+	      slv_reg58 <= slv_reg58_input;
+	      slv_reg59 <= slv_reg59_input;
+	      slv_reg60 <= slv_reg60_input;
+	      slv_reg61 <= slv_reg61_input;
+	      slv_reg62 <= slv_reg62_input;
+	      slv_reg63 <= slv_reg63_input;
+	  
+	    if (slv_reg_wren)
 	      begin
 	        case ( axi_awaddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
-	          5'h00:
+	          6'h00:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 0
 	                slv_reg0[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h01:
+	          6'h01:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 1
 	                slv_reg1[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h02:
+	          6'h02:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 2
 	                slv_reg2[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h03:
+	          6'h03:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 3
 	                slv_reg3[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h04:
+	          6'h04:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 4
 	                slv_reg4[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h05:
+	          6'h05:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 5
 	                slv_reg5[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h06:
+	          6'h06:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 6
 	                slv_reg6[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h07:
+	          6'h07:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 7
 	                slv_reg7[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h08:
+	          6'h08:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 8
 	                slv_reg8[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h09:
+	          6'h09:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 9
 	                slv_reg9[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h0A:
+	          6'h0A:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 10
 	                slv_reg10[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h0B:
+	          6'h0B:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 11
 	                slv_reg11[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h0C:
+	          6'h0C:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 12
 	                slv_reg12[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h0D:
+	          6'h0D:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 13
 	                slv_reg13[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-	          5'h0E:
+	          6'h0E:
 	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
 	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
 	                // Respective byte enables are asserted as per write strobes 
 	                // Slave register 14
 	                slv_reg14[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
 	              end  
-
+	          6'h0F:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 15
+	                slv_reg15[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h10:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 16
+	                slv_reg16[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h11:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 17
+	                slv_reg17[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h12:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 18
+	                slv_reg18[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h13:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 19
+	                slv_reg19[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h14:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 20
+	                slv_reg20[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h15:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 21
+	                slv_reg21[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h16:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 22
+	                slv_reg22[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h17:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 23
+	                slv_reg23[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h18:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 24
+	                slv_reg24[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h19:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 25
+	                slv_reg25[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h1A:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 26
+	                slv_reg26[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h1B:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 27
+	                slv_reg27[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h1C:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 28
+	                slv_reg28[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h1D:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 29
+	                slv_reg29[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h1E:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 30
+	                slv_reg30[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
+	          6'h1F:
+	            for ( byte_index = 0; byte_index <= (C_S_AXI_DATA_WIDTH/8)-1; byte_index = byte_index+1 )
+	              if ( S_AXI_WSTRB[byte_index] == 1 ) begin
+	                // Respective byte enables are asserted as per write strobes 
+	                // Slave register 31
+	                slv_reg31[(byte_index*8) +: 8] <= S_AXI_WDATA[(byte_index*8) +: 8];
+	              end  
 	          default : begin
 	                      slv_reg0 <= slv_reg0;
 	                      slv_reg1 <= slv_reg1;
@@ -472,145 +700,109 @@
 	                      slv_reg12 <= slv_reg12;
 	                      slv_reg13 <= slv_reg13;
 	                      slv_reg14 <= slv_reg14;
+	                      slv_reg15 <= slv_reg15;
+	                      slv_reg16 <= slv_reg16;
+	                      slv_reg17 <= slv_reg17;
+	                      slv_reg18 <= slv_reg18;
+	                      slv_reg19 <= slv_reg19;
+	                      slv_reg20 <= slv_reg20;
+	                      slv_reg21 <= slv_reg21;
+	                      slv_reg22 <= slv_reg22;
+	                      slv_reg23 <= slv_reg23;
+	                      slv_reg24 <= slv_reg24;
+	                      slv_reg25 <= slv_reg25;
+	                      slv_reg26 <= slv_reg26;
+	                      slv_reg27 <= slv_reg27;
+	                      slv_reg28 <= slv_reg28;
+	                      slv_reg29 <= slv_reg29;
+	                      slv_reg30 <= slv_reg30;
+	                      slv_reg31 <= slv_reg31;
+	                      /*slv_reg32 <= slv_reg32;
+	                      slv_reg33 <= slv_reg33;
+	                      slv_reg34 <= slv_reg34;
+	                      slv_reg35 <= slv_reg35;
+	                      slv_reg36 <= slv_reg36;
+	                      slv_reg37 <= slv_reg37;
+	                      slv_reg38 <= slv_reg38;
+	                      slv_reg39 <= slv_reg39;
+	                      slv_reg40 <= slv_reg40;
+	                      slv_reg41 <= slv_reg41;
+	                      slv_reg42 <= slv_reg42;
+	                      slv_reg43 <= slv_reg43;
+	                      slv_reg44 <= slv_reg44;
+	                      slv_reg45 <= slv_reg45;
+	                      slv_reg46 <= slv_reg46;
+	                      slv_reg47 <= slv_reg47;
+	                      slv_reg48 <= slv_reg48;
+	                      slv_reg49 <= slv_reg49;
+	                      slv_reg50 <= slv_reg50;
+	                      slv_reg51 <= slv_reg51;
+	                      slv_reg52 <= slv_reg52;
+	                      slv_reg53 <= slv_reg53;
+	                      slv_reg54 <= slv_reg54;
+	                      slv_reg55 <= slv_reg55;
+	                      slv_reg56 <= slv_reg56;
+	                      slv_reg57 <= slv_reg57;
+	                      slv_reg58 <= slv_reg58;
+	                      slv_reg59 <= slv_reg59;
+	                      slv_reg60 <= slv_reg60;
+	                      slv_reg61 <= slv_reg61;
+	                      slv_reg62 <= slv_reg62;
+	                      slv_reg63 <= slv_reg63; */
 	                    end
 	        endcase
 	      end
 	      
-	    	 
-
-	    else if (S_AXI_ARADDR_clear[7:0] == 'h74 && S_AXI_ARVALID_CLEAR != 0)
+	      	    				
+			else if (S_AXI_ARADDR_clear[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 'h3F && S_AXI_ARVALID_CLEAR != 0)
 	      begin
 	                   // for ( bit_index = 0; bit_index <= 31; bit_index = bit_index+1 )
                        //begin
                         //slv_reg14[(bit_index) +: 1] <=  ~ ( slv_reg30[bit_index +: 1]) && slv_reg14[(bit_index) +: 1];
-						slv_reg14[0] <= 1'b0;
+						slv_reg31[0] <= 1'b0;
 						//slv_reg14[1] <= 1'b0;
-						IRQ1_Host_Ack_reg <= 1'b1;
+						//IRQ1_Host_Ack_reg <= 1'b1;
              
                       end 
                       
                       
-          else if (S_AXI_ARADDR_clear[7:0] == 'h70 && S_AXI_ARVALID_CLEAR != 0)
+          else if (S_AXI_ARADDR_clear[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 'h3E && S_AXI_ARVALID_CLEAR != 0)
 	      begin
 	                   // for ( bit_index = 0; bit_index <= 31; bit_index = bit_index+1 )
                        //begin
                         //slv_reg14[(bit_index) +: 1] <=  ~ ( slv_reg30[bit_index +: 1]) && slv_reg14[(bit_index) +: 1];
-						slv_reg13[0] <= 1'b0;
+						slv_reg30[0] <= 1'b0;
 						//slv_reg14[1] <= 1'b0;
 						//IRQ1_Host_Ack_reg <= 1'b1;
                        end 
                        
-          else if (S_AXI_ARADDR_clear[7:0] == 'h6C && S_AXI_ARVALID_CLEAR != 0)
+          else if (S_AXI_ARADDR_clear[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 'h3D && S_AXI_ARVALID_CLEAR != 0)
           begin
 	                   // for ( bit_index = 0; bit_index <= 31; bit_index = bit_index+1 )
                        //begin
                         //slv_reg14[(bit_index) +: 1] <=  ~ ( slv_reg30[bit_index +: 1]) && slv_reg14[(bit_index) +: 1];
-						slv_reg12[0] <= 1'b0;
+						slv_reg29[0] <= 1'b0;
 						//slv_reg12[1] <= 1'b0;
 						
-												IRQ2_Host_Ack_reg <= 1'b1;
+
 						
 						
 						end
 						
-		  else if (S_AXI_ARADDR_clear[7:0] == 'h68 && S_AXI_ARVALID_CLEAR != 0)
+		  else if (S_AXI_ARADDR_clear[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] == 'h3C && S_AXI_ARVALID_CLEAR != 0)
 	      begin
 	                   // for ( bit_index = 0; bit_index <= 31; bit_index = bit_index+1 )
                        //begin
                         //slv_reg14[(bit_index) +: 1] <=  ~ ( slv_reg30[bit_index +: 1]) && slv_reg14[(bit_index) +: 1];
-						slv_reg11[0] <= 1'b0;
+						slv_reg28[0] <= 1'b0;
 						//slv_reg14[1] <= 1'b0;
 						//IRQ1_Host_Ack_reg <= 1'b1;
                        end 
-			
-	
-	         
-             else 
-             
-               begin
-               
-                IRQ1_Host_Ack_reg <= 1'b1;
-                IRQ2_Host_Ack_reg <= 1'b1;
-             
-              end
 
-  end			 
-end
-
-
-
-
-//	always @( posedge S_AXI_ACLK )
-//	begin
-//	  if ( S_AXI_ARESETN == 1'b0 )
-//	    begin
-	    
-//	      IRQ1_Host_Ack_reg <= 1'b0;
-	    
-//	    end
-	    
-	    
-//	  else
-	  
-//	   begin
-	   
-//	      if (slv_reg27[0] !=0)
-	    
-//	       begin
-
-//				IRQ1_Host_Ack_reg <= 1'b1;
-//           end
-
- 
-
-//           else  
-           
-//            begin           
-//                IRQ1_Host_Ack_reg <= 1'b0;
-                      
-//            end   
-	   
-//	   end
-	   
-//	 end
-	 
-	 
-	 
-	 
-//	 	always @( posedge S_AXI_ACLK )
-//	begin
-//	  if ( S_AXI_ARESETN == 1'b0 )
-//	    begin
-	    
-//	      IRQ2_Host_Ack_reg <= 1'b0;
-	    
-//	    end
-	    
-	    
-//	  else
-	  
-//	   begin
-	   
-//	      if (slv_reg29[0] !=0)
-	    
-//	       begin
-
-//				IRQ2_Host_Ack_reg <= 1'b1;
-//           end
-
- 
-
-//           else  
-           
-//            begin           
-//                IRQ2_Host_Ack_reg <= 1'b0;
-                      
-//            end   
-	   
-//	   end
-	   
-//	 end
-
+	      
+	      
+	  end
+	end    
 
 	// Implement write response logic generation
 	// The write response and response valid signals are asserted by the slave 
@@ -714,37 +906,70 @@ end
 	begin
 	      // Address decoding for reading registers
 	      case ( axi_araddr[ADDR_LSB+OPT_MEM_ADDR_BITS:ADDR_LSB] )
-	        5'h00   : reg_data_out <= slv_reg0;
-	        5'h01   : reg_data_out <= slv_reg1;
-	        5'h02   : reg_data_out <= slv_reg2;
-	        5'h03   : reg_data_out <= slv_reg3;
-	        5'h04   : reg_data_out <= slv_reg4;
-	        5'h05   : reg_data_out <= slv_reg5;
-	        5'h06   : reg_data_out <= slv_reg6;
-	        5'h07   : reg_data_out <= slv_reg7;
-	        5'h08   : reg_data_out <= slv_reg8;
-	        5'h09   : reg_data_out <= slv_reg9;
-	        5'h0A   : reg_data_out <= slv_reg10;
-	        5'h0B   : reg_data_out <= slv_reg11;
-	        5'h0C   : reg_data_out <= slv_reg12;
-	        5'h0D   : reg_data_out <= slv_reg13;
-	        5'h0E   : reg_data_out <= slv_reg14;
-	        5'h0F   : reg_data_out <= slv_reg15;
-	        5'h10   : reg_data_out <= slv_reg16;
-	        5'h11   : reg_data_out <= slv_reg17;
-	        5'h12   : reg_data_out <= slv_reg18;
-	        5'h13   : reg_data_out <= slv_reg19;
-	        5'h14   : reg_data_out <= slv_reg20;
-	        5'h15   : reg_data_out <= slv_reg21;
-	        5'h16   : reg_data_out <= slv_reg22;
-	        5'h17   : reg_data_out <= slv_reg23;
-	        5'h18   : reg_data_out <= slv_reg24;
-	        5'h19   : reg_data_out <= slv_reg25;
-	        5'h1A   : reg_data_out <= slv_reg26;
-	        5'h1B   : reg_data_out <= slv_reg27;
-	        5'h1C   : reg_data_out <= slv_reg28;
-	        5'h1D   : reg_data_out <= slv_reg29;
-	        5'h1E   : reg_data_out <= slv_reg30;
+	        6'h00   : reg_data_out <= slv_reg0;
+	        6'h01   : reg_data_out <= slv_reg1;
+	        6'h02   : reg_data_out <= slv_reg2;
+	        6'h03   : reg_data_out <= slv_reg3;
+	        6'h04   : reg_data_out <= slv_reg4;
+	        6'h05   : reg_data_out <= slv_reg5;
+	        6'h06   : reg_data_out <= slv_reg6;
+	        6'h07   : reg_data_out <= slv_reg7;
+	        6'h08   : reg_data_out <= slv_reg8;
+	        6'h09   : reg_data_out <= slv_reg9;
+	        6'h0A   : reg_data_out <= slv_reg10;
+	        6'h0B   : reg_data_out <= slv_reg11;
+	        6'h0C   : reg_data_out <= slv_reg12;
+	        6'h0D   : reg_data_out <= slv_reg13;
+	        6'h0E   : reg_data_out <= slv_reg14;
+	        6'h0F   : reg_data_out <= slv_reg15;
+	        6'h10   : reg_data_out <= slv_reg16;
+	        6'h11   : reg_data_out <= slv_reg17;
+	        6'h12   : reg_data_out <= slv_reg18;
+	        6'h13   : reg_data_out <= slv_reg19;
+	        6'h14   : reg_data_out <= slv_reg20;
+	        6'h15   : reg_data_out <= slv_reg21;
+	        6'h16   : reg_data_out <= slv_reg22;
+	        6'h17   : reg_data_out <= slv_reg23;
+	        6'h18   : reg_data_out <= slv_reg24;
+	        6'h19   : reg_data_out <= slv_reg25;
+	        6'h1A   : reg_data_out <= slv_reg26;
+	        6'h1B   : reg_data_out <= slv_reg27;
+	        6'h1C   : reg_data_out <= slv_reg28;
+	        6'h1D   : reg_data_out <= slv_reg29;
+	        6'h1E   : reg_data_out <= slv_reg30;
+	        6'h1F   : reg_data_out <= slv_reg31;
+	        6'h20   : reg_data_out <= slv_reg32;
+	        6'h21   : reg_data_out <= slv_reg33;
+	        6'h22   : reg_data_out <= slv_reg34;
+	        6'h23   : reg_data_out <= slv_reg35;
+	        6'h24   : reg_data_out <= slv_reg36;
+	        6'h25   : reg_data_out <= slv_reg37;
+	        6'h26   : reg_data_out <= slv_reg38;
+	        6'h27   : reg_data_out <= slv_reg39;
+	        6'h28   : reg_data_out <= slv_reg40;
+	        6'h29   : reg_data_out <= slv_reg41;
+	        6'h2A   : reg_data_out <= slv_reg42;
+	        6'h2B   : reg_data_out <= slv_reg43;
+	        6'h2C   : reg_data_out <= slv_reg44;
+	        6'h2D   : reg_data_out <= slv_reg45;
+	        6'h2E   : reg_data_out <= slv_reg46;
+	        6'h2F   : reg_data_out <= slv_reg47;
+	        6'h30   : reg_data_out <= slv_reg48;
+	        6'h31   : reg_data_out <= slv_reg49;
+	        6'h32   : reg_data_out <= slv_reg50;
+	        6'h33   : reg_data_out <= slv_reg51;
+	        6'h34   : reg_data_out <= slv_reg52;
+	        6'h35   : reg_data_out <= slv_reg53;
+	        6'h36   : reg_data_out <= slv_reg54;
+	        6'h37   : reg_data_out <= slv_reg55;
+	        6'h38   : reg_data_out <= slv_reg56;
+	        6'h39   : reg_data_out <= slv_reg57;
+	        6'h3A   : reg_data_out <= slv_reg58;
+	        6'h3B   : reg_data_out <= slv_reg59;
+	        6'h3C   : reg_data_out <= slv_reg60;
+	        6'h3D   : reg_data_out <= slv_reg61;
+	        6'h3E   : reg_data_out <= slv_reg62;
+	        6'h3F   : reg_data_out <= slv_reg63;
 	        default : reg_data_out <= 0;
 	      endcase
 	end
@@ -784,14 +1009,27 @@ end
 		assign slv_reg12_output = slv_reg12; 
 		assign slv_reg13_output = slv_reg13;
         assign slv_reg14_output = slv_reg14;		
-		assign IRQ1_to_Host[12] = slv_reg11[0];
-		assign IRQ1_to_Host[13] = slv_reg12[0];
-		assign IRQ1_to_Host[14] = slv_reg13[0];
-		assign IRQ1_to_Host[15] = slv_reg14[0];
-		
-		//assign IRQ1_Host_Ack = IRQ1_Host_Ack_reg;
-        //assign IRQ2_Host_Ack = IRQ2_Host_Ack_reg;
-
+        assign slv_reg15_output = slv_reg15;
+		assign slv_reg16_output = slv_reg16;
+		assign slv_reg17_output = slv_reg17;
+		assign slv_reg18_output = slv_reg18;
+		assign slv_reg19_output = slv_reg19;
+		assign slv_reg20_output = slv_reg20;
+		assign slv_reg21_output = slv_reg21;
+		assign slv_reg22_output = slv_reg22;
+		assign slv_reg23_output = slv_reg23;
+		assign slv_reg24_output = slv_reg24;
+		assign slv_reg25_output = slv_reg25;
+		assign slv_reg26_output = slv_reg26;
+		assign slv_reg27_output = slv_reg27;
+		assign slv_reg28_output = slv_reg28;
+		assign slv_reg29_output = slv_reg29;
+		assign slv_reg30_output = slv_reg30;
+		assign slv_reg31_output = slv_reg31;
+		assign IRQ1_to_PS = slv_reg28[0];
+		assign IRQ2_to_PS = slv_reg29[0];
+		assign IRQ3_to_PS = slv_reg30[0];
+		assign IRQ4_to_PS = slv_reg31[0];
 	// User logic ends
 
 	endmodule

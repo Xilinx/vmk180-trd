@@ -1,12 +1,12 @@
 
 `timescale 1ns / 1ps
-`include "pcie_reg_space_v1_1_tb_include.svh"
+`include "pcie_reg_space_v1_2_tb_include.svh"
 
 import axi_vip_pkg::*;
-import pcie_reg_space_v1_1_bfm_1_master_0_0_pkg::*;
-import pcie_reg_space_v1_1_bfm_1_master_1_0_pkg::*;
+import pcie_reg_space_v1_2_bfm_1_master_0_0_pkg::*;
+import pcie_reg_space_v1_2_bfm_1_master_1_0_pkg::*;
 
-module pcie_reg_space_v1_1_tb();
+module pcie_reg_space_v1_2_tb();
 
 
 xil_axi_uint                            error_cnt = 0;
@@ -105,8 +105,8 @@ axi_ready_gen                           awready_gen2;
 axi_ready_gen                           wready_gen2;  
 axi_ready_gen                           arready_gen2;  
 xil_axi_payload_byte                    data_mem[xil_axi_ulong];  
-pcie_reg_space_v1_1_bfm_1_master_0_0_mst_t          mst_agent_0;
-pcie_reg_space_v1_1_bfm_1_master_1_0_mst_t          mst_agent_1;
+pcie_reg_space_v1_2_bfm_1_master_0_0_mst_t          mst_agent_0;
+pcie_reg_space_v1_2_bfm_1_master_1_0_mst_t          mst_agent_1;
 
   `BD_WRAPPER DUT(
       .ARESETN(reset), 

@@ -7,7 +7,7 @@ PWD = $(shell readlink -f .)
 
 # the platform directory has to be an absolute path when passed to v++
 PFM_DIR = $(PWD)/platforms
-PFM_VER = 2021_2
+PFM_VER = 2022_1
 
 # valid platforms / overlays
 PFM_LIST = vmk180_trd
