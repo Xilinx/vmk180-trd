@@ -239,9 +239,16 @@ static gint set_host_parameters(App *app)
 }
 
 static char * getfilterstring(int index) {
-   const char *str1 = "{\"filter_preset\" : \"";
-   strbuf = malloc(strlen(str1) + strlen(filter_presets[index])+1);
-   sprintf(strbuf, "%s%s\" \}", str1, filter_presets[index] );
+   const char *str1 = "{\"filter_preset\":\"";
+   const char *str2 = "{\"filter_preset\" : \"";
+   if(index > 1){
+   strbuf = (char *)malloc(strlen(str1) + strlen(filter_presets[index])+1);
+   sprintf(strbuf, "%s%s\"\}", str1, filter_presets[index] );
+   }
+   else {
+   strbuf = (char *)malloc(strlen(str2) + strlen(filter_presets[index])+1);
+   sprintf(strbuf, "%s%s\"\}", str2, filter_presets[index] );
+   }
    return strbuf;
 }
 
