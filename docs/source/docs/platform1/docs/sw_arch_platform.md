@@ -288,6 +288,7 @@ Host application provides user interface to configure following parameters Heigh
 
 Device application provides user interface to configure  Plan-id and Sync parameters.
 
+![USECASE 4](../../media/software_usecase4.png )
 
 **Next Steps**
 
