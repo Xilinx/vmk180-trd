@@ -9,14 +9,14 @@ DEPENDS = "glib-2.0 glib-2.0-native xrt libcap libxml2 bison-native flex-native 
 
 inherit meson pkgconfig gettext
 
+TARGET_CPPFLAGS:append = " -I=/usr/include/xrt"
+
 S = "${WORKDIR}/git/vvas-utils"
 
 GIR_MESON_ENABLE_FLAG = "enabled"
 GIR_MESON_DISABLE_FLAG = "disabled"
 
-FILES:${PN} += "${libdir}/libvvasutil.so ${libdir}/libxrtutil.so ${libdir}/pkgconfig/*"
-FILES:${PN}-dev = "${includedir}"
-
-INSANE_SKIP:${PN} = "dev-deps"
+FILES:${PN} += " ${libdir}/libxrtutil-2.0.so ${libdir}/libvvasutil-2.0.so"
+FILES:${PN}-dev = "${includedir} ${libdir}/pkgconfig/*"
 
 #CVE_PRODUCT = "gstreamer"

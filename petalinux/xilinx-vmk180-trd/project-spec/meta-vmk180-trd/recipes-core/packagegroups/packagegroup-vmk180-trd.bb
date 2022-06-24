@@ -50,6 +50,7 @@ VMK180_TRD_PACKAGES = " \
 	libpcie-gst \
 	libxapm-python \
 	start-jupyterlab \
+	simd \
 	"
 
 RDEPENDS:${PN} = "${VMK180_TRD_PACKAGES}"

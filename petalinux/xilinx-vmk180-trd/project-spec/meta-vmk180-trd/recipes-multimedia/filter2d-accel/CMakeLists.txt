@@ -10,5 +10,3 @@ project(vmk180-trd)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 add_subdirectory(vvas-accel-sw-libs)
-
-

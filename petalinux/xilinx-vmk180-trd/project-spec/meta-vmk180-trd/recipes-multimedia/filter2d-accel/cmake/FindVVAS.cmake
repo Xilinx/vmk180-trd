@@ -16,7 +16,7 @@
 #
 
 find_path(VVAS_INCLUDE_DIRS NAMES vvas/vvas_kernel.h)
-find_library(VVAS_LIBRARIES NAMES vvasutil)
+find_library(VVAS_LIBRARIES NAMES vvasutil-2.0)
 
 set (_VVAS_REQUIRED_VARS VVAS_LIBRARIES VVAS_INCLUDE_DIRS)
 

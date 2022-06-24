@@ -179,7 +179,7 @@ int32_t xlnx_kernel_start(VVASKernel *handle, int start,
     const coeff_t *pcoeff = NULL;
     coeff_t coeff;
     size_t isize, jsize;
-    unsigned int err = 0;
+    unsigned int err = 0, ret = 0;
 
     if (jconfig) {
         /* filter_preset */
@@ -240,29 +240,14 @@ int32_t xlnx_kernel_start(VVASKernel *handle, int start,
         /* set coefficients */
         memcpy(kpriv->params->vaddr[0], *pcoeff, sizeof(*pcoeff));
     }
-
-    /* Input frame */
-    vvas_register_write(handle, &(input[0]->paddr[0]), sizeof(uint64_t), 0x10);
-    /* Output frame */
-    vvas_register_write(handle, &(output[0]->paddr[0]), sizeof(uint64_t), 0x1c);
-    /* Kernel Params (coefficients) */
-    vvas_register_write(handle, &(kpriv->params->paddr[0]),
-        sizeof(uint64_t), 0x28);
-    /* height */
-    vvas_register_write(handle, &(input[0]->props.height),
-        sizeof(uint32_t), 0x34);
-    /* width */
-    vvas_register_write(handle, &(input[0]->props.width),
-        sizeof(uint32_t), 0x3c);
-    /* in_fourcc */
-    vvas_register_write(handle, &(kpriv->in_fourcc),
-        sizeof(uint32_t), 0x44);
-    /* out_fourcc */
-    vvas_register_write(handle, &(kpriv->out_fourcc),
-        sizeof(uint32_t), 0x4c);
-
-    /* start */
-    return vvas_kernel_start(handle);
+    ret = vvas_kernel_start(handle,"pppuuuu",input[0]->paddr[0],output[0]->paddr[0],kpriv->params->paddr[0],
+	       (input[0]->props.height),(input[0]->props.width),(kpriv->in_fourcc),(kpriv->out_fourcc));
+    if (ret < 0) {
+        	LOG_MESSAGE (LOG_LEVEL_ERROR, kpriv->log_level, "PPE: failed to issue execute command");
+	    	return ret;
+	}
+   
+    return 0;
 }
 
 int32_t xlnx_kernel_done(VVASKernel *handle)
