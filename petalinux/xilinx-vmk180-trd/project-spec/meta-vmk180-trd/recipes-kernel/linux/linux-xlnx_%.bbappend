@@ -10,5 +10,6 @@ SRC_URI:append = " \
 	file://0004-added-driver-without-filter-support.patch \
 	file://0005-Added-dma-import-and-bufferpool-changes.patch \
 	file://0006-Added-VMAP-dma_buf_ops-and-CMA-memory-update.patch \
+	file://0001-media-xilinx-Add-isppipeline-driver.patch \
 	file://bsp.cfg \
 "
