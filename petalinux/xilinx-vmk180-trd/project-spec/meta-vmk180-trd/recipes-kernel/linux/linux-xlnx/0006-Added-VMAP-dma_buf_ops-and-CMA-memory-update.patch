@@ -1,14 +1,14 @@
-From 768dcf81335dbdb9edbad867e2e270d99c2b177d Mon Sep 17 00:00:00 2001
+From 82cf8d9a2f46a94b49fb330457313d8f2f686b88 Mon Sep 17 00:00:00 2001
 From: thippesw <thippesw@xilinx.com>
-Date: Wed, 13 Jul 2022 16:14:17 +0530
-Subject: [PATCH] ADDED VMAP IN DMA BUF OPS
+Date: Wed, 13 Jul 2022 17:40:22 +0530
+Subject: [PATCH] Added VMAP and CMA changes
 
 ---
- drivers/misc/xilinx_pci_endpoint.c | 345 ++++++++++++++++++++-----------------
- 1 file changed, 189 insertions(+), 156 deletions(-)
+ drivers/misc/xilinx_pci_endpoint.c | 347 ++++++++++++++++++++-----------------
+ 1 file changed, 190 insertions(+), 157 deletions(-)
 
 diff --git a/drivers/misc/xilinx_pci_endpoint.c b/drivers/misc/xilinx_pci_endpoint.c
-index 2d52751..77dddbc 100644
+index 2d52751..8e30d4e 100644
 --- a/drivers/misc/xilinx_pci_endpoint.c
 +++ b/drivers/misc/xilinx_pci_endpoint.c
 @@ -48,129 +48,91 @@
@@ -545,15 +545,23 @@ index 2d52751..77dddbc 100644
  }
  
  /**
-@@ -1235,7 +1244,20 @@ static int pciep_driver_destroy(struct pciep_driver_data *this)
+@@ -1235,6 +1244,7 @@ static int pciep_driver_destroy(struct pciep_driver_data *this)
  
  	ida_simple_remove(&pciep_device_ida, MINOR(this->device_number));
  	cdev_del(&this->cdev);
 +	device_destroy(pciep_sys_class, this->device_number);
  	kfree(this);
+ 	return 0;
+ }
+@@ -1250,7 +1260,19 @@ static int pciep_platform_driver_remove(struct platform_device *pdev)
+ {
+ 	struct pciep_driver_data *this = dev_get_drvdata(&pdev->dev);
+ 	int retval = 0;
+-
++	
 +	if(driver_data->host_done_irq) {
-+	devm_free_irq(&pdev->dev, driver_data->host_done_irq, driver_data);
-+	driver_data->host_done_irq = 0;
++		devm_free_irq(&pdev->dev, driver_data->host_done_irq, driver_data);
++		driver_data->host_done_irq = 0;
 +	}
 +	if(driver_data->wr_irq){
 +		devm_free_irq(&pdev->dev, driver_data->wr_irq, driver_data);
@@ -563,9 +571,9 @@ index 2d52751..77dddbc 100644
 +		devm_free_irq(&pdev->dev, driver_data->rd_irq, driver_data);
 +		driver_data->rd_irq = 0;
 +	}
- 	return 0;
- }
- 
+ 	retval = pciep_driver_destroy(this);
+ 	if (retval != 0)
+ 		return retval;
 @@ -1295,6 +1317,16 @@ static void __exit pciep_module_exit(void)
  }
  
