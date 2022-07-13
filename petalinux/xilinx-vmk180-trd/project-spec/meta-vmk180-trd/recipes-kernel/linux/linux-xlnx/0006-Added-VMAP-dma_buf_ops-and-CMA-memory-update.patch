@@ -559,17 +559,17 @@ index 2d52751..8e30d4e 100644
  	int retval = 0;
 -
 +	
-+	if(driver_data->host_done_irq) {
-+		devm_free_irq(&pdev->dev, driver_data->host_done_irq, driver_data);
-+		driver_data->host_done_irq = 0;
++	if(this->host_done_irq) {
++		devm_free_irq(&pdev->dev, this->host_done_irq, this);
++		this->host_done_irq = 0;
 +	}
-+	if(driver_data->wr_irq){
-+		devm_free_irq(&pdev->dev, driver_data->wr_irq, driver_data);
++	if(this->wr_irq){
++		devm_free_irq(&pdev->dev, this->wr_irq, this);
 +		driver_data->wr_irq = 0;
 +	}
-+	if(driver_data->rd_irq){
-+		devm_free_irq(&pdev->dev, driver_data->rd_irq, driver_data);
-+		driver_data->rd_irq = 0;
++	if(this->rd_irq){
++		devm_free_irq(&pdev->dev, this->rd_irq, this);
++		this->rd_irq = 0;
 +	}
  	retval = pciep_driver_destroy(this);
  	if (retval != 0)
