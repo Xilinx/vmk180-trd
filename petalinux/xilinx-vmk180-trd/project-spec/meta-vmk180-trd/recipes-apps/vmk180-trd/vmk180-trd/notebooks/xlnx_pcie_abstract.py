@@ -1,3 +1,4 @@
+## This file is an python module used as an abstraction for pcie callbacks in C.
 import sys
 import time
 import gi
@@ -180,7 +181,6 @@ def xlnx_pcieappsrc (src, caps) :
     cap_string = cap_string + ", framerate=" + str(fps.value)+"/1"
     cap = Gst.Caps.from_string(cap_string)
     caps.set_property("caps", cap)
-    print(cap_string)
     src.set_property("format", Gst.Format.TIME)
     src.set_property("block", True)
     src.set_property("is-live", True)

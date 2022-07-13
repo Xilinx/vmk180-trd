@@ -361,7 +361,7 @@ static void set_property (App *app)
         g_object_set (G_OBJECT (app->vvas_xfilter),              \
                 "kernels-config", "/usr/share/vvas/vmk180-trd/kernel_xfilter2d_pl.json",   \
                 NULL);
-	preset = getfilterstring(app->h_param.filter_preset);	
+	preset = getfilterstring(app->h_param.filter_preset);
 	g_object_set (G_OBJECT (app->vvas_xfilter),              \
                 "dynamic-config",preset,   \
                 NULL);
@@ -585,9 +585,10 @@ static gpointer host_app_reg_read (gpointer data)
         /* Move to IDLE mode until timeout */
         sleep (HOST_APP_REG_READ_TIMEOUT);
     }
-
+    
     GST_DEBUG("Exit thread is set, quitting hostapp register read thread");
-    g_thread_exit(NULL);
+    g_thread_exit(0);
+    return NULL;
 }
 
 gint main (gint argc, gchar *argv[])
@@ -601,7 +602,6 @@ gint main (gint argc, gchar *argv[])
     gulong      hid_enough  = 0;   /* handler id - enough data signal     */
     gulong      hid_sample  = 0;   /* handler id - new sample signal      */
     gulong      pid_query   = 0;   /* probe   id - appsink query callback */
-    gint        ndmabuf     = 3;
     memset (app, 0, sizeof(App));
 
     gst_init (&argc, &argv);
@@ -685,12 +685,6 @@ gint main (gint argc, gchar *argv[])
     if (app->h_param.usecase > VGST_USECASE_TYPE_MIPISRC_TO_HOST_BYPASS) {
         app->dma_export.fd = 0;
         app->dma_export.size = app->export_fd_size;
-	/* Driver will allocate specified number of dma bufferpool */
-	ret = pcie_num_dma_buf(app->fd,ndmabuf);
-	if (ret < 0) {
-            g_printerr ("Failed to initialize number of buffer");
-            goto DESTROY_PIPELINE;
-        }
         /* Driver will initalize bufferpool and store FDs, which can be
            export to user via dma-map/unmap IOCTLs */
         ret = pcie_dma_export(app->fd, &app->dma_export);

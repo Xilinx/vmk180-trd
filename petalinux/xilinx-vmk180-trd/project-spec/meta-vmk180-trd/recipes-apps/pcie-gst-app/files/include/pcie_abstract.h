@@ -265,7 +265,7 @@ gint pcie_dma_import_release(gint fpga_fd, struct dma_buf_imp* dma_import);
  *
  * @return 0 on success
  */
-gint pcie_num_dma_buf(gint fpga_fd, guint nbuf);
+gint pcie_num_dma_buf(gint fpga_fd);
 
 /**
  * @brief get the supported usecase type

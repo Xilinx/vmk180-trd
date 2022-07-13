@@ -137,20 +137,16 @@ gint pcie_read_stop_mipi_feed(gint fpga_fd, guint *mipi_feed)
     return ret;
 }
 
-gint pcie_num_dma_buf(gint fpga_fd, guint nbuf)
+gint pcie_num_dma_buf(gint fpga_fd)
 {
-    gint ret = -EINVAL;
-    if((nbuf < 1) && (nbuf >3)) {
-            GST_ERROR ("Failed to run ioctl to set number of dma buf");
-    	    return ret; 
-    }
+    gint ndmabuf = -EINVAL;
     if (fpga_fd >= 0) {
-        ret = ioctl(fpga_fd, NUM_DMA_BUF,&nbuf);
-        if (ret < 0)
-            GST_ERROR ("Failed to run ioctl to read stop mipi feed");
+        ndmabuf = ioctl(fpga_fd, NUM_DMA_BUF,NULL);
+        if (ndmabuf < 0)
+            GST_ERROR ("Failed to run ioctl to number of dma buffers allocated");
     }
 
-    return ret;
+    return ndmabuf;
 }
 
 gint pcie_dma_import(gint fpga_fd, struct dma_buf_imp *dma_import)
