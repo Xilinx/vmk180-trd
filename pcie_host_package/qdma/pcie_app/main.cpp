@@ -34,10 +34,9 @@
 
 int main(int argc, char *argv[])
 {
-	int cmd_opt1;
 
 	QApplication a(argc, argv);
 	w = new MainWindow;
-	QtConcurrent::run(cmaincall,w, argc,argv);
+	QtConcurrent::run(cmaincall,w);
 	return a.exec();
 }

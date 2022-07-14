@@ -24,9 +24,9 @@
  */
 
 #include "pcie_host.h"
-#include "main.h"
+#include "mainwindow.h"
 #define _BSD_SOURCE
-#define _XOPEN_SOURCE 500
+//#define _XOPEN_SOURCE 500
 #include <assert.h>
 #include <fcntl.h>
 #include <getopt.h>
@@ -135,7 +135,7 @@ struct pcie_transfer {
 	int h2c_fd;
 	int c2h_fd;
 	int reg_fd;
-	void *map_base;
+	char *map_base;
 	char *read_buffer;
 	char *write_buffer;
 	char *infname;
@@ -164,7 +164,7 @@ guint  add_watch;
 int flag = 0;
 
 	static gboolean
-handle_keyboard (GIOChannel *source, GIOCondition cond, gpointer *data)
+handle_keyboard (GIOChannel *source, GIOCondition , gpointer *)
 {
 	gchar    *str   = NULL;
 	gboolean ret    = TRUE;
@@ -229,13 +229,10 @@ int cb_deque(circular_buffer *cb, char *data)
 	return 0;
 }
 
-int cmaincall(struct MainWindow *frm, int argc, char *argv[])
+int cmaincall(struct MainWindow *frm)
 {
-	int cmd_opt;
-	char *h2c_device = H2C_DEVICE;
-	char *c2h_device = C2H_DEVICE;
-	char *infname;
-	char cross_sign = 0;
+	const char *h2c_device = H2C_DEVICE;
+	const char *c2h_device = C2H_DEVICE;
 	int ret;
 
 	while(1) {
@@ -247,11 +244,9 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 		printf("Enter 5 to run  : RawVideofilefromHost--> pciesrc-->filter2d-->kmssink\n");
 		printf("Enter 6 to run  : RawVideofilefromHost--> pciesrc-->kmssink\n");
 		printf("Enter 7 to 	: Exit application\n");
-	
+		
 		printf("Enter your choice:");
 		scanf("%d",&usecase_sel);
-		printf("Enter your choice:");
-	
 		switch(usecase_sel)
 		{
 			case 1: ret = mipi_displayonhost(frm,c2h_device);
@@ -312,11 +307,9 @@ int cmaincall(struct MainWindow *frm, int argc, char *argv[])
 	}
 }
 
-int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
+int mipi_displayonhost(struct MainWindow *frm,const char *c2h_device)
 {
 	int rc;
-	volatile unsigned int *infile_len;
-	unsigned long int file_len;
 	filter_type fil_type;
 	kernel_mode ker_mode;
 	volatile unsigned int *input_res = NULL;
@@ -363,7 +356,7 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 		goto c2h_out;
 	}
 	
-	trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
+	trans.map_base = (char *)mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
 	if (trans.map_base == (void *)-1) {
 		printf("Memory mapped at address %p.\n", trans.map_base);
 		fflush(stdout);
@@ -398,8 +391,8 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device)
 		*filter_params = fil_type;
 	}
 
-	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n"RESET); 
-	printf(KRED"To quit usecase, hit <q+enter> from host \n\n"RESET);
+	printf(KGREEN "\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n" RESET); 
+	printf(KRED "To quit usecase, hit <q+enter> from host \n\n" RESET);
 	
 	io_stdin = g_io_channel_unix_new (fileno (stdin));
 	add_watch = g_io_add_watch (io_stdin, G_IO_IN, (GIOFunc)handle_keyboard, NULL);
@@ -443,7 +436,7 @@ out:
 	app_running = false;
 	return rc;
 }
-int host2kmssink_with_filter( char *h2c_device)
+int host2kmssink_with_filter(const char *h2c_device)
 {
         ssize_t rc;
         volatile unsigned int *host_done;
@@ -467,7 +460,6 @@ int host2kmssink_with_filter( char *h2c_device)
 
         printf("Enter your choice:");
         scanf("%d",&choice);
-
         if (choice == 1) {
                 in_width  = 3840;
                 in_height = 2160;
@@ -494,7 +486,7 @@ int host2kmssink_with_filter( char *h2c_device)
         }
 
         /* map one page */
-        trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
+        trans.map_base = (char *)mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
         if (trans.map_base == (void *)-1) {
                 printf("Memory mapped at address %p.\n", trans.map_base);
                 fflush(stdout);
@@ -531,7 +523,7 @@ int host2kmssink_with_filter( char *h2c_device)
         /* Get the input file length  */
         if (trans.infile_fd > 0) {
                 file_len = lseek(trans.infile_fd, 0, SEEK_END);
-                if (file_len == (off_t)-1)
+                if (file_len <= 0)
                 {
                         printf("failed to lseek %s numbytes %lu\n", trans.infname, file_len);
                         rc = -EINVAL;
@@ -558,7 +550,7 @@ int host2kmssink_with_filter( char *h2c_device)
         ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
         *ucase_params = u_case & 0xFFFFFFFF;
 
-        printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+        printf(KGREEN "\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n" RESET);
         rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
         if (rc < 0)
                 goto infile_out;
@@ -600,7 +592,7 @@ h2c_out:
 }
 
 
-int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
+int host2host(struct MainWindow *frm,const char *h2c_device,const char *c2h_device)
 {
 	ssize_t rc;
 	volatile unsigned int *host_done;
@@ -664,7 +656,7 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	}
 
 	/* map one page */
-	trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
+	trans.map_base = (char *)mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
 	if (trans.map_base == (void *)-1) {
 		printf("Memory mapped at address %p.\n", trans.map_base);
 		fflush(stdout);
@@ -700,7 +692,7 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	/* Get the input file length  */
 	if (trans.infile_fd > 0) {
 		file_len = lseek(trans.infile_fd, 0, SEEK_END);
-		if (file_len == (off_t)-1)
+		if (file_len <= 0)
 		{
 			printf("failed to lseek %s numbytes %lu\n", trans.infname, file_len);
 			rc = -EINVAL;
@@ -726,7 +718,7 @@ int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device)
 	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
 	*ucase_params = u_case & 0xFFFFFFFF;
 
-	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+	printf(KGREEN "\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n" RESET);
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
 	if (rc < 0)
 		goto infile_out;
@@ -771,7 +763,7 @@ h2c_out:
 	return rc;
 }
 
-int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_device)
+int host2host_without_filter(struct MainWindow *frm, const char *h2c_device, const char *c2h_device)
 {
 	ssize_t rc;
 	volatile unsigned int *host_done;
@@ -779,7 +771,6 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	unsigned long int file_len;
 	kernel_mode ker_mode;
 	volatile unsigned int *input_res = NULL;
-	volatile unsigned int *filter_params;
 	volatile unsigned int *kernel_mode_params;
 	volatile unsigned int *fps_mode_params;
 	char infilename[100];
@@ -832,7 +823,7 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	}
 
 	/* map one page */
-	trans.map_base = mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
+	trans.map_base = (char *) mmap(0, MAP_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, trans.reg_fd, 0);
 	if (trans.map_base == (void *)-1) {
 		printf("Memory mapped at address %p.\n", trans.map_base);
 		fflush(stdout);
@@ -865,13 +856,13 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	/* Get the input file length  */
 	if (trans.infile_fd > 0) {
 		file_len = lseek(trans.infile_fd, 0, SEEK_END);
-		if (file_len == (off_t)-1)
+		if (file_len <= 0)
 		{
 			printf("failed to lseek %s numbytes %lu\n", trans.infname, file_len);
-                        goto infile_out;
+			goto infile_out;
 		}
 		/* reset the file position indicator to
-		   the beginning of the file */
+		the beginning of the file */
 		lseek(trans.infile_fd, 0L, SEEK_SET);
 		infile_len = ((uint32_t *)(trans.map_base + PCIRC_GET_FILE_LENGTH));
 		*infile_len = (unsigned int)(file_len & 0xFFFFFFFF);
@@ -888,7 +879,7 @@ int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_
 	ucase_params = ((uint32_t *)(trans.map_base + PCIRC_UCASE_SET));
 	*ucase_params = u_case & 0xFFFFFFFF;
 
-	printf(KGREEN"\nPlease run 'vmk180-trd-nb1.ipynb/vmk180-trd-nb3.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n"RESET);
+	printf(KGREEN "\nPlease run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)\n\n" RESET);
 	
 	rc = cb_init(&queue_frame, 240, in_width * in_height * 2);
 
@@ -936,7 +927,7 @@ h2c_out:
 
 }
 
-void *file_read (void *vargp)
+void *file_read (void *)
 {
 	char *read_allocated = NULL;
 	int size = in_height * in_width * 2;
@@ -944,8 +935,10 @@ void *file_read (void *vargp)
 	struct stat st;
 	unsigned long int file_size;
 	int num_cpu;
+#ifdef T_DEBUG
 	struct timespec ts_start, ts_end;
-
+	int k = 0;
+#endif
 	cpu_set_t cpuset;
 
 	num_cpu = get_nprocs();
@@ -956,7 +949,6 @@ void *file_read (void *vargp)
 		if (rc != 0)
 			printf("set affinity failed\n");
 	}
-	int k = 0;
 	fstat(trans.infile_fd, &st);
 	file_size = st.st_size;
 	posix_memalign((void **)&read_allocated, 4096 /*alignment */ , size + 4096);
@@ -1005,8 +997,6 @@ void *pcie_dma_read(void *)
 	int rc;
 	int num_cpu;
 	volatile unsigned int addr_high,addr_low, size, buffer_ready, read_complete;
-	volatile unsigned long int offset = 0;
-	volatile unsigned int lsb_offset, msb_offset;
 	volatile unsigned int *transfer_done;
 	volatile uint64_t addr;
 	char *read_allocated = NULL;
@@ -1058,17 +1048,13 @@ void *pcie_dma_read(void *)
 		addr_high = *((uint32_t *)(trans.map_base + PCIEP_READ_BUFFER_ADDR_HIGH));
 		addr = (uint64_t) addr_high << 32 | addr_low;
 		size = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_SIZE));
-		lsb_offset = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_OFFSET));
-		msb_offset = *((uint32_t *) (trans.map_base + PCIEP_READ_BUFFER_READY));
-		lsb_offset = 0;
-		offset = lsb_offset | ((unsigned long int)(msb_offset & 0xFFFF0000) << 16);
 		rc = cb_deque(&queue_file_frame, trans.read_buffer);
 		if (rc == 1) {
 			do {
 			} while(queue_file_frame.index == 0);
 			cb_deque(&queue_file_frame, trans.read_buffer);
 		}
-		rc = write_from_buffer(H2C_DEVICE, trans.h2c_fd, trans.read_buffer, size, addr);
+		rc = write_from_buffer((char *)H2C_DEVICE, trans.h2c_fd, trans.read_buffer, size, addr);
 		if (rc < 0) {
 			printf("write from buffer failed size %d rc %d", size, rc);
 			goto out;
@@ -1164,7 +1150,7 @@ void  *pcie_dma_write(void *)
 			do {
 			}while (queue_frame.index >= 70);
 
-			rc = read_to_buffer(C2H_DEVICE, trans.c2h_fd, trans.write_buffer, size, addr);
+			rc = read_to_buffer((char *)C2H_DEVICE, trans.c2h_fd, trans.write_buffer, size, addr);
 			if (rc < 0) {
 				printf("write function read to buffer failed size %d rc %d\n", size, rc);
 				goto out;

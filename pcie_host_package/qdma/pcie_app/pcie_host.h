@@ -47,7 +47,7 @@ extern bool app_running;
  * frm 			: A Qtwindow frame to display on host.
  * c2h_device		: qdma channel to host device node for dma read transaction.
  */
-int mipi_displayonhost(struct MainWindow *frm, char *c2h_device );
+int mipi_displayonhost(struct MainWindow *frm,const char *c2h_device );
 
 /**
  * host2host   : Function to provide control from host to Endpoint and transfer a video file from host to EP via pcie. (i.e., appsrc)    
@@ -56,8 +56,8 @@ int mipi_displayonhost(struct MainWindow *frm, char *c2h_device );
  * h2c_device  : qdma host to channel device node for dma write transaction
  * c2h_device  : qdma channel to host device node for dma read transaction.
  */
-int host2host(struct MainWindow *frm,char *h2c_device, char *c2h_device);
-int host2kmssink_with_filter(char *h2c_device);
+int host2host(struct MainWindow *frm,const char *h2c_device,const char *c2h_device);
+int host2kmssink_with_filter(const char *h2c_device);
 
 /**
  * host2host_without_filter   : Function to provide control from host to Endpoint and transfer a video file from host to EP via pcie.(i.e.,appsrc)
@@ -67,7 +67,7 @@ int host2kmssink_with_filter(char *h2c_device);
  * c2h_device  : qdma channel to host device node for dma read transaction.
  */
 
-int host2host_without_filter(struct MainWindow *frm,char *h2c_device, char *c2h_device);
+int host2host_without_filter(struct MainWindow *frm,const char *h2c_device,const char *c2h_device);
 
 /**
  * pcie_dma_read :  Thread function to start dma write transaction from host to channel.
@@ -84,7 +84,7 @@ void *pcie_dma_write(void *);
  */
 void *file_read(void * vargp);
 int cb_deque(circular_buffer *cb, char *data);
-int cmaincall(struct MainWindow *frm, int argc, char *argv[]);
+int cmaincall(struct MainWindow *frm);
 
 
 }

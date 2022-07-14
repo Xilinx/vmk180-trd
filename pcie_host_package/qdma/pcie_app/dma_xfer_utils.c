@@ -64,7 +64,7 @@ ssize_t read_to_buffer(char *fname, int fd, char *buffer, uint64_t size,
 	off_t offset = base;
 
 	do { /* Support zero byte transfer */
-		uint64_t bytes = size - count;
+		ssize_t bytes = size - count;
 
 		if (bytes > RW_MAX_SIZE)
 			bytes = RW_MAX_SIZE;
@@ -124,7 +124,7 @@ ssize_t write_from_buffer(char *fname, int fd, char *buffer, uint64_t size,
 	off_t offset = base;
 
 	do { /* Support zero byte transfer */
-		uint64_t bytes = size - count;
+		ssize_t bytes = size - count;
 
 		if (bytes > RW_MAX_SIZE)
 			bytes = RW_MAX_SIZE;
