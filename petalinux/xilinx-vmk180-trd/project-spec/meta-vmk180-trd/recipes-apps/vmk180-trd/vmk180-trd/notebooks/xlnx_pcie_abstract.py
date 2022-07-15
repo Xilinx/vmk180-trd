@@ -208,11 +208,9 @@ def PCIe_GetFilterPreset(pcie_fd) :
 	return filtertype
 
 def export_pciedmabuff(pcie_fd) :
-    ndmabuf = 3 #Allocate 3 exported 3 dma buffer file descriptors
     export_fd_size = int(0)
     export_fd_size = user32_dll.get_export_fd_size(yuv_frame_size)
     buffer_main = dma_buf()
     buffer_main.fd = 0
     buffer_main.size = export_fd_size
-    user32_dll.pcie_num_dma_buf(pcie_fd,ndmabuf)
     user32_dll.pcie_dma_export(pcie_fd,byref(buffer_main))
