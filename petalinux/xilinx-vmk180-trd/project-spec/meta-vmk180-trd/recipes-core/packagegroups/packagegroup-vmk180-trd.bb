@@ -41,7 +41,6 @@ VMK180_TRD_PACKAGES = " \
 	trd-files \
 	ttf-bitstream-vera \
 	tzdata \
-	pcie-gst-app \
 	xmediactl \
 	vvas-utils \
 	vvas-gst \

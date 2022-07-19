@@ -24,7 +24,6 @@
 
 App s_app;
 GST_DEBUG_CATEGORY (pcie_gst_app_debug);
-char *strbuf;
 
 #define GST_CAT_DEFAULT pcie_gst_app_debug
 
@@ -238,7 +237,7 @@ static gint set_host_parameters(App *app)
     return ret;
 }
 
-static char * getfilterstring(int index) {
+static char * getfilterstring(int index,char *strbuf) {
    const char *str1 = "{\"filter_preset\":\"";
    const char *str2 = "{\"filter_preset\" : \"";
    if(index > 1){
@@ -291,7 +290,7 @@ static void gst_reset_elements (App *app)
 static void set_property (App *app)
 {
     GstCaps* srcCaps = NULL;
-    char * preset;	
+    char * preset,*strbuf;	
     if (app->h_param.usecase >= VGST_USECASE_TYPE_APPSRC_TO_HOST) {
         GST_DEBUG ("Setting up appsrc plugin");
         g_object_set (G_OBJECT (app->pciesrc),                      \
@@ -361,7 +360,7 @@ static void set_property (App *app)
         g_object_set (G_OBJECT (app->vvas_xfilter),              \
                 "kernels-config", "/usr/share/vvas/vmk180-trd/kernel_xfilter2d_pl.json",   \
                 NULL);
-	preset = getfilterstring(app->h_param.filter_preset);
+	preset = getfilterstring(app->h_param.filter_preset,strbuf);
 	g_object_set (G_OBJECT (app->vvas_xfilter),              \
                 "dynamic-config",preset,   \
                 NULL);
