@@ -565,7 +565,7 @@ index 2d52751..8e30d4e 100644
 +	}
 +	if(this->wr_irq){
 +		devm_free_irq(&pdev->dev, this->wr_irq, this);
-+		driver_data->wr_irq = 0;
++		this->wr_irq = 0;
 +	}
 +	if(this->rd_irq){
 +		devm_free_irq(&pdev->dev, this->rd_irq, this);
