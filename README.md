@@ -1,6 +1,6 @@
 <table class="sphinxhide">
  <tr>
-   <td align="center"><img src="docs/source/docs/media/xilinx-logo.png" width="30%"/><h1> VMK180 Targeted Reference Design (TRD)-2021.2 </h1>
+   <td align="center"><img src="docs/source/docs/media/xilinx-logo.png" width="30%"/><h1> VMK180 Targeted Reference Design (TRD)-2022.1 </h1>
    </td>
  </tr>
 </table>
@@ -9,7 +9,7 @@
 
 The VMK180 TRD consists of a platform, accelerator and Jupyter notebooks to demonstrate various aspects of the design and functionality of various Board interfaces. A platform is a Vivado design with a pre-instantiated set of I/O interfaces and a corresponding PetaLinux BSP and image that includes the required kernel drivers and user-space libraries to exercise those interfaces. Accelerators are mapped to FPGA logic resources and stitched into the platform using the Vitis toolchain. The reference design currently supports the VMK180 evaluation board. 
 
-Following is the list of Platform design available in 2021.2:
+Following is the list of Platform design available in 2022.1:
 
 | Platform Name  | Description  |  Links |
 | -------------- | ------------- |----------------|
@@ -32,7 +32,7 @@ GitHub issues will be used for tracking requests and bugs. For questions go to [
 
 The design includes files licensed by Xilinx and third parties under the terms
 of the GNU General Public License, GNU Lesser General Public License,
-BSD License, MIT License, and other licenses. The [archiver_2021_2.tar.gz ](https://www.xilinx.com/member/forms/download/xef.html?filename=archiver_2021_2.tar.gz) Package includes one
+BSD License, MIT License, and other licenses. The [archiver_2022_1.tar.gz ](https://www.xilinx.com/member/forms/download/xef.html?filename=archiver_2021_2.tar.gz) Package includes one
 folder named ``sources`` containing the complete set of source
 files and one named ``licenses`` containing licenses extracted from
 the source files. These licenses and sources are extracted from petalinux bsp recipes
