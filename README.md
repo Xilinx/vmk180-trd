@@ -1,6 +1,6 @@
 <table class="sphinxhide">
  <tr>
-   <td align="center"><img src="docs/source/docs/media/xilinx-logo.png" width="30%"/><h1> VMK180 Targeted Reference Design (TRD)-2022.1 </h1>
+   <h1> VMK180 Targeted Reference Design (TRD)-2022.1 </h1>
    </td>
  </tr>
 </table>
