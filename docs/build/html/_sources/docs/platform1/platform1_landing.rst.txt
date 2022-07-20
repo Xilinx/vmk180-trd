@@ -1,11 +1,12 @@
 VMK180 TRD
 ===========================================================
 
-VMK180 TRD 2021.2 demonstrates following functionalities :
+VMK180 TRD 2022.1 demonstrates following functionalities :
 
 * Video being captured from MIPI image sensor, processed with an accelerator and displayed on a HDMI monitor connected to vmk180 board.
-* Video being captured from MIPI image sensor on the board, processed (optionally) with an accelerator, sent to a x86 host machine (root complex) via PCIe and displayed on a monitor connected to the host machine.
+* Video being captured from MIPI image sensor , processed (optionally) with an accelerator, sent to a x86 host machine (root complex) via PCIe and displayed on a monitor connected to the host machine.
 * Video frames being transferred from a file on the host machine to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface, processed (optionally) with an accelerator, sent back to host and displayed on a monitor connected to the host machine. . 
+* Video frames being transferred from a file on the host machine to the VMK180 evaluation board (endpoint) through the PCIe QDMA bridge interface, processed (optionally) with an accelerator and displayed on a monitor connected to the host machine.
 
 Accelerator functions can be added to this platform using Vitis platform. Supported acceleration function in this design is a 2D Filter.
 
@@ -19,8 +20,8 @@ Features
  
 * 4k resolution images from a sensor
 * HDMI display
-* Demonstration of Board as PCIe End-Point accelerator Card
-* User programmable 2D filter
+* Demonstration of VMK180 as PCIe End-Point accelerator Card
+* User programmable accelerated 2D filter
 * Loop Back of processed 4k Video data over PCIe
 * Live Display of Loop backed video on Host
 * Jupyter notebook based applications control, power and performance monitoring
@@ -76,15 +77,14 @@ Other
 Xilinx Support
 ---------------
 
-GitHub issues will be used for tracking requests and bugs. For questions go to [forums.xilinx.com](http://forums.xilinx.com/).
+GitHub issues will be used for tracking requests and bugs. For questions go to `forums.xilinx.com <http://forums.xilinx.com/>`_.
 
 License
 -------
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 
-You may obtain a copy of the License at
-[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+You may obtain a copy of the License at `http://www.apache.org/licenses/LICENSE-2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
 
 
 

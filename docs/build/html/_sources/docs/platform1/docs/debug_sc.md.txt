@@ -33,6 +33,16 @@ PCIe Debug
 
 For extensive details on debugging refer to relevent sections of  [PCIe debug guide](https://xilinx.github.io/pcie-debug-kmap/pciedebug/build/html/index.html)
 
+pcie-gst-app command line application for debug
+-----------------------------------------------
+This command application is used to provide CPU utilzation numbers for a given usecase without depending on jupyter-lab services running in the background. 
+
+**Build and execution steps**
+
+1. By default pcie gst app commandline application is disabled in petalinux, to enable it add `pcie-gst-app` recipe to `vmk180-trd/petalinux/${PROOT}/project-spec/meta-vmk180-trd/recipes-core/packagegroups/packagegroup-vmk180-trd.bb` 
+2. To build `pcie-gst-app` re-build petalinux project by following steps provided in `Building Petalinux` section .
+3. Run Pcie host application as recommended in `Run Host and EP applications section`. 
+4. Execute pcie_gst_app and observe the output selected usescase. If Usecase 1 (or) Usecase 2 is selected from host application, Make sure to execute `xmediactl.sh` (or) `xmedictl_1080.sh` depending on the selected resolution before running pcie_gst_app from commandline.
 
 **License**
 

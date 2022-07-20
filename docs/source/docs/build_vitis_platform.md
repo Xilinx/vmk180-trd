@@ -10,7 +10,7 @@ This tutorial shows how to build a Platform for applications running on VMK180 E
 Prerequisites
 --------------------
 
-* Vitis Unified Software Platform 2021.2
+* Vitis Unified Software Platform 2022.1
 
 Accessing the Tutorial Reference Files
 -------------------------------------------
@@ -19,11 +19,11 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal:
 
    ```
-   git clone --branch 2021.2 --recursive https://github.com/Xilinx/vmk180-trd.git
+   git clone --branch 2022.1 --recursive https://github.com/Xilinx/vmk180-trd.git
 
    ```
 
-2. Navigate to the `vmk180-trd-2021.2` which is the working directory.
+2. Navigate to the `vmk180-trd-2022.1` which is the working directory.
 
 Generating an Vitis Extensible platform
 --------------------------------------------

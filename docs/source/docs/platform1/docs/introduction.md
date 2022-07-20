@@ -46,9 +46,10 @@ Design Components
 <details>
  <summary><b>Hardware components</b></summary>
 
-  * VMK180 Evaluation Kit
+  * [VMK180 Evaluation Kit](https://www.xilinx.com/products/boards-and-kits/vmk180.html)
   * [Leopard IMX274 MIPI FMC Card](https://www.leopardimaging.com/product/csi-2-mipi-modules-i-pex/li-imx274mipi-fmc)
   * A x86 server class host machine
+  * A monitor with HDMI input supporting upto 4kp60 & Display port upto 4k30
   
 </details>
 
@@ -57,7 +58,6 @@ Design Components
 
 * Video inputs
    * MIPI CSI-2 Rx
-   * RAW Video file
 * Video outputs
    * HDMI
    * PCIe/Display Port on Host
@@ -80,15 +80,15 @@ Design Components
 * Linux kernel subsystems
    * Video source: Video4 Linux (V4L2)
    * Display: Direct Rendering Manager (DRM)/Kernel Mode Setting (KMS)
+   * [Xilinx run-time (XRT)](https://www.xilinx.com/products/design-tools/vitis/xrt.html)
 * Linux user space frameworks
    * Jupyter
-   * GStreamer 
-   * Xilinx run-time (XRT)
+   * [Vitis Video Analytics SDK](https://www.xilinx.com/products/design-tools/vitis/vvas.html) 
+   
 * Host components
-  * linux User space frameworks
   * QT
   * OpenCV
-  * QDMA Driver
+  * [Xilinx QDMA Driver](https://xilinx.github.io/dma_ip_drivers/2019.1/linux-kernel/html/index.html)
 
  </details>
 

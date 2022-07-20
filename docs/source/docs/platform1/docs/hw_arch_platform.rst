@@ -108,29 +108,13 @@ For more information on CPM-PCIe & QDMA please refer to Versal ACAP CPM DMA and 
 PCIe User Space Register
 ------------------------
 
-For hand shaking between host and endpoint applications, the user space register IP provides a set of registers. The following figure shows the logical diagram of the IP.
+For hand shaking between host and endpoint applications, the user space register IP provides a set of registers. 
 
-There are 15 32-bit registers starting from offset that have read/write access from the PS. Each register is byte addressable, which means the address for the second register can be calculated by adding four to the address of the first one. Following these are 15 registers that are read-only for the PS and contain values written by the DMA/bridge IP. Reg14 is used as an Interrupt register and reg30 is an Interrupt Acknowledgment register as described in the previous section.
+There are total 32 4-byte wide registers starting from offset 0x00 that have read/write access from the PS. Each register is byte addressable, which means the address for the second register can be calculated by adding four to the address of the first one.
 
-Similarly, there are 15 32-bit registers starting from offset 0x0000 that have read/write access from the host. Following these are 14 registers that are read-only for the host and contain data written by the PS.
+Similarly, there are 32 4-byte wide registers having read/write access from the host.
 
-.. image:: ../../media/User_Space_IP_Logical_Diagram.png
-   :width: 800
-
-
-Registers available to the PS are listed in the following table. Of these, reg0-reg14 have read and
-write access and reg15-30 are read-only.
-
-**Registers Available to the PS**
-
-.. image:: ../../media/Registers_Available_to_the_PS.png
-   :width: 400
-   
-
-.. image:: ../../media/Registers_Available_to_the_PS_2.png
-	:width: 400
-
-The same register space is visible to the PCIe DMA with reg0-14 with read/write access and reg15-28 as read-only. Reg29-30 are dummy and are not required.
+Detailed mapping of these registers is documented in PCIe EP driver section in software architecture.
 
 Clocks & Reset 
 --------------------------

@@ -22,12 +22,12 @@ Setting up the Board
 ------------------------
 
 ### Flash the SD Card
-  * Download  the `vmk180_trd_prebuilt_2021.2.zip` package, unzip and save it on your computer. Alternatively, Go through tutorials section to build `petalinux-sdimage.wic` locally.
+  * Download  the `vmk180_trd_prebuilt_2022.1.zip` package, unzip and save it on your computer. Alternatively, Go through tutorials section to build `petalinux-sdimage.wic` locally.
   
   * To uncompress wic file use following command 
 
 	```
-	cd vmk180_trd_prebuilt_2021.2
+	cd vmk180_trd_prebuilt_2022.1
 	xz -d -v petalinux-sdimage.wic.xz
 	```
 
@@ -124,19 +124,23 @@ Below diagram shows Board and hardware connections.
 
  ```
  root@vmk180-trd:~#
-[W 02:30:21.552 LabApp] JupyterLab server extension not enabled, manually loading...
-[I 02:30:21.571 LabApp] JupyterLab extension loaded from /usr/lib/python3.5/site-packages/jupyterlab
-[I 02:30:21.572 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
-[I 02:30:21.580 LabApp] Serving notebooks from local directory: /usr/share/notebooks
-[I 02:30:21.581 LabApp] The Jupyter Notebook is running at:
-[I 02:30:21.581 LabApp] http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
-[I 02:30:21.581 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
-[C 02:30:23.092 LabApp]
-
- To access the notebook, open this file in a browser:
-     file:///home/root/.local/share/jupyter/runtime/nbserver-1889-open.html
- Or copy and paste one of these URLs:
-     http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
+[   70.233800] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.122 ServerApp] jupyterlab | extension was successfully linked.
+[   77.468923] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.283 LabApp] JupyterLab extension loaded from /usr/lib/python3.9/site-packages/jupyterlab
+[   77.469109] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.283 LabApp] JupyterLab application directory is /usr/share/jupyter/lab
+[   77.469224] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.300 ServerApp] jupyterlab | extension was successfully loaded.
+[   77.469319] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.303 ServerApp] Serving notebooks from local directory: /usr/share/notebooks
+[   77.469411] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.303 ServerApp] Jupyter Server 1.13.5 is running at:
+[   77.469509] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.303 ServerApp] http://172.19.1.246/lab?token=246f08cec92a774115fe9ca6f3ba5d151deba1ae05aeb993
+[   77.469600] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.303 ServerApp]  or http://127.0.0.1:8888/lab?token=246f08cec92a774115fe9ca6f3ba5d151deba1ae05aeb993
+[   77.469701] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.303 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[   77.469810] start-jupyter.sh[541]: [C 2022-07-15 09:10:50.322 ServerApp]
+[   77.469901] start-jupyter.sh[541]:     
+[   77.469989] start-jupyter.sh[541]:     To access the server, open this file in a browser:
+[   77.470086] start-jupyter.sh[541]:         file:///home/root/.local/share/jupyter/runtime/jpserver-541-open.html
+[   77.470213] start-jupyter.sh[541]:     Or copy and paste one of these URLs:
+[   77.470311] start-jupyter.sh[541]:         http://172.19.1.246:8888/lab?token=246f08cec92a774115fe9ca6f3ba5d151deba1ae05aeb993
+[   77.470400] start-jupyter.sh[541]:      or http://127.0.0.1:8888/lab?token=246f08cec92a774115fe9ca6f3ba5d151deba1ae05aeb993
+  
  ```
    Follow these steps to connect to the jupyter-server using Chrome browser on the laptop.
 
@@ -153,14 +157,14 @@ http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
 
 ```
 
-/etc/init.d/jupyterlab-server stop
-/etc/init.d/jupyterlab-server start
+systemctl stop jupyter-setup
+systemctl start jupyter-setup
 
 ```
 To look up the jupyter server IP address and token on the target, run:
 
 ```
-jupyter notebook list
+journalctl -u jupyter-setup
 
 ```
 Copy the generated URL with token on the prompt of Versal target and paste it to the browser address bar of the laptop, for example:
@@ -182,7 +186,7 @@ the subnet of the host machine.
 **Setting up a private network with target board and the host machine for Windows users:**
 
 * Ensure a direct connection between the windows host machine and the target
-  board using an ethernet cable as shown in the :ref:`Board Setup` section.
+  board using an ethernet cable as shown in the Hardware Setup section.
 
 * In windows, run command prompt as an admisntrator
 
@@ -258,9 +262,8 @@ the subnet of the host machine.
 * To start Jupyter Notebook run
 
 ```
-
-     /etc/init.d/jupyterlab-server stop
-     /etc/init.d/jupyterlab-server start
+systemctl stop jupyter-setup
+systemctl start jupyter-setup
 ```
 
 Run the Application
@@ -270,8 +273,9 @@ Run the Application
 
  This TRD includes the following jupyter notebooks:
 
-1. **vmk180-trd-nb1.ipynb**:Demonstrates how to configure a V4L2 device, launches endpoint application which processes media content through filter(optional) and transfers processed content to host via PCIe.
-2. **vmk180-trd-nb2.ipynb**: Demonstrates how to capture video from a V4L2 device, processes it through filter(optional) and display the output on a monitor using a DRM/KMS display device.
+1. **vmk180-trd-nb1.ipynb**: Demonstrates how to configure a V4L2 device or video raw file from host machine through pcie, processes media content through 2D filter(optional) and transfers processed content to host via PCIe (or) display the content on hdmi monitor.
+	>  **NOTE** : For PCIe use-cases, host application to be run prior to running notebook (i.e. vmk180-trd-nb1) on end point. the steps to run host application are documented in the following section.
+2. **vmk180-trd-nb2.ipynb**:  Demonstrates how to capture video from a MIPI device, processes it through 2D convolution filter accelerator and display the output on a monitor using a DRM/KMS display device. This notebook uses the GStreamer multimedia framework. In addition, the memory bandwidth is measured and plotted in a parallel notebook.
 3. **vmk180-trd-apm.ipynb**: Demonstrates how to plot the memory bandwidth while a video pipeline is running using the libxapm library with python bindings.
 4. **vmk180-trd-cpu.ipynb**: Demonstrates how to plot the CPU usage while running applications and pipelines.
 5. **vmk180-trd-power.ipynb**: Demonstrates how to plot power consumption of multiple voltage rails throughout the board.
@@ -282,15 +286,16 @@ to run the notebooks, follow the below steps:
 2. Double click to open the notebook
 3. Select ‘Kernel’ → ‘Restart Kernel and Run All Cells’ (This will reset kernel and run's all cells sequentially) from the top menu bar to run the demo. Scroll down to the end of the notebook to see the video output.
 
- ![BoardUI](../../media/jnbh.png)
+	![BoardUI](../../media/jnbh.png)
 
 4. Click the rectangular icon to interrupt the kernel and stop the video stream.
 
- ![Interrupt](../../media/platform1_interrupt.PNG)
+	![Interrupt](../../media/platform1_interrupt.PNG)
 
 5. Select ‘Kernel’ → ‘Shutdown Kernel’ → close the notebook tab and move to the next notebook.
 
 > **NOTE** : Please follow ''step 3 to step 5'', without this you may observe incorrect behavior while moving to different notebook. 
+
 
 Host Machine Software setup
 --------------------------------
@@ -486,59 +491,66 @@ Steps to run Host application :
 	-- Rawvideofile (with abosolute path of video file to play).
  ```
  
-This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
+This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> Appsink(PCIe))
 1. First run Host Machine Software setup steps,Then execute pcie_host_app application as following.
 	
 	```	
 		# ./pcie_host_app
 	```
 
-![Usecase](../../media/Capture.PNG)
 
-2. From the three usecases select any one of the usecase or 4 to quit application.
+2. From the six usecases select any one of the usecase or 4 to quit application.
 	```
-	# ./pcie_host_app
-	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost **
-	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-	  Enter 4 to 	: Exit application
-	  Enter your choice : 1
+		# ./pcie_host_app
+		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+		Enter 2 to run  : MIPI-->pciesink--> displayonhost
+		Enter 3 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		Enter 4 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		Enter 5 to run  : RawVideofilefromHost--> pciesrc-->filter2d-->kmssink
+		Enter 6 to run  : RawVideofilefromHost--> pciesrc-->kmssink
+		Enter 7 to 	: Exit application
+		Enter your choice:1
+
 	```
-![Usecase](../../media/Select_usecase.png)
 
 3. Select desired resolution (Enter 1 or 2 ):
-	```	
-	# ./pcie_host_app
-	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-	  Enter 4 to 	: Exit application
-	  Enter your choice : 1
-	  select the resolution
-	  1. 3840x2160
-	  2. 1920x1080
-	  Enter your choice : 1
 	```
-	
-![Usecase](../../media/Select_resolution.png)
+		# ./pcie_host_app 
+		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+		Enter 2 to run  : MIPI-->pciesink--> displayonhost
+		Enter 3 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		Enter 4 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		Enter 5 to run  : RawVideofilefromHost--> pciesrc-->filter2d-->kmssink
+		Enter 6 to run  : RawVideofilefromHost--> pciesrc-->kmssink
+		Enter 7 to 	: Exit application
+		Enter your choice:1
+		select the resolution 
+		1. 3840x2160
+		2. 1920x1080
+		Enter your choice:1
+	```
+
 
 4. From below table select anyone filter-type   (Enter 0 - 10)  
 
 	```
-	# ./pcie_host_app
-	  Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-	  Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-	  Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-	  Enter 4 to 	: Exit application
-	  Enter your choice : 1
-	  select the resolution 
-	  1. 3840x2160
-	  2. 1920x1080
-	  Enter your choice : 2
-	  Enter filter type value 0-10:9
+		# ./pcie_host_app
+		Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+		Enter 2 to run  : MIPI-->pciesink--> displayonhost
+		Enter 3 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		Enter 4 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		Enter 5 to run  : RawVideofilefromHost--> pciesrc-->filter2d-->kmssink
+		Enter 6 to run  : RawVideofilefromHost--> pciesrc-->kmssink
+		Enter 7 to 	: Exit application
+		Enter your choice:1
+		select the resolution 
+		1. 3840x2160
+		2. 1920x1080
+		Enter your choice:1  
+		Enter filter type value 0-10:9
 	
 	```
-![Usecase](../../media/Select_filter.png)
+
 
 5. When application prompts below prints launch (vmk180-trd-nb1.ipynb) jupyter notebook. 
 
@@ -546,34 +558,35 @@ This example demonstrates Usecase-1(MIPI --> 2D Image Processing --> HDMI)
 
 	```
 	
-	Please run 'vmk180-trd-nb1.ipynb' jupyter from endpoint
-	To quit usecase, hit <q+enter> from host 
+		Please run 'vmk180-trd-nb1.ipynb' jupyter notebook from endpoint (To launch endpoint application)
+		To quit usecase, hit <q+enter> from host 
 	
 	```
-![Usecase](../../media/Running_Usecase.png)
 
 
 > **Note:**  Only for `MIPI` usecase , hit <q+enter> from host to quit.
 
-![Usecase](../../media/quiting_usecase.png)
 
-For Usecase-2 and Usecase-3, User is expected to pass rawvideo file as an additional parameter.
+
+From Usecase-3, User is expected to pass rawvideo file as an additional parameter.
 
 6. Enter input filename with absolute path to play and depending on rawvideo file size usecases stops  
 	```
 	 # ./pcie_host_app 
-	   Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
-           Enter 2 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
-           Enter 3 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
-           Enter 4 to 	: Exit application
-	   Enter your choice : 2
-	   select the resolution
-	   1. 3840x2160
-	   2. 1920x1080
-	   Enter your choice:2
-	   Enter input filename with path to transfer: ~/xxx.yuv
+	 	Enter 1 to run  : MIPI-->filter2d-->pciesink--> displayonhost
+	   	Enter 2 to run  : MIPI-->pciesink--> displayonhost
+		Enter 3 to run  : RawVideofilefromHost-->pciesrc-->filter2d-->pciesink-->displayonhost
+		Enter 4 to run  : RawVideofilefromHost--> pciesrc-->pciesink-->displayonhost
+		Enter 5 to run  : RawVideofilefromHost--> pciesrc-->filter2d-->kmssink
+		Enter 6 to run  : RawVideofilefromHost--> pciesrc-->kmssink
+		Enter 7 to 	: Exit application
+		Enter your choice : 3
+	   	select the resolution
+	   	1. 3840x2160
+	   	2. 1920x1080
+	   	Enter your choice:2
+	   	Enter input filename with path to transfer: ~/xxx.yuv
 	```
-![Usecase](../../media/usecase_2_3.PNG)
 	
 **To execute end-point application:** 
 

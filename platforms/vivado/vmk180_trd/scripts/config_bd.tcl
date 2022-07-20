@@ -2150,6 +2150,7 @@ proc create_root_design { parentCell } {
    CONFIG.DIVCLK_DIVIDE {27} \
    CONFIG.JITTER_SEL {Min_O_Jitter} \
    CONFIG.PHASESHIFT_MODE {WAVEFORM} \
+   CONFIG.PRIM_SOURCE {Global_buffer} \
    CONFIG.RESET_TYPE {ACTIVE_LOW} \
    CONFIG.SECONDARY_IN_FREQ {171.427} \
    CONFIG.USE_LOCKED {true} \

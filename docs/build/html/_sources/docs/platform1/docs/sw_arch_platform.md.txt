@@ -16,7 +16,7 @@ Software Architecture of the Platform
 Introduction
 ------------
 
-In this document it describes the Linux software stack,PS application running on the endpoint receives control information using the PCIe BAR map memory and data flow to and fro to the host machine through the QDMA drivers. 2dfilter accelerator in the PL receives this data, processes it and sends processed content back to the host.
+This document describes the Linux software stack,PS application(Gstreamer Python bindings) running on the endpoint receives control information from the host using PCIe BAR map memory.  QDMA controller is used to transfer data between host machine and enpoint. 2dfilter accelerator in the PL receives data from host/MIPI, processes it and sends processed content back to the host (or) display's on HDMI connected to PS.
 
 Software Stack
 ---------------
@@ -27,22 +27,26 @@ The  software stack of VMK180 endpoint device and x86 host is shown in the follo
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack.png)
 
-### The Endpoint software stack is horizontally divided into the following layers:
+The Endpoint software stack is horizontally divided into the following layers:
 
 * Application layer (user-space)
-	- G-streamer/Jupyter notebooks with a simple control and visualization interface     
-	- GStreamer multimedia framework with python bindings for video pipeline control(MIPI → Filtered → HDMI)   
-	- Gstreamer based application to capture data from MIPI on endpoint, process and transfer to host machine via pcie and display on HOST machine.
-	- Gstreamer based application to receive data host machine, process the data on EP and transfer to host machine via pcie and display on HOST 		  machine
+	- G-streamer/Jupyter notebooks with a simple control and visualization interface.     
+	- GStreamer multimedia framework with python bindings for video pipeline control.
 * Middleware layer (user-space)
-	- Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer
-	- Provides access to kernel frameworks
+	- Implements and exposes domain-specific functionality by means of GStreamer plugins to interface with the application layer.
+	- Provides access to kernel frameworks.
 * Operating system (OS) layer (kernel-space)
-	- Provides a stable, well-defined API to user-space
- 	- Includes device drivers and kernel frameworks (subsystems)
+	- Provides a stable, well-defined API to user-space.
+ 	- Includes device drivers and kernel frameworks (subsystems).
 	- Access to hardware IPs
 
-### Vertically, the Endpoint software components are divided by domain :
+Vertically, the Endpoint software components are divided by domain :
+
+* Video capture
+* Accelerator
+* Display
+* PCIe Ep driver
+
 
 #### Video Capture :
 
@@ -54,7 +58,7 @@ At a high level it consists of the following layers from top to bottom:
 
 * User-space layers
 
-	- GStreamer: Media source bin plugin (wrapper around generic v4l2src plugin)
+	- GStreamer: xlnxvideosource plugin (wrapper around generic v4l2src plugin)
 	- Media controller: Library to configure v4l subdevices and media devices
 
 * Kernel-space layers
@@ -145,6 +149,63 @@ The connector models the physical interface to the display. Both DisplayPort and
 
 The framework exposes two device nodes per display pipeline to user space: the /dev/dri/card* device node and an emulated /dev/fb* device node for backward compatibility with the legacy fbdev Linux framework. The latter is not used in this design. libdrm was created to facilitate the interface of user space programs with the DRM subsystem. This library is merely a wrapper that provides a function written in C for every ioctl of the DRM API, as well as constants, structures and other helper elements. The use of libdrm not only avoids exposing the kernel interface directly to user space, but presents the usual advantages of reusing and sharing code between programs.
 
+#### QDMA Drivers
+
+QDMA driver on the host machine is used to identify VMK180 device connected to the host machine via PCIe interface and perform data transfer through DMA.
+
+Please refer to below link for more details on QDMA drivers:
+https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
+
+#### PCIe End Point Driver 
+Endpoint driver is used to communicate with the Host using dedicated BAR. Endpoint driver makes use of DMA framework available in linux kernel by which it exports DMA buffers as file descriptors to userspace and import a DMA buffer from userspace using a file descriptor previously exported for a different or the same device.
+
+For initiating DMA transfers through pcie, Endpoint driver registers two interrupts i.e., DMA read and DMA write interrupts and one more interrupt to acknowledgement host that DMA transfer is complete. The BAR registers described below are used as control information between host and endpoint.  
+
+Below table provide the purpose of each PCIe User Space Registers in both endpoint driver and host application.
+		
+![PCIe_USER SPACE REGISTERS](../../media/pcie_user_space_reg.png )
+
+
+#### GStreamer
+
+GStreamer is a cross-platform open source multimedia framework that provides infrastructure to integrate multiple multimedia components and create pipelines/graphs. GStreamer graphs are made of two or more plugin elements which are delivered as shared libraries. The following is a list of commonly performed tasks in the GStreamer framework:
+
+Selection of a source GStreamer plugin
+
+Selection of a processing VVAS plugin
+
+Selection of a sink GStreamer plugin
+
+Configuration of properties of above GStreamer plugins
+
+Control of a GStreamer pipeline
+
+#### Plugins
+
+The following GStreamer plugin categories are used in this design:
+
+Source
+
+	xlnxvideosrc : V4l2 sources such as  MIPI single-sensor.
+	
+	appsrc : source that makes video buffers available into a GStreamer pipeline. 
+
+Sink
+	
+	kmssink : KMS display sink for HDMI Tx.
+	
+	appsink : sink that makes video buffers available to an application such as the display inside jupyter notebooks
+
+Processing/acceleration
+	
+	vvasplugin : VVAS Infrastructure Plug-ins or VVAS Custom Plug-ins.
+
+Other
+
+	capsfilter: filters capabilities
+	
+	perf: measure frames-per-seconds (fps) at an arbitrary point in the pipeline
+
 ## Host machine software stack 
 
 ![Linux Software Stack and Vertical Domains](../../media/software_stack_host.png )
@@ -162,7 +223,7 @@ The framework exposes two device nodes per display pipeline to user space: the /
  	- Includes device drivers and kernel frameworks (subsystems).
 	- Access to hardware IPs.
 
-### Host machine software components
+### Host machine userspace software components
 
 #### Qt application
 - command-line application to communicate control information between host abd endpoint via pcie-host lib.
@@ -172,13 +233,6 @@ The framework exposes two device nodes per display pipeline to user space: the /
 	
 Library functions to perform dma tranfers using dma xfer utils and access PCIe BAR register to communicate control information between host and 	endpoint 
 	
-#### QDMA Drivers
-
-QDMA driver on the host machine is used to identify VMK180 device connected to the host machine via PCIe interface and perform data transfer through DMA.
-
-Please refer to below link for more details on QDMA drivers:
-https://github.com/Xilinx/dma_ip_drivers/tree/master/QDMA/linux-kernel.
-
 
 Communication between x86 machine (Host) and  target
 ------------------------------------------------------
@@ -187,27 +241,18 @@ Following diagram captures, all the components involved in achieving different u
 
 ![Linux SW components](../../media/software_components.png )
 
-* G-streamer plugins :
-		Following G-streamer plugins are supported and provided as part of package.
+Following G-streamer plugins(Python bindings) are supported and provided as part of package.
 
 * Appsrc plugin: 
 		Appsrc plugin interacts with PCIe EP driver and gets the media content from the Host over PCIe interface.
 
-* Appsync Plugin: 
+* Appsinc Plugin: 
  		Appsync plugin interacts with PCIe EP driver and sends the media content to the Host over PCIe interface.
 
-* 2dfilter plugin: 
-  		2dfilter plugin gets media content from Appsrc, passes it through PL filter and sends filtered content to Appsync.
-
-* SDXFilter2d: 
-		SDX filter2d plugin is used to configure 2dfilter in PL
-
+* vvas_xfilter plugin :
+		A generic infrastructure plug-in: 1 input, 1 output, supporting pass-through, in-place, and transform processing.
 * pcie_lib: 
-		This library provides abstract APIs for pcie_transcode applications that interact with PCIe user space configuration. 
-
-* pcie_ep_driver: 
-		EP driver is used to communicate with the Host using dedicated BAR. It registers DMA read and DMA write interrupts and sends acknowledgement to Host 			accordingly. 
-
+		This library provides abstract APIs for the gstreamer python binding jupyter notebook applicationthat interact with PCIe user space configuration. 
 
 ## Details on Data and control information Flow
 
@@ -219,7 +264,7 @@ A dedicated BAR is used to send control information between Host and the Device 
 
 ### At Endpoint :
 
-In the device, there is an Gstreamer based application which loads the xclbin file using XRT and gets control information with the help of EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
+In the device, there is an Gstreamer pyton binding jupyter notebook  which loads the xclbin file using XRT and gets control information with the help of pcie abstract library and EP pcie driver. Depending on the control information, setups corresponding usecase, using DMA-BUF mechanism does ZERO copy between the GST plugins and transfers data back to the Host. . To achieve better performance instead of buffer copy, endpoint drivers uses DMA-BUF framework available in the linux kernel. With the help of DMA-BUF framework zero copy is achieved by just transferring buffer handles between different SW components.
 
 Supported Use cases:
 --------------------
@@ -232,9 +277,11 @@ Following use cases are supported in this release.
 
 3. Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host
 
+4. Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> HDMI
+
 ### Usecase-1(MIPI --> 2D Image Processing --> HDMI):
 
-Data is captured using MIPI camera, captured frame is fed through Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port. 
+Data is captured using MIPI camera, captured frame is fed through ISP, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port. 
 
 DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
 
@@ -245,7 +292,7 @@ Device application provides user interface to configure  Plan-id and Sync parame
 
 ### Usecase-2(MIPI --> 2D Image Processing --> PCIE/QDMA EP --> PCIE x86 Host(RC) ):
 
-Data is captured using MIPI camera, processed using Demossaic, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent to the Host using appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
+Data is captured using MIPI camera, processed using ISP, Scalar blocks. Captured frame is processed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent to the Host using appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
 
 DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
 
@@ -257,7 +304,7 @@ Device application provides user interface to configure  Plan-id and Sync parame
 
 ### Usecase3: (Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> PCIE/QDMA EP --> PCIE x86 Host(RC) --> Display on Host):
 
-Data is captured from the file source, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent back to the Host using Appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
+Host application reads data from file, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is sent back to the Host using Appsync G-streamer plugin. On the Host data is displayed on the monitor connected to it.
 
 DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
 
@@ -266,6 +313,18 @@ Host application provides user interface to configure following parameters Heigh
 Device application provides user interface to configure  Plan-id and Sync parameters 
 
 ![USECASE 3](../../media/software_usecase3.png )
+
+### (Usecase4: Raw Video File from Host --> PCIE x86 Host(RC) --> PCIE/QDMA EP --> 2D Image Processing/Bypass --> HDMI)
+
+Host application reads data from file, using DMA data is transferred to device. On the device Appsrc G-streamer plugin is used to receive the data which is then fed through 2d filter( filter IP created using the Vitis™ flow in the PL)and filtered content is displayed on the Monitor which is connected to the HDMI port by KMSSINK gstreamer plugin.
+
+DMA-BUF mechanism which is available in Linux is used to achieve Zero-copy between G-streamer plugins and to achieve better performance.
+
+Host application provides user interface to configure following parameters Height, Width,  Input-format, Kernel-preset, Kernel-mode, Kernel-name, Framerate. Host send all these parameters to the device using the control interface and actual media data is transferred using DMA through PCIe.
+
+Device application provides user interface to configure  Plan-id and Sync parameters.
+
+![USECASE 4](../../media/software_usecase4.png )
 
 **Next Steps**
 

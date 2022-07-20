@@ -26,7 +26,7 @@ In the following sections, you will:
 
 Prerequisites
 --------------
-1. PetaLinux 2021.2 tools installation
+1. PetaLinux 2022.1 tools installation
 
 Accessing the Tutorial Reference Files
 --------------------------------------
@@ -36,11 +36,11 @@ Accessing the Tutorial Reference Files
 1. To access the reference files, type the following into a terminal:
 
    ```
-   git clone --branch 2021.2 --recursive https://github.com/Xilinx/vmk180-trd.git
+   git clone --branch 2022.1 --recursive https://github.com/Xilinx/vmk180-trd.git
 
    ```
 
-2. Navigate to the `vmk180-trd-2021.2` which is the working directory.
+2. Navigate to the `vmk180-trd-2022.1` which is the working directory.
 
 
 To Build Designs and Petalinux in one step:
@@ -66,7 +66,7 @@ make all sdcard PFM=<val> OVERLAY=<val> YES=1
 Modifying/Configure the petalinux project manually
 --------------------------------
 
-* Source the PetaLinux 2021.2 tool settings.sh script.
+* Source the PetaLinux 2022.1 tool settings.sh script.
 
 Run the following command to create a new Petalinux project from the working directory
 
@@ -134,9 +134,9 @@ screen.
 
 ```
 $ images/linux/sdk.sh
-PetaLinux SDK installer version 2021.2
+PetaLinux SDK installer version 2022.1
 ============================================
-Enter target directory for SDK (default: /opt/petalinux/2021.2): ./images/linux/sdk
+Enter target directory for SDK (default: /opt/petalinux/2022.1): ./images/linux/sdk
 ```
 
 Once the SDK is installed, source the file

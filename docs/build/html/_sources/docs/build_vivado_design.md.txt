@@ -19,7 +19,7 @@ This tutorial shows how to build the hardware design for applications running on
 
 ### Prerequisites
 
-* Vivado Design Suite 2021.2
+* Vivado Design Suite 2022.1
 
 #### Accessing the Tutorial Reference Files
 
@@ -28,7 +28,7 @@ This tutorial shows how to build the hardware design for applications running on
 1. To access the reference files, type the following into a terminal:
 
  ```
-git clone --branch 2021.2 --recursive https://github.com/Xilinx/vmk180-trd.git
+git clone --branch 2022.1 --recursive https://github.com/Xilinx/vmk180-trd.git
 
 ```
 
