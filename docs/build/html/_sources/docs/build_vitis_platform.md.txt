@@ -43,7 +43,7 @@ Generating an Vitis Extensible platform
 
    |Application |Platform name (PFM)|
    |----|----|
-   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd|
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd|
 
 3. The generated platform will be located at
 

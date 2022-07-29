@@ -62,7 +62,6 @@ vmk180-trd
 ¦   +-- scripts
 ¦   +-- vivado
 ¦   ¦   +-- vmk180_trd
-¦   ¦   +-- vmk180_es1_trd
 +-- README
 
 </pre>

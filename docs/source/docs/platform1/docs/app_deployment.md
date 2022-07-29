@@ -116,12 +116,20 @@ Below diagram shows Board and hardware connections.
   * Make physical connections to ethernet, HDMI, UART, webcam and power as shown in the image.
 	
   * Turn ON power switch SW13.
-	
+  
   * On Versal UART0 terminal, we would see the Versal device booting from the micro SD card starting with the message “Xilinx Versal Platform Loader and Manager”
 	
-  * In about 60 seconds boot is complete. Observe the Linux prompt root@vmk180-trd and autostart of JupyterLab server as shown in the example below:
-	
 
+  > **Note**: Below messages observed during linux boot don't impact VMK180 TRD functionality and it is safe to ignore.
+ 
+ ``` 
+[FAILED] Failed to mount NFSD configuration filesystem.
+  	
+[FAILED] Failed to start LSB: Kernel NFS server support.
+ ```
+
+  * In about 60 seconds boot is complete. Observe the Linux prompt root@vmk180-trd and autostart of JupyterLab server as shown in the example below:
+ 
  ```
  root@vmk180-trd:~#
 [   70.233800] start-jupyter.sh[541]: [I 2022-07-15 09:10:50.122 ServerApp] jupyterlab | extension was successfully linked.
@@ -153,7 +161,8 @@ http://172.19.1.246:8888/?token=c46d443a39d2648046afdbb9bc5821177ab7cd386c218103
 
 ```
 
-  > **Note**: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix the IP address and restart the jupyter server as shown below:
+  > **Note**: If for any reason target fails to grab an IP address from the network, Jupyter server would fail to issue an URL. In such a case user is recommended to fix the IP address and restart the jupyter server by following below steps till `Copy the generated URL onto browser.
+
 
 ```
 

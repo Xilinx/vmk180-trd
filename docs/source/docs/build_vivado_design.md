@@ -31,29 +31,7 @@ This tutorial shows how to build the hardware design for applications running on
 git clone --branch 2022.1 --recursive https://github.com/Xilinx/vmk180-trd.git
 
 ```
-
-### Enable Versal device support
-
-   To enable VMK180 ES1 board/device support, you need to create two tcl initialization
-   scripts, one for Vivado and one for HLS. Add the following line to each of
-   the tcl scripts:
-
-```
-  enable_beta_device xcvm1802-vsva2197-2MP-e-S-es1
-```
-
-   The initialization tcl script for Vivado shall be placed at:
-
-   * **Linux**: $HOME/.Xilinx/Vivado/Vivado_init.tcl
-
-   * **Windows**: %APPDATA%/Roaming/Xilinx/Vivado/Vivado_init.tcl
-
-   Similarly, the initialization tcl script for HLS shall be placed at:
-
-   * **Linux**: $HOME/.Xilinx/HLS_init.tcl
-
-   * **Windows**: %APPDATA%/Roaming/Xilinx/HLS_init.tcl
-
+ 
  Navigate to the `vmk180-trd` which is the working directory.
 
 ### Generating an Extensible XSA
@@ -68,7 +46,7 @@ git clone --branch 2022.1 --recursive https://github.com/Xilinx/vmk180-trd.git
 
    |Application |Platform name|
    |----|----|
-   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd|
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd|
 
 
 2. To build the XSA, Source Vivado and run the following command. The Makefile uses scripts/main.tcl file to create a Vivado project, populate the block design and finally build a XSA. The XSA generation may take couple of hours depending on the system specification

@@ -102,6 +102,7 @@ Xilinx adopted the V4L2 framework for most of its video IP portfolio. The curren
 | Xilinx Video Pipeline (XVIPP) <br> | - Configures video pipeline and register media, video and sub-device nodes.  <br> - Configures all entities in the pipeline and validate links.  <br>	- Configures and controls DMA engines (Xilinx Video Framebuffer Write).  <br>	- Starts/stops video stream. |
 | MIPI CSI-2 Rx 				 | - Sets media bus format and resolution on input pad. <br>	- Sets media bus format and resolution on output pad. |
 | IMX274 sensor <br> | - Sets the media bus format and resolution for the sensor Input pad. <br> - Set the media bus format and resolution for output pads.|
+| ISP <br> | - Driver for Xilinx Vitis Vision ISP Pipeline. This is a V4L sub-device based driver for Vitis Vision ISP pipeline that takes a Bayer video stream format as input and generates an RGB video output. |
 
 #### HDMI Tx Display
 

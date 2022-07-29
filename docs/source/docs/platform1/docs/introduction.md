@@ -86,8 +86,8 @@ Design Components
    * [Vitis Video Analytics SDK](https://www.xilinx.com/products/design-tools/vitis/vvas.html) 
    
 * Host components
-  * QT
-  * OpenCV
+  * QT - QT version 5.9.0
+  * OpenCV - OpenCV version 4.6.0-dev
   * [Xilinx QDMA Driver](https://xilinx.github.io/dma_ip_drivers/2019.1/linux-kernel/html/index.html)
 
  </details>

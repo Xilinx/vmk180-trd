@@ -60,7 +60,7 @@ make all sdcard PFM=<val> OVERLAY=<val> YES=1
 
    |Application name |Platform name(PFM)| Overlay(OVERLAY) Supported |
    |----|----|----|
-   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd, vmk180_es1_trd| filter2d_pl |
+   |VMK180 (Multimedia-PCIe) TRD |vmk180_trd| filter2d_pl |
 
 
 Modifying/Configure the petalinux project manually
