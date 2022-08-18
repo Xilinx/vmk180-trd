@@ -13,7 +13,7 @@ Following is the list of Platform design available in 2022.1:
 
 | Platform Name  | Description  |  Links |
 | -------------- | ------------- |----------------|
-| Platform 1: VMK180 (Multimedia-PCIe) TRD  |The multimedia-PCIe TRD demonstrates video capture either from a MIPI image sensor or a PCIe based video source and displays it on a  HDMI monitor or sends back to host via PCIe where it can be displayed on a monitor. Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter.  |   <ul><li><a href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_trd_prebuilt_2021.2.zip">Pre-Built Package</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_es1_trd_prebuilt_2021.2.zip">Pre-Built ES1 Package</a></li></ul>
+| Platform 1: VMK180 (Multimedia-PCIe) TRD  |The multimedia-PCIe TRD demonstrates video capture either from a MIPI image sensor or a PCIe based video source and displays it on a  HDMI monitor or sends back to host via PCIe where it can be displayed on a monitor. Accelerator functions can also be added to this platform using Vitis. Supported acceleration function in this design is a 2D Filter.  |   <ul><li><a href="https://xilinx.github.io/vmk180-trd/2022.1/build/html/index.html">Documentation</a></li><li><a href="https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_trd_prebuilt_2022.1.zip">Pre-Built Package</a></li>
 
 For more information about the VMK180 Evaluation Board , see [Versal Prime Series VMK180 Evaluation Kit](https://www.xilinx.com/products/boards-and-kits/vmk180.html)
 
@@ -32,7 +32,7 @@ GitHub issues will be used for tracking requests and bugs. For questions go to [
 
 The design includes files licensed by Xilinx and third parties under the terms
 of the GNU General Public License, GNU Lesser General Public License,
-BSD License, MIT License, and other licenses. The [archiver_2022_1.tar.gz ](https://www.xilinx.com/member/forms/download/xef.html?filename=archiver_2021_2.tar.gz) Package includes one
+BSD License, MIT License, and other licenses. The [archiver_2022_1.tar.gz ](https://www.xilinx.com/member/forms/download/xef.html?filename=vmk180_trd_third_party_licenses_and_source_2022_1.tar.gz) Package includes one
 folder named ``sources`` containing the complete set of source
 files and one named ``licenses`` containing licenses extracted from
 the source files. These licenses and sources are extracted from petalinux bsp recipes
