@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,16 +11,18 @@
 function OptanonWrapper() { }
 </script>
 <!-- OneTrust Cookies Consent Notice end for xilinx.github.io -->
-  <title>Tool Flow Overview &mdash; VMK180 TRD 2022.1 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <title>Tool Flow Overview &mdash; VMK180 TRD 2022.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -72,13 +74,6 @@ function OptanonWrapper() { }
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Versions</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2022.1/build/html/index.html">     Master (2022.1)</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.2/build/html/index.html">     2021.2</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2021.1/build/html/index.html">     2021.1</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://xilinx.github.io/vmk180-trd/2020.2/build/html/index.html">     2020.2</a></li>
-</ul>
 
         </div>
       </div>
@@ -114,35 +109,38 @@ function OptanonWrapper() { }
  <td align="center"><h1>Tool Flow Overview</h1> </td>
  </tr>
 </table><div class="section" id="tool-flow-overview">
-<h1>Tool Flow Overview<a class="headerlink" href="#tool-flow-overview" title="Permalink to this headline">¶</a></h1>
+<h1>Tool Flow Overview<a class="headerlink" href="#tool-flow-overview" title="Permalink to this heading">¶</a></h1>
 <div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>This document provides an overview of how the hardware and software components are built for an application.</p>
 </div>
 <div class="section" id="tool-flow">
-<h2>Tool Flow<a class="headerlink" href="#tool-flow" title="Permalink to this headline">¶</a></h2>
+<h2>Tool Flow<a class="headerlink" href="#tool-flow" title="Permalink to this heading">¶</a></h2>
 <p>The overall tool flow is outlined in the figure below. Each step in the tool flow is explained in detail in subsequent build tutorials.</p>
 <p><img alt="Tool Flow" src="../_images/tool-flow.jpg" /></p>
 <p>At a high level, the builds steps are as follows:</p>
 <ol class="simple">
-<li>Vivado platform design: The Vivado design is augmented with platform parameters that describe the meta data and physical interfaces available to the Vitis compiler for stitching in PL kernels.</li>
-<li>Platform creation: The XSCT utility is used to create an extensible platform whose main component is the XSA created by Vivado in step 1.</li>
-<li>PL kernels: The Vitis compiler is used to compile PL accelerator kernels from C/C++ using high-level synthesis (HLS) or to package RTL kernels. The kernels are compiled into xo files and consumed by the Vitis linker in the next step.
-Vitis linker and packager: The Vitis linker integrates the PL kernels into the platform and implements the design. It generates a new device image (bitfile) as well as xclbin file containing meta data information about the PL kernels.</li>
-<li>PetaLinux BSP: The PetaLinux BSP is a collection of yocto meta layers and recipes that are used to generate a bootable SD card image including boot image components (BOOT.BIN), Linux image (image.ub) and external rootf filesystem partition (rootfs). The rootfs contains a collection of software packages required to run the target applications.</li>
+<li><p>Vivado platform design: The Vivado design is augmented with platform parameters that describe the meta data and physical interfaces available to the Vitis compiler for stitching in PL kernels.</p></li>
+<li><p>Platform creation: The XSCT utility is used to create an extensible platform whose main component is the XSA created by Vivado in step 1.</p></li>
+<li><p>PL kernels: The Vitis compiler is used to compile PL accelerator kernels from C/C++ using high-level synthesis (HLS) or to package RTL kernels. The kernels are compiled into xo files and consumed by the Vitis linker in the next step.
+Vitis linker and packager: The Vitis linker integrates the PL kernels into the platform and implements the design. It generates a new device image (bitfile) as well as xclbin file containing meta data information about the PL kernels.</p></li>
+<li><p>PetaLinux BSP: The PetaLinux BSP is a collection of yocto meta layers and recipes that are used to generate a bootable SD card image including boot image components (BOOT.BIN), Linux image (image.ub) and external rootf filesystem partition (rootfs). The rootfs contains a collection of software packages required to run the target applications.</p></li>
 </ol>
 <div class="section" id="accessing-the-tutorial-reference-files">
-<h3>Accessing the Tutorial Reference Files<a class="headerlink" href="#accessing-the-tutorial-reference-files" title="Permalink to this headline">¶</a></h3>
+<h3>Accessing the Tutorial Reference Files<a class="headerlink" href="#accessing-the-tutorial-reference-files" title="Permalink to this heading">¶</a></h3>
 <ol class="simple">
-<li>To access the reference files, type the following into a terminal:</li>
+<li><p>To access the reference files, type the following into a terminal:</p></li>
 </ol>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">branch</span> <span class="mf">2022.1</span> <span class="o">--</span><span class="n">recursive</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">Xilinx</span><span class="o">/</span><span class="n">vmk180</span><span class="o">-</span><span class="n">trd</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
+<blockquote>
+<div><p><strong>Note</strong>: The preferred OS for this tool flow is Linux. This steps are not tested on Windows OS and is not recommended to use.</p>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="directory-structure">
-<h2>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<h2>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this heading">¶</a></h2>
 <p>The directory structure of the repository is shown below</p>
 <pre>
 vmk180-trd
@@ -165,14 +163,14 @@ vmk180-trd
 
 </pre></div>
 <div class="section" id="next-steps">
-<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">¶</a></h2>
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="build_vivado_design.html"><span class="doc">Building the Hardware design using Vivado</span></a></li>
-<li>Go back to the <a class="reference external" href="../index.html">VMK180 Targeted Reference Designs start page</a></li>
+<li><p><a class="reference internal" href="build_vivado_design.html"><span class="doc">Building the Hardware design using Vivado</span></a></p></li>
+<li><p>Go back to the <a class="reference external" href="../index.html">VMK180 Targeted Reference Designs start page</a></p></li>
 </ul>
 </div>
 <div class="section" id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">¶</a></h2>
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License.</p>
 <p>You may obtain a copy of the License at
 <a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
@@ -202,7 +200,7 @@ vmk180-trd
 
   <div role="contentinfo">
     <p>&#169; Copyright 2019-2022, Xilinx, Inc..
-      <span class="lastupdated">Last updated on August 18, 2022.
+      <span class="lastupdated">Last updated on May 04, 2023.
       </span></p>
   </div>
 
